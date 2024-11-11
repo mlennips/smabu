@@ -27,7 +27,7 @@ The project follows a Clean Architecture pattern, which includes:
 - Command
 - CQRS (Approach)
 
-# Custom License Agreement for SMABU
+# Custom License Agreement for smabu
 
 ## License Terms
 
