@@ -1,0 +1,56 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/LIT.Smabu.API
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/LIT.Smabu.API
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/LIT.Smabu.ArchitectureTests
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/LIT.Smabu.Domain
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/LIT.Smabu.DomainTests
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/LIT.Smabu.Infrastructure
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/LIT.Smabu.Shared
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/LIT.Smabu.UseCases
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /src/lit.smabu.react
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /src/lit.smabu.react
+    schedule:
+      interval: daily
