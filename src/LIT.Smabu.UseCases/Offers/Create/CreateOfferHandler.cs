@@ -2,7 +2,6 @@
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Domain.Specifications;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 

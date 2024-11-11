@@ -1,5 +1,4 @@
 ﻿using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate

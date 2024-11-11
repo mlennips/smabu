@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Common
     {
         public string DisplayName => $"{Name1}, {Street}, {PostalCode} {City} - {Country}";
 
-        public static AddressDTO From(Address address)
+        public static AddressDTO Create(Address address)
         {
             return new AddressDTO(address.Name1, address.Name2, address.Street, address.HouseNumber, address.PostalCode, address.City, address.Country);
         }

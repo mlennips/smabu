@@ -4,6 +4,9 @@ namespace LIT.Smabu.Domain.Common
 {
     public record DatePeriod : IValueObject
     {
+        public DateOnly From { get; }
+        public DateOnly? To { get; }
+
         public DatePeriod(DateOnly from, DateOnly? to)
         {
             if (from == DateOnly.MinValue && to == DateOnly.MinValue)
@@ -18,8 +21,22 @@ namespace LIT.Smabu.Domain.Common
             To = to;
         }
 
-        public DateOnly From { get; }
-        public DateOnly? To { get; }
+        public static DatePeriod Create(DateTime from, DateTime? to)
+        {
+            to = to == DateTime.MinValue ? null : to;
+            if (from == DateTime.MinValue)
+            {
+                throw new ArgumentNullException(nameof(from));
+            }
+            else if (to != null && from > to)
+            {
+                return new(DateOnly.FromDateTime(to.Value), DateOnly.FromDateTime(to.Value));
+            }
+            else
+            {
+                return new(DateOnly.FromDateTime(from), to != null ? DateOnly.FromDateTime(to.Value) : null);
+            }
+        }
 
         public override string ToString()
         {
@@ -48,23 +65,6 @@ namespace LIT.Smabu.Domain.Common
             else
             {
                 return $"{From.Month:00}.{From.Year}-{To?.Month:00}.{To?.Year}";
-            }
-        }
-
-        public static DatePeriod CreateFrom(DateTime from, DateTime? to)
-        {
-            to = to == DateTime.MinValue ? null : to;
-            if (from == DateTime.MinValue)
-            {
-                throw new ArgumentNullException(nameof(from));
-            }
-            else if (to != null && from > to)
-            {
-                return new(DateOnly.FromDateTime(to.Value), DateOnly.FromDateTime(to.Value));
-            }
-            else
-            {
-                return new(DateOnly.FromDateTime(from), to != null ? DateOnly.FromDateTime(to.Value) : null);
             }
         }
     }

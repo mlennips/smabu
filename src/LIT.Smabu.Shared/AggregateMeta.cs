@@ -5,13 +5,13 @@ namespace LIT.Smabu.Shared
     [ComplexType]
     public record AggregateMeta : EntityMeta
     {
+        public long Version { get; init; }
+
         public AggregateMeta(long version, DateTime createdAt, string createdById, string createdByName, DateTime? modifiedAt, string? modifiedById, string? modifiedByName)
             : base(createdAt, createdById, createdByName, modifiedAt, modifiedById, modifiedByName)
         {
             Version = version;
         }
-
-        public long Version { get; init; }
 
         public static AggregateMeta CreateLegacy(ICurrentUser currentUser, DateTime createdAt)
         {

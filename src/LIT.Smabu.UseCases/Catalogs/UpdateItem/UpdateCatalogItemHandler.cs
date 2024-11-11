@@ -1,5 +1,4 @@
-﻿using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 

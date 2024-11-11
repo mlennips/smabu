@@ -22,8 +22,6 @@ namespace LIT.Smabu.Domain.CatalogAggregate.Services
             return result;
         }
 
-
-
         private async Task<bool> CheckHasOffers(CatalogItemId id)
         {
             var offers = await store.GetAllAsync<Offer>();

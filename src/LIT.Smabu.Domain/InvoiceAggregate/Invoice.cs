@@ -2,7 +2,6 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.CatalogAggregate;
-using LIT.Smabu.Domain.InvoiceAggregate.Events;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -42,7 +41,6 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             Items = items ?? [];
         }
 #pragma warning restore IDE0290 // Primären Konstruktor verwenden
-
 
         public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate)
         {
@@ -217,11 +215,10 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
             if (!PerformancePeriod.To.HasValue)
             {
-                PerformancePeriod = DatePeriod.CreateFrom(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
+                PerformancePeriod = DatePeriod.Create(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
             }
 
             InvoiceDate ??= DateOnly.FromDateTime(ReleasedAt.Value);
-            AddDomainEvent(new InvoiceReleasedEvent(Id));
             return Result.Success();
         }
 

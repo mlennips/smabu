@@ -4,6 +4,8 @@ namespace LIT.Smabu.Domain.Common
 {
     public record Color : IValueObject
     {
+        public string Hex { get; }
+
         public Color(string hex)
         {
             if (!IsValidHexColor(hex))
@@ -30,8 +32,6 @@ namespace LIT.Smabu.Domain.Common
             string complementaryColor = luminance > 128 ? "#000000" : "#FFFFFF";
             return new Color(complementaryColor);
         }
-
-        public string Hex { get; }
 
         private static bool IsValidHexColor(string value)
         {

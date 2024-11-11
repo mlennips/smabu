@@ -8,6 +8,16 @@ namespace LIT.Smabu.UseCases.Invoices
 {
     public record InvoiceItemDTO : IDTO
     {
+        public string DisplayName => Position.ToString("00", CultureInfo.InvariantCulture);
+        public InvoiceItemId Id { get; set; }
+        public InvoiceId InvoiceId { get; set; }
+        public int Position { get; set; }
+        public string Details { get; set; }
+        public Quantity Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal TotalPrice { get; set; }
+        public CatalogItemId? CatalogItemId { get; set; }
+
         public InvoiceItemDTO(InvoiceItemId id, InvoiceId invoiceId, int position, string details, Quantity quantity,
                               decimal unitPrice, decimal totalPrice, CatalogItemId? catalogItemId)
         {
@@ -20,16 +30,6 @@ namespace LIT.Smabu.UseCases.Invoices
             TotalPrice = totalPrice;
             CatalogItemId = catalogItemId;
         }
-
-        public string DisplayName => Position.ToString("00", CultureInfo.InvariantCulture);
-        public InvoiceItemId Id { get; set; }
-        public InvoiceId InvoiceId { get; set; }
-        public int Position { get; set; }
-        public string Details { get; set; }
-        public Quantity Quantity { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal TotalPrice { get; set; }
-        public CatalogItemId? CatalogItemId { get; set; }
 
         public static InvoiceItemDTO Create(InvoiceItem invoiceItem)
         {

@@ -11,7 +11,7 @@ namespace LIT.Smabu.UseCases.TermsOfPayments.Create
         {
             var termsOfPayment = TermsOfPayment.Create(request.Id, request.Title, request.Details, request.DueDays);
             await store.CreateAsync(termsOfPayment);
-            return TermsOfPaymentDTO.CreateFrom(termsOfPayment);
+            return TermsOfPaymentDTO.Create(termsOfPayment);
         }
     }
 }

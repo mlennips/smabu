@@ -8,16 +8,16 @@ namespace LIT.Smabu.Domain.CatalogAggregate
     {
         private readonly List<CatalogItem> _items = items;
 
-        public static CatalogGroup Create(CatalogGroupId id, CatalogId catalogId, string name, string description)
-        {
-            return new CatalogGroup(id, catalogId, name, description, []);
-        }
-
         public override CatalogGroupId Id { get; } = id;
         public CatalogId CatalogId { get; } = catalogId;
         public string Name { get; private set; } = name;
         public string Description { get; private set; } = description;
         public IReadOnlyList<CatalogItem> Items => _items;
+
+        public static CatalogGroup Create(CatalogGroupId id, CatalogId catalogId, string name, string description)
+        {
+            return new CatalogGroup(id, catalogId, name, description, []);
+        }
 
         public Result Update(string name, string description)
         {

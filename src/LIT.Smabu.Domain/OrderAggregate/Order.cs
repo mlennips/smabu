@@ -15,8 +15,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
         public DateOnly OrderDate { get; private set; } = orderDate;
         public DateTime? Deadline { get; private set; } = deadline;
         public string BunchKey { get; private set; } = bunchKey;
-
-        public OrderReferences References = OrderReferences.Empty;
+        public OrderReferences References { get; private set; } = OrderReferences.Empty;
 
         public static Order Create(OrderId id, OrderNumber number, CustomerId customerId, string name, DateOnly orderDate)
         {

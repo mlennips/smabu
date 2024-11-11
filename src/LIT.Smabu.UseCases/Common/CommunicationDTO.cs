@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Common
     {
         public string DisplayName => "";
 
-        public static CommunicationDTO From(Communication communication)
+        public static CommunicationDTO Create(Communication communication)
         {
             return new CommunicationDTO(communication.Email, communication.Mobil, communication.Phone, communication.Website);
         }

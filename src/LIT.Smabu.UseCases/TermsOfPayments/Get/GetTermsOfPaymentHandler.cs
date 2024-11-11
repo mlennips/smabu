@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.TermsOfPayments.Get
         public async Task<Result<TermsOfPaymentDTO>> Handle(GetTermsOfPaymentQuery request, CancellationToken cancellationToken)
         {
             var termsOfPayment = await store.GetByAsync(request.Id);
-            return TermsOfPaymentDTO.CreateFrom(termsOfPayment);
+            return TermsOfPaymentDTO.Create(termsOfPayment);
         }
     }
 }

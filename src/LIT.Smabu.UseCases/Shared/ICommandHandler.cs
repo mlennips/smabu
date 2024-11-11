@@ -1,7 +1,5 @@
 ﻿using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.Shared;
 using MediatR;
-using System.Windows.Input;
 
 namespace LIT.Smabu.UseCases.Shared
 {

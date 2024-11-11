@@ -8,6 +8,21 @@ namespace LIT.Smabu.UseCases.Invoices
 {
     public record InvoiceDTO : IDTO
     {
+        public string DisplayName => $"{Number?.DisplayName}/{Customer.CorporateDesign.ShortName}";
+        public InvoiceId Id { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public CustomerDTO Customer { get; set; }
+        public InvoiceNumber Number { get; set; }
+        public DateOnly? InvoiceDate { get; set; }
+        public decimal Amount { get; set; }
+        public Currency Currency { get; set; }
+        public virtual DatePeriod PerformancePeriod { get; set; }
+        public int FiscalYear { get; set; }
+        public TaxRate TaxRate { get; set; }
+        public bool IsReleased { get; set; }
+        public DateTime? ReleasedAt { get; set; }
+        public List<InvoiceItemDTO>? Items { get; set; }
+
         public InvoiceDTO(InvoiceId id, DateTime? createdAt, CustomerDTO customer, InvoiceNumber number, DateOnly? invoiceDate, decimal amount,
                           Currency currency, DatePeriod performancePeriod, int fiscalYear, TaxRate taxRate, bool isReleased, DateTime? releasedAt)
         {
@@ -24,21 +39,6 @@ namespace LIT.Smabu.UseCases.Invoices
             IsReleased = isReleased;
             ReleasedAt = releasedAt;
         }
-
-        public string DisplayName => $"{Number?.DisplayName}/{Customer.CorporateDesign.ShortName}";
-        public InvoiceId Id { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public CustomerDTO Customer { get; set; }
-        public InvoiceNumber Number { get; set; }
-        public DateOnly? InvoiceDate { get; set; }
-        public decimal Amount { get; set; }
-        public Currency Currency { get; set; }
-        public virtual DatePeriod PerformancePeriod { get; set; }
-        public int FiscalYear { get; set; }
-        public TaxRate TaxRate { get; set; }
-        public bool IsReleased { get; set; }
-        public DateTime? ReleasedAt { get; set; }
-        public List<InvoiceItemDTO>? Items { get; set; }
 
         public static InvoiceDTO Create(Invoice invoice, Customer customer, bool withItems = false)
         {

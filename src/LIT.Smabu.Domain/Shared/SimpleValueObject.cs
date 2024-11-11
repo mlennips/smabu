@@ -4,6 +4,8 @@ namespace LIT.Smabu.Domain.Shared
 {
     public abstract record SimpleValueObject<T> : IValueObject, IComparable<SimpleValueObject<T>>
     {
+        public T Value { get; init; }
+
         public SimpleValueObject(T value)
         {
             if (value is null)
@@ -12,8 +14,6 @@ namespace LIT.Smabu.Domain.Shared
             }
             Value = value;
         }
-
-        public T Value { get; init; }
 
         public override int GetHashCode() => Value!.GetHashCode();
         public virtual int CompareTo(SimpleValueObject<T>? other) => other is not null ? ToString().CompareTo(other.ToString()) : -1;
