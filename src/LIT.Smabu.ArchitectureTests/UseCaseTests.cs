@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.UseCases.Shared;
+﻿using LIT.Smabu.UseCases.Base;
 using NetArchTest.Rules;
 using System.Reflection;
 

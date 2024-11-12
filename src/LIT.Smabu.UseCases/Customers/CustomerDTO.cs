@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.UseCases.Base;
 using LIT.Smabu.UseCases.Common;
-using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Customers
 {

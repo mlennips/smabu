@@ -1,12 +1,12 @@
-﻿using LIT.Smabu.UseCases.Customers.Create;
-using LIT.Smabu.UseCases.Customers.Delete;
-using LIT.Smabu.UseCases.Customers.Update;
-using MediatR;
-using LIT.Smabu.UseCases.Customers.List;
-using LIT.Smabu.UseCases.Customers.Get;
+﻿using MediatR;
 using LIT.Smabu.UseCases.Customers;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.Base;
+using static LIT.Smabu.UseCases.Customers.CreateCustomer;
+using static LIT.Smabu.UseCases.Customers.ListCustomer;
+using static LIT.Smabu.UseCases.Customers.GetCustomer;
+using static LIT.Smabu.UseCases.Customers.UpdateCustomer;
+using static LIT.Smabu.UseCases.Customers.DeleteCustomer;
 
 namespace LIT.Smabu.API.Endpoints
 {

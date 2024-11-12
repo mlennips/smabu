@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.TermsOfPaymentAggregate;
-using LIT.Smabu.UseCases.Shared;
+using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments
 {

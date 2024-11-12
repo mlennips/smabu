@@ -1,17 +1,17 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.UseCases.Offers.AddOfferItem;
-using LIT.Smabu.UseCases.Offers.Create;
-using LIT.Smabu.UseCases.Offers.Delete;
-using LIT.Smabu.UseCases.Offers.Get;
-using LIT.Smabu.UseCases.Offers.List;
-using LIT.Smabu.UseCases.Offers.RemoveOfferItem;
-using LIT.Smabu.UseCases.Offers.Update;
-using LIT.Smabu.UseCases.Offers.UpdateOfferItem;
 using MediatR;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Offers;
-using LIT.Smabu.UseCases.Offers.CreateReport;
 using LIT.Smabu.Domain.Base;
+using static LIT.Smabu.UseCases.Offers.CreateOffer;
+using static LIT.Smabu.UseCases.Offers.ListOffers;
+using static LIT.Smabu.UseCases.Offers.GetOffer;
+using static LIT.Smabu.UseCases.Offers.GetOfferReport;
+using static LIT.Smabu.UseCases.Offers.UpdateOffer;
+using static LIT.Smabu.UseCases.Offers.DeleteOffer;
+using static LIT.Smabu.UseCases.Offers.AddOfferItem;
+using static LIT.Smabu.UseCases.Offers.UpdateOfferItem;
+using static LIT.Smabu.UseCases.Offers.RemoveOfferItem;
 
 namespace LIT.Smabu.API.Endpoints
 {

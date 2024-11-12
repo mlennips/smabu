@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Shared;
-using LIT.Smabu.UseCases.Shared;
 using NetArchTest.Rules;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;

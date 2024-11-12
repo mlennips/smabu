@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { ModelError } from '../types/domain';
+import { ErrorDetail } from '../types/domain';
 
 export interface AppError {
     message: string;
@@ -16,7 +16,7 @@ export const convertToAppError = (error: any): AppError => {
     } else if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         const status = axiosError.response?.status;
-        const modelError = error.response?.data as ModelError;
+        const modelError = error.response?.data as ErrorDetail;
         if (modelError?.code) {         
             return {
                 code: axiosError.code ?? 'UNKNOWN',

@@ -28,31 +28,31 @@ export interface UpdateOfferItemCommand {
      * @type {OfferItemId}
      * @memberof UpdateOfferItemCommand
      */
-    id: OfferItemId;
+    offerItemId?: OfferItemId;
 
     /**
      * @type {OfferId}
      * @memberof UpdateOfferItemCommand
      */
-    offerId: OfferId;
+    offerId?: OfferId;
 
     /**
      * @type {string}
      * @memberof UpdateOfferItemCommand
      */
-    details: string | null;
+    details?: string | null;
 
     /**
      * @type {Quantity}
      * @memberof UpdateOfferItemCommand
      */
-    quantity: Quantity;
+    quantity?: Quantity;
 
     /**
      * @type {number}
      * @memberof UpdateOfferItemCommand
      */
-    unitPrice: number;
+    unitPrice?: number;
 
     /**
      * @type {CatalogItemId}

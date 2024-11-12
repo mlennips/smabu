@@ -29,19 +29,19 @@ export interface CreateOfferCommand {
      * @type {OfferId}
      * @memberof CreateOfferCommand
      */
-    offerId: OfferId;
+    offerId?: OfferId;
 
     /**
      * @type {CustomerId}
      * @memberof CreateOfferCommand
      */
-    customerId: CustomerId;
+    customerId?: CustomerId;
 
     /**
      * @type {Currency}
      * @memberof CreateOfferCommand
      */
-    currency: Currency;
+    currency?: Currency;
 
     /**
      * @type {TaxRate}

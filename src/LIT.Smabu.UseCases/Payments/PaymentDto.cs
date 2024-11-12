@@ -2,7 +2,7 @@
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.PaymentAggregate;
-using LIT.Smabu.UseCases.Shared;
+using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.Payments
 {

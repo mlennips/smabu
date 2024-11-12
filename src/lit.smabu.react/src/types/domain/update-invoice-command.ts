@@ -27,19 +27,19 @@ export interface UpdateInvoiceCommand {
      * @type {InvoiceId}
      * @memberof UpdateInvoiceCommand
      */
-    invoiceId: InvoiceId;
+    invoiceId?: InvoiceId;
 
     /**
      * @type {DatePeriod}
      * @memberof UpdateInvoiceCommand
      */
-    performancePeriod: DatePeriod;
+    performancePeriod?: DatePeriod;
 
     /**
      * @type {TaxRate}
      * @memberof UpdateInvoiceCommand
      */
-    taxRate: TaxRate;
+    taxRate?: TaxRate;
 
     /**
      * @type {string}

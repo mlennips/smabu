@@ -53,7 +53,7 @@ const OfferCreate = () => {
             onLoading: setLoading,
             onSuccess: (_response) => {
                 toast("Angebot erfolgreich erstellt", "success");
-                navigate(`/offers/${data.offerId.value}`);
+                navigate(`/offers/${data.offerId?.value}`);
             },
             onError: setError
         });
@@ -65,10 +65,10 @@ const OfferCreate = () => {
             <DefaultContentContainer loading={loading} error={error} >
                 <Paper sx={{ p: 2 }}>
                     <Grid container spacing={1}>
-                        <Grid size={{ xs: 12, sm: 3 }}><TextField fullWidth label="Währung" name="currency" value={data?.currency.isoCode} onChange={handleChange} required disabled /></Grid>
+                        <Grid size={{ xs: 12, sm: 3 }}><TextField fullWidth label="Währung" name="currency" value={data?.currency?.isoCode} onChange={handleChange} required disabled /></Grid>
                         <Grid size={{ xs: 12 , sm: 9 }}>
                             <TextField select fullWidth label="Kunde" name="customerId"
-                                value={data?.customerId.value} onChange={handleChange} required
+                                value={data?.customerId?.value} onChange={handleChange} required
                                 slotProps={{
                                     select: {
                                         native: true,

@@ -1,20 +1,20 @@
 ﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Invoices;
-using LIT.Smabu.UseCases.Invoices.AddInvoiceItem;
-using LIT.Smabu.UseCases.Invoices.Create;
-using LIT.Smabu.UseCases.Invoices.CreateReport;
-using LIT.Smabu.UseCases.Invoices.Delete;
-using LIT.Smabu.UseCases.Invoices.Get;
-using LIT.Smabu.UseCases.Invoices.List;
-using LIT.Smabu.UseCases.Invoices.MoveInvoiceItem;
-using LIT.Smabu.UseCases.Invoices.Release;
-using LIT.Smabu.UseCases.Invoices.RemoveInvoiceItem;
-using LIT.Smabu.UseCases.Invoices.Update;
-using LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem;
-using LIT.Smabu.UseCases.Invoices.WithdrawRelease;
 using MediatR;
+using static LIT.Smabu.UseCases.Invoices.AddInvoiceItem;
+using static LIT.Smabu.UseCases.Invoices.CreateInvoice;
+using static LIT.Smabu.UseCases.Invoices.DeleteInvoice;
+using static LIT.Smabu.UseCases.Invoices.GetInvoice;
+using static LIT.Smabu.UseCases.Invoices.GetInvoiceReport;
+using static LIT.Smabu.UseCases.Invoices.ListInvoices;
+using static LIT.Smabu.UseCases.Invoices.MoveInvoiceItemDown;
+using static LIT.Smabu.UseCases.Invoices.MoveInvoiceItemUp;
+using static LIT.Smabu.UseCases.Invoices.ReleaseInvoice;
+using static LIT.Smabu.UseCases.Invoices.RemoveInvoiceItem;
+using static LIT.Smabu.UseCases.Invoices.UpdateInvoice;
+using static LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem;
+using static LIT.Smabu.UseCases.Invoices.WithdrawReleaseInvoice;
 
 namespace LIT.Smabu.API.Endpoints
 {

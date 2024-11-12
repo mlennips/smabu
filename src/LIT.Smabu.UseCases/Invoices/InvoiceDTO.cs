@@ -1,8 +1,8 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.UseCases.Base;
 using LIT.Smabu.UseCases.Customers;
-using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Invoices
 {

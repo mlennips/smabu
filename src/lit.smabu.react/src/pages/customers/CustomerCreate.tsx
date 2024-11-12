@@ -36,7 +36,7 @@ const CustomerCreate = () => {
             onLoading: setLoading,
             onSuccess: () => {
                 toast("Kunde erfolgreich erstellt", "success");
-                navigate(`/customers/${data.customerId.value}`);
+                navigate(`/customers/${data.customerId?.value}`);
             },
             onError: setError
         });

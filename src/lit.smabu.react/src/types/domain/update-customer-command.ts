@@ -28,19 +28,19 @@ export interface UpdateCustomerCommand {
      * @type {CustomerId}
      * @memberof UpdateCustomerCommand
      */
-    customerId: CustomerId;
+    customerId?: CustomerId;
 
     /**
      * @type {string}
      * @memberof UpdateCustomerCommand
      */
-    name: string | null;
+    name?: string | null;
 
     /**
      * @type {string}
      * @memberof UpdateCustomerCommand
      */
-    industryBranch: string | null;
+    industryBranch?: string | null;
 
     /**
      * @type {Address}

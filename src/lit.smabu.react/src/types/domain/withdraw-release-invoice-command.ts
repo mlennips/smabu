@@ -25,5 +25,5 @@ export interface WithdrawReleaseInvoiceCommand {
      * @type {InvoiceId}
      * @memberof WithdrawReleaseInvoiceCommand
      */
-    invoiceId: InvoiceId;
+    invoiceId?: InvoiceId;
 }

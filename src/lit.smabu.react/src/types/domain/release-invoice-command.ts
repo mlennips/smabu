@@ -26,7 +26,7 @@ export interface ReleaseInvoiceCommand {
      * @type {InvoiceId}
      * @memberof ReleaseInvoiceCommand
      */
-    invoiceId: InvoiceId;
+    invoiceId?: InvoiceId;
 
     /**
      * @type {InvoiceNumber}
