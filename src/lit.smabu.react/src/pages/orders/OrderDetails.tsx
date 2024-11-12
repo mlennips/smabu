@@ -35,7 +35,7 @@ const OrderDetails = () => {
         event.preventDefault();
         handleAsyncTask({
             task: () => updateOrder(params.orderId!, {
-                id: data?.id!,
+                orderId: data?.id!,
                 name: data?.name!,
                 orderDate: data?.orderDate!,
                 deadline: data?.deadline,

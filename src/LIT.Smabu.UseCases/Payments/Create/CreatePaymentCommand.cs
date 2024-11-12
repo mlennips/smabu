@@ -1,7 +1,9 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate.Events;
 using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.UseCases.Shared;
+using MediatR;
 
 namespace LIT.Smabu.UseCases.Payments.Create
 {
@@ -22,7 +24,7 @@ namespace LIT.Smabu.UseCases.Payments.Create
 
         public bool? MarkAsPaid { get; init; }
 
-        public CreatePaymentCommand(PaymentId paymentId, PaymentDirection direction, DateTime accountingDate, string details, 
+        public CreatePaymentCommand(PaymentId paymentId, PaymentDirection direction, DateTime accountingDate, string details,
             string payer, string payee, CustomerId? customerId, InvoiceId? invoiceId, string referenceNr, DateTime? referenceDate, decimal amountDue,
             bool? markAsPaid = false)
         {
@@ -38,6 +40,23 @@ namespace LIT.Smabu.UseCases.Payments.Create
             ReferenceDate = referenceDate;
             AmountDue = amountDue;
             MarkAsPaid = markAsPaid;
+        }
+
+        internal static CreatePaymentCommand Create(Invoice invoice, Customer customer)
+        {
+            return new CreatePaymentCommand(
+                new PaymentId(Guid.NewGuid()),
+                PaymentDirection.Incoming,
+                invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
+                "",
+                customer.Name,
+                "",
+                customer.Id,
+                invoice.Id,
+                invoice.Number.DisplayName,
+                invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
+                invoice.Amount,
+                false);
         }
 
         internal bool Validate()

@@ -2,6 +2,7 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.CatalogAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate.Events;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -212,13 +213,13 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             Number = Number!.IsTemporary ? number : Number;
             ReleasedAt = releasedAt ?? DateTime.UtcNow;
             IsReleased = true;
-
             if (!PerformancePeriod.To.HasValue)
             {
                 PerformancePeriod = DatePeriod.Create(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
             }
-
             InvoiceDate ??= DateOnly.FromDateTime(ReleasedAt.Value);
+
+            AddDomainEvent(new InvoiceReleasedEvent(Id));
             return Result.Success();
         }
 

@@ -4,7 +4,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Orders.Create
 {
-    public record CreateOrderCommand(OrderId Id, CustomerId CustomerId, string Name, 
+    public record CreateOrderCommand(OrderId OrderId, CustomerId CustomerId, string Name, 
         DateTime OrderDate, OrderNumber? Number = null) : ICommand<OrderId>
     {
 

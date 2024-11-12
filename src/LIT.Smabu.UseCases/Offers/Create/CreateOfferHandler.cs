@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Offers.Create
         {
             var customer = await store.GetByAsync(request.CustomerId);
             var number = request.Number ?? await businessNumberService.CreateOfferNumberAsync();
-            var offer = Offer.Create(request.Id, request.CustomerId, number, customer.MainAddress,
+            var offer = Offer.Create(request.OfferId, request.CustomerId, number, customer.MainAddress,
                 request.Currency, request.TaxRate ?? TaxRate.Default);
             await store.CreateAsync(offer);
             return offer.Id;

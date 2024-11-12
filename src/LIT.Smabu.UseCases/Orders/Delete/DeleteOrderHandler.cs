@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Orders.Delete
     {
         public async Task<Result> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = await store.GetByAsync(request.Id);
+            var order = await store.GetByAsync(request.OrderId);
             order.Delete();
             await store.DeleteAsync(order);
             return Result.Success();

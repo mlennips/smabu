@@ -43,7 +43,7 @@ const InvoiceItemDetails = () => {
 
         handleAsyncTask({
             task: () => updateInvoiceItem(params.invoiceId!, params.invoiceItemId!, {
-                id: data?.id!,
+                invoiceItemId: data?.id!,
                 invoiceId: data?.invoiceId!,
                 quantity: data?.quantity!,
                 unitPrice: data?.unitPrice!,

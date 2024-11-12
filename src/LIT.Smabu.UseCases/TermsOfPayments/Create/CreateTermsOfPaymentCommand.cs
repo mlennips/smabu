@@ -1,20 +1,19 @@
 ﻿using LIT.Smabu.Domain.TermsOfPaymentAggregate;
 using LIT.Smabu.UseCases.Shared;
-using LIT.Smabu.UseCases.TermsOfPayments;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.Create
 {
-    public record CreateTermsOfPaymentCommand : ICommand<TermsOfPaymentDTO>
+    public record CreateTermsOfPaymentCommand : ICommand<TermsOfPaymentId>
     {
-        public CreateTermsOfPaymentCommand(TermsOfPaymentId id, string title, string details, int? dueDays)
+        public CreateTermsOfPaymentCommand(TermsOfPaymentId termsOfPaymentId, string title, string details, int? dueDays)
         {
-            Id = id;
+            TermsOfPaymentId = termsOfPaymentId;
             Title = title;
             Details = details;
             DueDays = dueDays;
         }
 
-        public TermsOfPaymentId Id { get; }
+        public TermsOfPaymentId TermsOfPaymentId { get; }
         public string Title { get; }
         public string Details { get; }
         public int? DueDays { get; }

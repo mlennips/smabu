@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Invoices.Release
     {
         public async Task<Result> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var invoice = await store.GetByAsync(request.Id);
+            var invoice = await store.GetByAsync(request.InvoiceId);
             InvoiceNumber number = await businessNumberService.CreateInvoiceNumberAsync(invoice.Number, request.Number, invoice.FiscalYear);
             var result = invoice.Release(number, request.ReleasedAt);
             if (result.IsFailure)

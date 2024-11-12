@@ -14,7 +14,7 @@ import SelectField from '../../components/controls/SelectField';
 
 const OrderCreate = () => {
     const [data, setData] = useState<CreateOrderCommand>({
-        id: createId<OrderId>(),
+        orderId: createId<OrderId>(),
         name: 'Neuer Auftrag',
         orderDate: new Date(),
     });
@@ -43,16 +43,11 @@ const OrderCreate = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         handleAsyncTask({
-            task: () => createOrder({
-                id: data!.id,
-                name: data!.name,
-                orderDate: data!.orderDate,
-                customerId: data!.customerId
-            }),
+            task: () => createOrder(data),
             onLoading: setLoading,
             onSuccess: (_response) => {
                 toast("Auftrag erfolgreich erstellt", "success");
-                navigate(`/orders/${data?.id?.value}`);
+                navigate(`/orders/${data?.orderId?.value}`);
             },
             onError: setError
         });

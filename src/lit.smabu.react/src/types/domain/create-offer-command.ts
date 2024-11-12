@@ -29,7 +29,7 @@ export interface CreateOfferCommand {
      * @type {OfferId}
      * @memberof CreateOfferCommand
      */
-    id: OfferId;
+    offerId: OfferId;
 
     /**
      * @type {CustomerId}

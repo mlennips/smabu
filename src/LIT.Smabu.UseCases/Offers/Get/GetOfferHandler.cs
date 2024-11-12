@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Offers.Get
     {
         public async Task<Result<OfferDTO>> Handle(GetOfferQuery request, CancellationToken cancellationToken)
         {
-            var offer = await store.GetByAsync(request.Id);
+            var offer = await store.GetByAsync(request.OfferId);
             var customer = await store.GetByAsync(offer.CustomerId);
             return OfferDTO.Create(offer, customer, request.WithItems);
         }

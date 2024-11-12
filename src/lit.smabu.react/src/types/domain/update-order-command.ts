@@ -25,7 +25,7 @@ export interface UpdateOrderCommand {
      * @type {OrderId}
      * @memberof UpdateOrderCommand
      */
-    id?: OrderId;
+    orderId?: OrderId;
 
     /**
      * @type {string}

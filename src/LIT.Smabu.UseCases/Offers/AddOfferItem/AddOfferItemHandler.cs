@@ -10,9 +10,9 @@ namespace LIT.Smabu.UseCases.Offers.AddOfferItem
         public async Task<Result<OfferItemId>> Handle(AddOfferItemCommand request, CancellationToken cancellationToken)
         {
             var offer = await store.GetByAsync(request.OfferId);
-            offer.AddItem(request.Id, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
+            offer.AddItem(request.OfferItemId, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
             await store.UpdateAsync(offer);
-            return request.Id;
+            return request.OfferItemId;
         }
     }
 }

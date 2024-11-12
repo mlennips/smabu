@@ -1,10 +1,13 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate.Events;
+﻿using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.InvoiceAggregate.Events;
 using LIT.Smabu.Domain.PaymentAggregate;
+using LIT.Smabu.Domain.PaymentAggregate.Specifications;
 using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 using MediatR;
+
 namespace LIT.Smabu.UseCases.Payments.Create
 {
     public class CreatePaymentHandler(IAggregateStore store, BusinessNumberService businessNumberService) 
@@ -12,22 +15,14 @@ namespace LIT.Smabu.UseCases.Payments.Create
     {
         public async Task Handle(InvoiceReleasedEvent request, CancellationToken cancellationToken)
         {
+            var alreadyExists = await CheckPaymentForInvoiceAlreadyExistsAsync(request.InvoiceId);
+            if (alreadyExists)
+            {
+                return;
+            }
             var invoice = await store.GetByAsync(request.InvoiceId);
             var customer = await store.GetByAsync(invoice.CustomerId);
-            var command = new CreatePaymentCommand(
-                new PaymentId(Guid.NewGuid()),
-                PaymentDirection.Incoming,
-                invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
-                "",
-                customer.Name,
-                "",
-                customer.Id,
-                request.InvoiceId,
-                invoice.Number.DisplayName,
-                invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
-                invoice.Amount,
-                false);
-
+            var command = CreatePaymentCommand.Create(invoice, customer);
             await Handle(command, cancellationToken);
         }
 
@@ -62,6 +57,12 @@ namespace LIT.Smabu.UseCases.Payments.Create
 
             await store.CreateAsync(payment);
             return payment.Id;
+        }
+
+        private async Task<bool> CheckPaymentForInvoiceAlreadyExistsAsync(InvoiceId invoiceId)
+        {
+            var detectedPayments = await store.ApplySpecificationTask(new DetectPaymentsWithInvoiceIdSpec(invoiceId));
+            return detectedPayments.Any();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem
 {
     public record UpdateInvoiceItemCommand : ICommand<InvoiceItemId>
     {
-        public required InvoiceItemId Id { get; set; }
+        public required InvoiceItemId InvoiceItemId { get; set; }
         public required InvoiceId InvoiceId { get; set; }
         public required string Details { get; set; }
         public required Quantity Quantity { get; set; }

@@ -19,7 +19,7 @@ const OfferItemCreate = () => {
     const { toast } = useNotification();
     const [offer, setOffer] = useState<OfferDTO>();
     const [data, setData] = useState<AddOfferItemCommand>({
-        id: createId(),
+        offerItemId: createId(),
         offerId: { value: params.offerId },
         quantity: { value: 0, unit: undefined },
         unitPrice: 0,

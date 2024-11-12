@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Offers.Delete
     {
         public async Task<Result> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
         {
-            var result = await deleteOfferService.DeleteAsync(request.Id);
+            var result = await deleteOfferService.DeleteAsync(request.OfferId);
             return result; 
         }
     }

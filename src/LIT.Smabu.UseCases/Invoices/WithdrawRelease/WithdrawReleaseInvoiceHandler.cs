@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Invoices.WithdrawRelease
     {
         public async Task<Result> Handle(WithdrawReleaseInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var invoice = await store.GetByAsync(request.Id);
+            var invoice = await store.GetByAsync(request.InvoiceId);
             var result = invoice.WithdrawRelease();
             if (result.IsFailure)
             {

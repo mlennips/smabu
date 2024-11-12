@@ -27,7 +27,7 @@ export interface UpdateInvoiceCommand {
      * @type {InvoiceId}
      * @memberof UpdateInvoiceCommand
      */
-    id: InvoiceId;
+    invoiceId: InvoiceId;
 
     /**
      * @type {DatePeriod}

@@ -3,7 +3,6 @@ using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
-using static LIT.Smabu.UseCases.Orders.OrderDTO;
 
 namespace LIT.Smabu.UseCases.Orders.Get
 {
@@ -11,7 +10,7 @@ namespace LIT.Smabu.UseCases.Orders.Get
     {
         public async Task<Result<OrderDTO>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
-            var order = await store.GetByAsync(request.Id);
+            var order = await store.GetByAsync(request.OrderId);
             var customer = await store.GetByAsync(order.CustomerId);
 
             List<Invoice> invoices = order.References.InvoiceIds.Count != 0

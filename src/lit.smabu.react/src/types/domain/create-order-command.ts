@@ -27,7 +27,7 @@ export interface CreateOrderCommand {
      * @type {OrderId}
      * @memberof CreateOrderCommand
      */
-    id?: OrderId;
+    orderId?: OrderId;
 
     /**
      * @type {CustomerId}

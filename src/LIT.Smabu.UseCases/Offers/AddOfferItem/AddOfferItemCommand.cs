@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Offers.AddOfferItem
 {
     public record AddOfferItemCommand : ICommand<OfferItemId>
     {
-        public required OfferItemId Id { get; set; }
+        public required OfferItemId OfferItemId { get; set; }
         public required OfferId OfferId { get; set; }
         public required string Details { get; set; }
         public required Quantity Quantity { get; set; }

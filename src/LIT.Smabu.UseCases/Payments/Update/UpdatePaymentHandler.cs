@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Payments.Update
     {
         public async Task<Result> Handle(UpdatePaymentCommand request, CancellationToken cancellationToken)
         {
-            var payment = await store.GetByAsync(request.Id);
+            var payment = await store.GetByAsync(request.PaymentId);
             if (payment == null)
             {
                 return PaymentErrors.NotFound;

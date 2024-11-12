@@ -26,7 +26,7 @@ export interface UpdateOfferCommand {
      * @type {OfferId}
      * @memberof UpdateOfferCommand
      */
-    id: OfferId;
+    offerId: OfferId;
 
     /**
      * @type {TaxRate}

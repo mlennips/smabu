@@ -4,7 +4,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Offers.CreateReport
 {
-    public record GetOfferReportQuery(OfferId Id) : IQuery<IReport>
+    public record GetOfferReportQuery(OfferId OfferId) : IQuery<IReport>
     {
 
     }

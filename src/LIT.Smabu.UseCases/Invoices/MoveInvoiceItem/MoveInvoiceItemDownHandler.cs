@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Invoices.MoveInvoiceItem
         public async Task<Result> Handle(MoveInvoiceItemDownCommand request, CancellationToken cancellationToken)
         {
             var invoice = await store.GetByAsync(request.InvoiceId);
-            var result = invoice.MoveItemDown(request.Id);
+            var result = invoice.MoveItemDown(request.InvoiceItemId);
             if (result.IsFailure)
             {
                 return result.Error;

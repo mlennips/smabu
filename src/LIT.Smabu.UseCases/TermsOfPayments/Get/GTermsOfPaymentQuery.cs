@@ -1,16 +1,15 @@
 ﻿using LIT.Smabu.Domain.TermsOfPaymentAggregate;
 using LIT.Smabu.UseCases.Shared;
-using LIT.Smabu.UseCases.TermsOfPayments;
 
 namespace LIT.Smabu.UseCases.TermsOfPayments.Get
 {
     public record GetTermsOfPaymentQuery : IQuery<TermsOfPaymentDTO>
     {
-        public GetTermsOfPaymentQuery(TermsOfPaymentId id)
+        public GetTermsOfPaymentQuery(TermsOfPaymentId termsOfPaymentId)
         {
-            Id = id;
+            TermsOfPaymentId = termsOfPaymentId;
         }
 
-        public TermsOfPaymentId Id { get; }
+        public TermsOfPaymentId TermsOfPaymentId { get; }
     }
 }

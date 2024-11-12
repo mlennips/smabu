@@ -19,7 +19,7 @@ const defaultCurrency: Currency = {
 
 const OfferCreate = () => {
     const [data, setData] = useState<CreateOfferCommand>({
-        id: createId<OfferId>(),
+        offerId: createId<OfferId>(),
         currency: defaultCurrency,
         customerId: { value: '' }
     });
@@ -49,16 +49,11 @@ const OfferCreate = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         handleAsyncTask({
-            task: () => createOffer({
-                id: data!.id,
-                customerId: data!.customerId,
-                currency: data!.currency,
-                taxRate: data!.taxRate
-            }),
+            task: () => createOffer(data),
             onLoading: setLoading,
             onSuccess: (_response) => {
                 toast("Angebot erfolgreich erstellt", "success");
-                navigate(`/offers/${data.id.value}`);
+                navigate(`/offers/${data.offerId.value}`);
             },
             onError: setError
         });

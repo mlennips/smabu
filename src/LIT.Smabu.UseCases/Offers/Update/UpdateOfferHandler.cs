@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Offers.Update
     {
         public async Task<Result<OfferDTO>> Handle(UpdateOfferCommand request, CancellationToken cancellationToken)
         {
-            var offer = await store.GetByAsync(request.Id);
+            var offer = await store.GetByAsync(request.OfferId);
             var customer = await store.GetByAsync(offer.CustomerId);
             offer.Update(request.TaxRate, request.OfferDate, request.ExpiresOn);
             await store.UpdateAsync(offer);

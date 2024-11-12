@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Invoices.UpdateInvoiceItem
         public async Task<Result<InvoiceItemId>> Handle(UpdateInvoiceItemCommand request, CancellationToken cancellationToken)
         {
             var invoice = await store.GetByAsync(request.InvoiceId);
-            var invoiceItemResult = invoice.UpdateItem(request.Id, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
+            var invoiceItemResult = invoice.UpdateItem(request.InvoiceItemId, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
             if (invoiceItemResult.IsFailure)
             {
                 return invoiceItemResult.Error;

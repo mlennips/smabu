@@ -28,7 +28,7 @@ export interface UpdateInvoiceItemCommand {
      * @type {InvoiceItemId}
      * @memberof UpdateInvoiceItemCommand
      */
-    id: InvoiceItemId;
+    invoiceItemId: InvoiceItemId;
 
     /**
      * @type {InvoiceId}

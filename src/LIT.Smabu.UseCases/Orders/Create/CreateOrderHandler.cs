@@ -11,7 +11,7 @@ namespace LIT.Smabu.UseCases.Orders.Create
         public async Task<Result<OrderId>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var number = request.Number ?? await businessNumberService.CreateOrderNumberAsync(request.OrderDate.Year);
-            var order = Order.Create(request.Id, number, request.CustomerId, request.Name, DateOnly.FromDateTime(request.OrderDate));
+            var order = Order.Create(request.OrderId, number, request.CustomerId, request.Name, DateOnly.FromDateTime(request.OrderDate));
             await store.CreateAsync(order);
             return order.Id;
         }

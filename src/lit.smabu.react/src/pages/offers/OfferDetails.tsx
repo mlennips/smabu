@@ -61,7 +61,7 @@ const OfferDetails = () => {
         event.preventDefault();
         handleAsyncTask({
             task: () => updateOffer(params.offerId!, {
-                id: data?.id!,
+                offerId: data?.id!,
                 taxRate: data?.taxRate!,
                 expiresOn: data?.expiresOn!,
             }),

@@ -28,7 +28,7 @@ export interface AddOfferItemCommand {
      * @type {OfferItemId}
      * @memberof AddOfferItemCommand
      */
-    id: OfferItemId;
+    offerItemId: OfferItemId;
 
     /**
      * @type {OfferId}

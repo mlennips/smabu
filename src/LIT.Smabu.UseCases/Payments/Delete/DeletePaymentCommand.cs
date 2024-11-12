@@ -3,7 +3,7 @@ using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Payments.Delete
 {
-    public record DeletePaymentCommand(PaymentId Id) : ICommand
+    public record DeletePaymentCommand(PaymentId PaymentId) : ICommand
     {
     }
 }

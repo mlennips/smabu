@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Payments.Delete
     {
         public async Task<Result> Handle(DeletePaymentCommand request, CancellationToken cancellationToken)
         {
-            var payment = await store.GetByAsync(request.Id);
+            var payment = await store.GetByAsync(request.PaymentId);
             if (payment == null)
             {
                 return PaymentErrors.NotFound;

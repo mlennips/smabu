@@ -5,7 +5,7 @@ namespace LIT.Smabu.UseCases.Payments.Update
 {
     public record UpdatePaymentCommand : ICommand
     {
-        public PaymentId Id { get; }
+        public PaymentId PaymentId { get; }
         public string Details { get; }
         public string Payer { get; }
         public string Payee { get; }
@@ -16,10 +16,10 @@ namespace LIT.Smabu.UseCases.Payments.Update
         public DateTime? DueDate { get; }
         public PaymentStatus Status { get; }
 
-        public UpdatePaymentCommand(PaymentId id, string details, string payer, string payee, string referenceNr, DateTime? referenceDate, 
+        public UpdatePaymentCommand(PaymentId paymentId, string details, string payer, string payee, string referenceNr, DateTime? referenceDate, 
             DateTime accountingDate, decimal amountDue, PaymentStatus status)
         {
-            Id = id;
+            PaymentId = paymentId;
             Details = details;
             Payer = payer;
             Payee = payee;
