@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.OrderAggregate;
-using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 using static LIT.Smabu.UseCases.Orders.OrderDTO;

@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Shared;
 using MediatR;
 
@@ -6,7 +6,7 @@ namespace LIT.Smabu.API
 {
     public static class ApiServiceExtensions
     {
-        public static async Task<IResult> SendAndMatchAsync<TResult>(this IMediator mediator, IRequest<Result<TResult>> request, Func<TResult, IResult> onSuccess, Func<Error, IResult> onFailure)
+        public static async Task<IResult> SendAndMatchAsync<TResult>(this IMediator mediator, IRequest<Result<TResult>> request, Func<TResult, IResult> onSuccess, Func<ErrorDetail, IResult> onFailure)
             where TResult : class
         {
             var response = await mediator.Send(request!);
@@ -34,7 +34,7 @@ namespace LIT.Smabu.API
             }
         }
 
-        public static async Task<IResult> SendAndMatchAsync(this IMediator mediator, IBaseRequest request, Func<IResult>? onSuccess = null, Func<Error, IResult>? onFailure = null)
+        public static async Task<IResult> SendAndMatchAsync(this IMediator mediator, IBaseRequest request, Func<IResult>? onSuccess = null, Func<ErrorDetail, IResult>? onFailure = null)
         {
             onSuccess ??= () => Results.Ok();
             onFailure ??= Results.BadRequest;

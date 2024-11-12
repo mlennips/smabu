@@ -6,7 +6,7 @@ using LIT.Smabu.UseCases.Customers.List;
 using LIT.Smabu.UseCases.Customers.Get;
 using LIT.Smabu.UseCases.Customers;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -47,7 +47,7 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
     }
 }

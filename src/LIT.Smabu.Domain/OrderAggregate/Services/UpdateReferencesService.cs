@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.OrderAggregate.Specifications;
-using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.OrderAggregate.Specifications;
 using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.OrderAggregate.Services
@@ -26,7 +26,7 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
 
         private async Task<Result> CheckReferencesAsync(OrderId orderId, OrderReferences references)
         {
-            var errors = new List<Error>();
+            var errors = new List<ErrorDetail>();
             foreach (var entityId in references.GetAllReferenceIds())
             {
                 var detectedOrder = (await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();

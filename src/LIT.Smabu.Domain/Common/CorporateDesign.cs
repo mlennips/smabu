@@ -32,8 +32,8 @@ namespace LIT.Smabu.Domain.Common
         {
             var formattedName = new string(name.Where(char.IsLetterOrDigit).ToArray()).Replace(" ", "");
             return formattedName.Length > 8
-                ? formattedName[..8].ToUpper()
-                : formattedName.ToUpper();
+                ? formattedName[..8].ToUpperInvariant()
+                : formattedName.ToUpperInvariant();
         }
     }
 }

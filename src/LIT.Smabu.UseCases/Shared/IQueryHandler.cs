@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
 using MediatR;
 
 namespace LIT.Smabu.UseCases.Shared

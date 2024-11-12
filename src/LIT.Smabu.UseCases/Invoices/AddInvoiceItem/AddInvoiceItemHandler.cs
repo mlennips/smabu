@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 

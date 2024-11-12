@@ -11,7 +11,7 @@ using MediatR;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.UseCases.Offers;
 using LIT.Smabu.UseCases.Offers.CreateReport;
-using LIT.Smabu.Domain.Shared;
+using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -55,21 +55,21 @@ namespace LIT.Smabu.API.Endpoints
                     },
                     onFailure: Results.BadRequest))
             .Produces<IResult>()
-            .Produces<Error>(400);
+            .Produces<ErrorDetail>(400);
 
             api.MapPut("/{offerId}", async (IMediator mediator, Guid offerId, UpdateOfferCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OfferId>()
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapDelete("/{offerId}", async (IMediator mediator, Guid offerId) =>
                 await mediator.SendAndMatchAsync(new DeleteOfferCommand(new(offerId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
 
         private static void RegisterOfferItem(RouteGroupBuilder api)
@@ -91,7 +91,7 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
     }
 }

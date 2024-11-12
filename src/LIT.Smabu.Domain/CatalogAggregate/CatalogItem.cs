@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Domain.Common;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
@@ -44,7 +44,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result Update(string name, string description, bool isActive, Unit unit)
         {
-            List<Error> validationErrors = Validate(name, unit);
+            List<ErrorDetail> validationErrors = Validate(name, unit);
             if (validationErrors.Count != 0)
             {
                 return Result.Failure(validationErrors);
@@ -74,9 +74,9 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return Result.Success();
         }
 
-        private static List<Error> Validate(string name, Unit unit)
+        private static List<ErrorDetail> Validate(string name, Unit unit)
         {
-            var validationErrors = new List<Error>();
+            var validationErrors = new List<ErrorDetail>();
             if (string.IsNullOrEmpty(name))
             {
                 validationErrors.Add(CatalogErrors.NameEmpty);

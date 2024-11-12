@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Shared;
 
-namespace LIT.Smabu.Domain.Shared
+namespace LIT.Smabu.Domain.Base
 {
     public class DomainException(string message, IEntityId? entityId = null) : Exception(BuildMessage(message, entityId))
     {

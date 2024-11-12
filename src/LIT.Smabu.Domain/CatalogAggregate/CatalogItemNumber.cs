@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using System.Globalization;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
@@ -10,7 +11,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public static CatalogItemNumber CreateFirst()
         {
-            return new CatalogItemNumber(int.Parse(1.ToString("0000")));
+            return new CatalogItemNumber(1);
         }
 
         public static CatalogItemNumber CreateNext(CatalogItemNumber lastNumber)

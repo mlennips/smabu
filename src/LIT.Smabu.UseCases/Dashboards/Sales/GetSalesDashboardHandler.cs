@@ -1,8 +1,8 @@
-﻿using LIT.Smabu.Domain.Common;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.Services;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 using Microsoft.Extensions.Caching.Memory;

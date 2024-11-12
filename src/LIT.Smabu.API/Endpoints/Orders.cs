@@ -5,10 +5,10 @@ using LIT.Smabu.UseCases.Orders;
 using LIT.Smabu.UseCases.Orders.List;
 using LIT.Smabu.UseCases.Orders.Get;
 using LIT.Smabu.UseCases.Orders.Update;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.Orders.Delete;
 using LIT.Smabu.UseCases.Orders.UpdateReferences;
 using LIT.Smabu.UseCases.Orders.GetReferences;
+using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -48,14 +48,14 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OrderId>()
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapDelete("/{orderId}", async (IMediator mediator, Guid orderId) =>
                 await mediator.SendAndMatchAsync(new DeleteOrderCommand(new(orderId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapGet("/{orderId}/references", async (IMediator mediator, Guid orderId) =>
                 await mediator.SendAndMatchAsync(new GetOrderReferencesQuery(new(orderId)),
@@ -68,7 +68,7 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
     }
 }

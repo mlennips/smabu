@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Domain.Shared
+﻿namespace LIT.Smabu.Domain.Base
 {
     public interface IHasBusinessNumber<T>
         where T : BusinessNumber

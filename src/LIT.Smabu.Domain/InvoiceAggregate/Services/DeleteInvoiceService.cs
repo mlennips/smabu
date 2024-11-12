@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Domain.Common;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.OrderAggregate.Specifications;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate.Services

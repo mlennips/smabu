@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.OrderAggregate.Services;
-using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.OrderAggregate.Services;
 using LIT.Smabu.UseCases.Shared;
 
 namespace LIT.Smabu.UseCases.Orders.UpdateReferences

@@ -1,7 +1,6 @@
 ﻿using LIT.Smabu.Shared;
-using System.Transactions;
 
-namespace LIT.Smabu.Domain.Shared
+namespace LIT.Smabu.Domain.Base
 {
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId
@@ -18,7 +17,7 @@ namespace LIT.Smabu.Domain.Shared
             }
             else
             {
-                throw new DomainException($"Erwartete Version ist {Meta.Version + 1} anstatt {aggregateMeta.Version}.", Id);
+                throw new DomainException($"Expected version is {Meta.Version + 1} instead of {aggregateMeta.Version}.", Id);
             }
         }
 

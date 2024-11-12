@@ -6,13 +6,13 @@ using LIT.Smabu.UseCases.Catalogs.GetItem;
 using LIT.Smabu.UseCases.Catalogs.UpdateItem;
 using LIT.Smabu.UseCases.Catalogs.Update;
 using LIT.Smabu.UseCases.Catalogs.Delete;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.UseCases.Catalogs.RemoveItem;
 using LIT.Smabu.UseCases.Catalogs.GetGroup;
 using LIT.Smabu.UseCases.Catalogs.UpdateGroup;
 using LIT.Smabu.UseCases.Catalogs.RemoveGroup;
 using LIT.Smabu.UseCases.Catalogs.AddGroup;
 using LIT.Smabu.UseCases.Catalogs.AddItem;
+using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -48,7 +48,7 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
 
         private static void MapCatalogGroups(RouteGroupBuilder api)
@@ -77,7 +77,7 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
 
         private static void MapCatalogItems(RouteGroupBuilder api)
@@ -106,7 +106,7 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
-using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Invoices;
 using LIT.Smabu.UseCases.Invoices.AddInvoiceItem;
@@ -62,35 +62,35 @@ namespace LIT.Smabu.API.Endpoints
                     },
                     onFailure: Results.BadRequest))
             .Produces<IResult>()
-            .Produces<Error>(400);
+            .Produces<ErrorDetail>(400);
 
             api.MapPut("/{invoiceId}", async (IMediator mediator, Guid invoiceId, UpdateInvoiceCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceId>()
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapPut("/{invoiceId}/release", async (IMediator mediator, Guid invoiceId, ReleaseInvoiceCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapPut("/{invoiceId}/withdrawrelease", async (IMediator mediator, Guid invoiceId, WithdrawReleaseInvoiceCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapDelete("/{invoiceId}", async (IMediator mediator, Guid invoiceId) =>
                 await mediator.SendAndMatchAsync(new DeleteInvoiceCommand(new(invoiceId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
 
         private static void RegisterInvoiceItem(RouteGroupBuilder api)
@@ -113,21 +113,21 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapPut("/{invoiceId}/items/{invoiceItemId}/moveup", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId) =>
                 await mediator.SendAndMatchAsync(new MoveInvoiceItemUpCommand(new(invoiceItemId), new(invoiceId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapDelete("/{invoiceId}/items/{invoiceItemId}", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId) =>
                 await mediator.SendAndMatchAsync(new RemoveInvoiceItemCommand(new(invoiceItemId), new(invoiceId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
     }
 }

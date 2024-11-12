@@ -1,8 +1,8 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate.Events;
+using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -127,7 +127,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             var item = Items.Find(x => x.Id == id);
             if (item == null)
             {
-                return Result.Failure(new Error("Invoice.ItemNotFound", "Item not found."));
+                return Result.Failure(new ErrorDetail("Invoice.ItemNotFound", "Item not found."));
             }
 
             Items.Remove(item);

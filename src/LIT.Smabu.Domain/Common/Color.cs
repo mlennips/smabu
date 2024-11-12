@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Shared;
+using System.Globalization;
 
 namespace LIT.Smabu.Domain.Common
 {
@@ -41,7 +42,7 @@ namespace LIT.Smabu.Domain.Common
         private static int GetRGB(string hexValue)
         {
             var hexWithoutHash = hexValue.TrimStart('#');
-            return int.Parse(hexWithoutHash, System.Globalization.NumberStyles.HexNumber);
+            return int.Parse(hexWithoutHash, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using LIT.Smabu.Domain.InvoiceAggregate;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate.Events;
 using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.Domain.PaymentAggregate.Specifications;
 using LIT.Smabu.Domain.Services;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Shared;
 using LIT.Smabu.UseCases.Shared;
 using MediatR;

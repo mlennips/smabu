@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using System.Globalization;
 
 namespace LIT.Smabu.Domain.OrderAggregate
 {
@@ -10,7 +11,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
 
         public static OrderNumber CreateFirst(int year)
         {
-            return new OrderNumber(int.Parse(year.ToString() + 1.ToString("0000")));
+            return new OrderNumber(long.Parse($"{year}0001", CultureInfo.InvariantCulture));
         }
 
         public static OrderNumber CreateNext(OrderNumber lastNumber)
