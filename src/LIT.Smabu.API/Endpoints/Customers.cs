@@ -14,7 +14,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterCustomersEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/customers")
+            RouteGroupBuilder api = routes.MapGroup("/customers")
                 .WithTags(["Customers"])
                 .RequireAuthorization();
 
@@ -30,13 +30,13 @@ namespace LIT.Smabu.API.Endpoints
                     onFailure: Results.BadRequest))
                 .Produces<CustomerDTO[]>();
 
-            api.MapGet("/{customerId}", async (IMediator mediator, Guid customerId) => 
+            api.MapGet("/{customerId}", async (IMediator mediator, Guid customerId) =>
                 await mediator.SendAndMatchAsync(new GetCustomerQuery(new(customerId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<CustomerDTO>();
 
-            api.MapPut("/{customerId}", async (IMediator mediator, Guid customerId, UpdateCustomerCommand command) => 
+            api.MapPut("/{customerId}", async (IMediator mediator, Guid customerId, UpdateCustomerCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))

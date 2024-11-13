@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Domain.PaymentAggregate
 {
-    public record PaymentId(Guid Value)  : EntityId<Payment>(Value)
+    public record PaymentId(Guid Value) : EntityId<Payment>(Value)
     {
 
     }

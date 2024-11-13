@@ -16,22 +16,16 @@ namespace LIT.Smabu.UseCases.Invoices
             public async Task<Result<InvoiceDTO[]>> Handle(ListInvoicesQuery request, CancellationToken cancellationToken)
             {
                 IReadOnlyList<Invoice> invoices = [];
-                if (request.CustomerId != null)
-                {
-                    invoices = await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(request.CustomerId));
-                }
-                else
-                {
-                    invoices = await store.GetAllAsync<Invoice>();
-                }
+                invoices = request.CustomerId != null
+                    ? await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(request.CustomerId))
+                    : await store.GetAllAsync<Invoice>();
 
                 var customerIds = invoices.Select(x => x.CustomerId).ToList();
-                var customers = await store.GetByAsync(customerIds);
-                var result = invoices.Select(x => InvoiceDTO.Create(x, customers[x.CustomerId]))
+                Dictionary<IEntityId<Customer>, Customer> customers = await store.GetByAsync(customerIds);
+                InvoiceDTO[] result = [.. invoices.Select(x => InvoiceDTO.Create(x, customers[x.CustomerId]))
                     .OrderBy(x => x.Number.IsTemporary ? 0 : 1)
                     .ThenByDescending(x => x.Number)
-                    .ThenByDescending(x => x.CreatedAt)
-                    .ToArray();
+                    .ThenByDescending(x => x.CreatedAt)];
                 return result;
             }
         }

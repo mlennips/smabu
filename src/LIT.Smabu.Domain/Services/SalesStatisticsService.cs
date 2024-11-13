@@ -46,7 +46,7 @@ namespace LIT.Smabu.Domain.Services
 
         public async Task<GetSalesByYear> GetSalesByYearAsync()
         {
-            var invoices = await GetInvoicesAsync();
+            IReadOnlyList<Invoice> invoices = await GetInvoicesAsync();
 
             GetSalesByYear result = new()
             {
@@ -69,7 +69,7 @@ namespace LIT.Smabu.Domain.Services
 
         public async Task<Dictionary<CustomerId, decimal>> GetSalesByCustomerAsync()
         {
-            var invoices = await GetInvoicesAsync();
+            IReadOnlyList<Invoice> invoices = await GetInvoicesAsync();
 
             var result = invoices
                 .GroupBy(invoice => invoice.CustomerId)
@@ -79,7 +79,10 @@ namespace LIT.Smabu.Domain.Services
             return result;
         }
 
-        private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync() => invoices ??= await store.GetAllAsync<Invoice>();
+        private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync()
+        {
+            return invoices ??= await store.GetAllAsync<Invoice>();
+        }
     }
 
     public record GetSalesByYear

@@ -1,0 +1,13 @@
+﻿[*.cs]
+
+# CS1591: Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
+dotnet_diagnostic.CS1591.severity = silent
+
+# IDE0008: Expliziten Typ verwenden
+csharp_style_var_when_type_is_apparent = true
+
+# IDE0008: Expliziten Typ verwenden
+csharp_style_var_for_built_in_types = true
+
+# IDE0005: Generate documentation file
+dotnet_diagnostic.IDE0005.severity = none

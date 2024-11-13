@@ -15,18 +15,11 @@ namespace LIT.Smabu.Domain.OrderAggregate.Specifications
 
         private static Expression<Func<Order, bool>> GetExpression(IEntityId referenceId)
         {
-            if (referenceId is InvoiceId invoiceId)
-            {
-                return x => x.References.InvoiceIds.Contains(invoiceId);
-            }
-            else if (referenceId is OfferId offerId)
-            {
-                return x => x.References.OfferIds.Contains(offerId);
-            }
-            else
-            {
-                return x => false;
-            }
+            return referenceId is InvoiceId invoiceId
+                ? (x => x.References.InvoiceIds.Contains(invoiceId))
+                : (Expression<Func<Order, bool>>)(referenceId is OfferId offerId
+                    ? (x => x.References.OfferIds.Contains(offerId))
+                    : (x => false));
         }
     }
 }

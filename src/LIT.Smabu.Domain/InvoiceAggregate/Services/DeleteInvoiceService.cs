@@ -15,7 +15,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate.Services
                 return CommonErrors.HasReferences;
             }
 
-            var invoice = await store.GetByAsync(id);
+            Invoice invoice = await store.GetByAsync(id);
             invoice.Delete();
             await store.DeleteAsync(invoice);
             return Result.Success();
@@ -23,7 +23,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate.Services
 
         private async Task<bool> CheckIsInOrdersAsync(InvoiceId id)
         {
-            var orders = await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
+            IReadOnlyList<OrderAggregate.Order> orders = await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
             return orders.Any();
         }
     }

@@ -30,6 +30,9 @@ namespace LIT.Smabu.Domain.Common
             _ => "???"
         };
 
-        public static Unit[] GetAll() => [None, Hour, Day, Item, Project];
+        public static Unit[] GetAll()
+        {
+            return [None, Hour, Day, Item, Project];
+        }
     }
 }

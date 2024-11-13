@@ -13,12 +13,13 @@ namespace LIT.Smabu.UseCases.Payments
         {
             public async Task<Result> Handle(CompletePaymentCommand request, CancellationToken cancellationToken)
             {
-                var payment = await store.GetByAsync(request.PaymentId);
+                Payment payment = await store.GetByAsync(request.PaymentId);
                 if (payment == null)
                 {
                     return PaymentErrors.NotFound;
                 }
-                var completeResult = payment.Complete(request.Amount, request.PaidAt);
+
+                Result completeResult = payment.Complete(request.Amount, request.PaidAt);
 
                 if (completeResult.IsSuccess)
                 {

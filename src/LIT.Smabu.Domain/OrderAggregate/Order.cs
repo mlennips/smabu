@@ -3,8 +3,8 @@ using LIT.Smabu.Domain.CustomerAggregate;
 
 namespace LIT.Smabu.Domain.OrderAggregate
 {
-    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description, 
-        DateOnly orderDate, DateTime? deadline, string bunchKey = "") 
+    public class Order(OrderId id, OrderNumber number, CustomerId customerId, string name, string description,
+        DateOnly orderDate, DateTime? deadline, string bunchKey = "")
         : AggregateRoot<OrderId>, IHasBusinessNumber<OrderNumber>
     {
         public override OrderId Id { get; } = id;
@@ -19,11 +19,9 @@ namespace LIT.Smabu.Domain.OrderAggregate
 
         public static Order Create(OrderId id, OrderNumber number, CustomerId customerId, string name, DateOnly orderDate)
         {
-            if (customerId == null || number == null || id == null || string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException("customerId, number, id, and name cannot be empty.");
-            }
-            return new Order(id, number, customerId, name, "", orderDate, null);
+            return customerId == null || number == null || id == null || string.IsNullOrEmpty(name)
+                ? throw new ArgumentException("customerId, number, id, and name cannot be empty.")
+                : new Order(id, number, customerId, name, "", orderDate, null);
         }
 
         public Result Update(string name, string description, DateOnly orderDate, string bunchKey, DateTime? deadline)

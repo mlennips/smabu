@@ -15,7 +15,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterPaymentsEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/payments")
+            RouteGroupBuilder api = routes.MapGroup("/payments")
                 .WithTags(["Payments"])
                 .RequireAuthorization();
 

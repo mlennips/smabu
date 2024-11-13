@@ -12,7 +12,7 @@ namespace LIT.Smabu.UseCases.Invoices
         {
             public async Task<Result> Handle(DeleteInvoiceCommand request, CancellationToken cancellationToken)
             {
-                var result = await deleteInvoiceService.DeleteAsync(request.InvoiceId);
+                Result result = await deleteInvoiceService.DeleteAsync(request.InvoiceId);
                 return result;
             }
         }

@@ -14,7 +14,7 @@ namespace LIT.Smabu.UseCases.Orders
         {
             public async Task<Result<OrderId>> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
             {
-                var order = await store.GetByAsync(request.OrderId);
+                Order order = await store.GetByAsync(request.OrderId);
                 order.Update(request.Name, request.Description, request.OrderDate, request.BunchKey, request.Deadline);
                 await store.UpdateAsync(order);
                 return order.Id;

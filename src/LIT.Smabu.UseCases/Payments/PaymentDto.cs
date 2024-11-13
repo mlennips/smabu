@@ -29,13 +29,7 @@ namespace LIT.Smabu.UseCases.Payments
         public Currency Currency { get; } = currency;
         public PaymentStatus Status { get; } = status;
 
-        public string DisplayName
-        {
-            get
-            {
-                return $"{Direction.Value} {Number.DisplayName} / {Payer}{Payee} / {ReferenceNr}";
-            }
-        }
+        public string DisplayName => $"{Direction.Value} {Number.DisplayName} / {Payer}{Payee} / {ReferenceNr}";
 
         internal static PaymentDTO Create(Payment payment)
         {

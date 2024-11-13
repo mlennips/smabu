@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Offers
         {
             public async Task<Result<IReport>> Handle(GetOfferReportQuery request, CancellationToken cancellationToken)
             {
-                var report = await reportFactory.CreateOfferReportAsync(request.OfferId);
+                IReport report = await reportFactory.CreateOfferReportAsync(request.OfferId);
                 return Result.Success(report);
             }
         }

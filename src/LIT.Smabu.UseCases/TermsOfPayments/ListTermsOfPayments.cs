@@ -13,8 +13,8 @@ namespace LIT.Smabu.UseCases.TermsOfPayments
         {
             public async Task<Result<TermsOfPaymentDTO[]>> Handle(ListTermsOfPaymentsQuery request, CancellationToken cancellationToken)
             {
-                var termsOfPayments = await store.GetAllAsync<TermsOfPayment>();
-                return termsOfPayments.Select(x => TermsOfPaymentDTO.Create(x)).OrderByDescending(x => x.Title).ToArray();
+                IReadOnlyList<TermsOfPayment> termsOfPayments = await store.GetAllAsync<TermsOfPayment>();
+                return termsOfPayments.Select(TermsOfPaymentDTO.Create).OrderByDescending(x => x.Title).ToArray();
             }
         }
     }

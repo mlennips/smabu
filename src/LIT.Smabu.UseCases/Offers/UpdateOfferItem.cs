@@ -16,7 +16,7 @@ namespace LIT.Smabu.UseCases.Offers
         {
             public async Task<Result> Handle(UpdateOfferItemCommand request, CancellationToken cancellationToken)
             {
-                var offer = await store.GetByAsync(request.OfferId);
+                Offer offer = await store.GetByAsync(request.OfferId);
                 offer.UpdateItem(request.OfferItemId, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
                 await store.UpdateAsync(offer);
                 return Result.Success();

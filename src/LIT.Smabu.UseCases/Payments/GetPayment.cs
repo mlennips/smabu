@@ -13,12 +13,8 @@ namespace LIT.Smabu.UseCases.Payments
         {
             public async Task<Result<PaymentDTO>> Handle(GetPaymentQuery request, CancellationToken cancellationToken)
             {
-                var payment = await store.GetByAsync(request.PaymentId);
-                if (payment == null)
-                {
-                    return PaymentErrors.NotFound;
-                }
-                return PaymentDTO.Create(payment);
+                Payment payment = await store.GetByAsync(request.PaymentId);
+                return payment == null ? PaymentErrors.NotFound : PaymentDTO.Create(payment);
             }
         }
     }

@@ -19,7 +19,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterOffersEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/offers")
+            RouteGroupBuilder api = routes.MapGroup("/offers")
                 .WithTags(["Offers"])
                 .RequireAuthorization();
 
@@ -49,7 +49,8 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapGet("/{offerId}/report", async (IMediator mediator, Guid offerId) =>
                await mediator.SendAndMatchAsync(new GetOfferReportQuery(new(offerId)),
-                    onSuccess: (report) => {
+                    onSuccess: (report) =>
+                    {
                         var pdf = report.GeneratePdf();
                         return Results.File(pdf, "application/pdf");
                     },

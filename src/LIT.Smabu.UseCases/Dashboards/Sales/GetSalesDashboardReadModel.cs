@@ -32,7 +32,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
             public List<Serie> Series { get; internal set; } = [];
             public List<string> ValueLabels { get; internal set; } = [];
 
-            public record Serie(string Label, string Key, string Group = "") 
+            public record Serie(string Label, string Key, string Group = "")
             {
                 public List<decimal> Values { get; internal set; } = [];
             }

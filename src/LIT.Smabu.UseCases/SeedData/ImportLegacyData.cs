@@ -20,13 +20,13 @@ namespace LIT.Smabu.UseCases.SeedData
             if (File.Exists(jsonFile))
             {
                 var jsonContent = await File.ReadAllTextAsync(jsonFile);
-                var importObject = JsonConvert.DeserializeObject<BackupObject>(jsonContent);
+                BackupObject? importObject = JsonConvert.DeserializeObject<BackupObject>(jsonContent);
                 var paymentCounter = 0;
                 if (importObject?.Kunden != null)
                 {
                     try
                     {
-                        foreach (var importKunde in importObject.Kunden)
+                        foreach (BackupObject.Kunde importKunde in importObject.Kunden)
                         {
                             var customerId = new CustomerId(Guid.NewGuid());
 
@@ -39,7 +39,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             await store.CreateAsync(customer);
 
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
-                            foreach (var importRechnung in importRechnungen)
+                            foreach (BackupObject.Rechnung? importRechnung in importRechnungen)
                             {
                                 var invoiceNumber = InvoiceNumber.CreateLegacy((long)importRechnung.Rechnungsnummer);
                                 var invoiceId = new InvoiceId(Guid.NewGuid());
@@ -49,9 +49,9 @@ namespace LIT.Smabu.UseCases.SeedData
                                     Currency.EUR, TaxRate.Default);
                                 invoice.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
 
-                                foreach (var importRechnungPosition in importRechnung.Positionen)
+                                foreach (BackupObject.Rechnung.Rechnungsposition importRechnungPosition in importRechnung.Positionen)
                                 {
-                                    var invoiceItem = invoice.AddItem(new InvoiceItemId(Guid.NewGuid()),
+                                    invoice.AddItem(new InvoiceItemId(Guid.NewGuid()),
                                         string.IsNullOrWhiteSpace(importRechnungPosition.Bemerkung) ? "Keine weiteren Informationen" : importRechnungPosition.Bemerkung,
                                         new Quantity(importRechnungPosition.Menge, ParseUnit(importRechnungPosition.ProduktEinheit)),
                                         importRechnungPosition.Preis);
@@ -63,7 +63,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             }
 
                             var importAngebote = importObject.Angebote.Where(x => x.KundeId == importKunde.Id).ToList();
-                            foreach (var importAngebot in importAngebote)
+                            foreach (BackupObject.Angebot? importAngebot in importAngebote)
                             {
                                 var offerNumber = OfferNumber.CreateLegacy(importAngebot.Id);
                                 var offerId = new OfferId(Guid.NewGuid());
@@ -72,9 +72,9 @@ namespace LIT.Smabu.UseCases.SeedData
                                 offer.Update(TaxRate.Default, DateOnly.FromDateTime(importAngebot.Angebotsdatum),
                                     DateOnly.FromDateTime(importAngebot.Angebotsdatum.AddDays(importAngebot.GueltigkeitTage)));
 
-                                foreach (var importAngebotPosition in importAngebot.Positionen)
+                                foreach (BackupObject.Angebot.Angebotsposition importAngebotPosition in importAngebot.Positionen)
                                 {
-                                    var offerItem = offer.AddItem(new OfferItemId(Guid.NewGuid()), importAngebotPosition.Bemerkung,
+                                    offer.AddItem(new OfferItemId(Guid.NewGuid()), importAngebotPosition.Bemerkung,
                                         new Quantity(importAngebotPosition.Menge, ParseUnit(importAngebotPosition.ProduktEinheit)), importAngebotPosition.Preis);
                                 }
 
@@ -97,14 +97,14 @@ namespace LIT.Smabu.UseCases.SeedData
 
         private static async Task<int> ImportPaymentsAsync(IAggregateStore store, ImportUser currentUser, BackupObject importObject, int paymentCounter)
         {
-            var invoices = await store.GetAllAsync<Invoice>();
-            var customers = await store.GetAllAsync<Customer>();
-            foreach (var invoice in invoices.OrderBy(x => x.InvoiceDate))
+            IReadOnlyList<Invoice> invoices = await store.GetAllAsync<Invoice>();
+            IReadOnlyList<Customer> customers = await store.GetAllAsync<Customer>();
+            foreach (Invoice? invoice in invoices.OrderBy(x => x.InvoiceDate))
             {
-                var importRechnung = importObject.Rechnungen.Single(x => x.Rechnungsnummer == invoice.Number.Value);
+                BackupObject.Rechnung importRechnung = importObject.Rechnungen.Single(x => x.Rechnungsnummer == invoice.Number.Value);
                 if (importRechnung.LeistungsdatumBis != null)
                 {
-                    var customer = customers.Single(x => x.Number.Value == importRechnung.KundeId);
+                    Customer customer = customers.Single(x => x.Number.Value == importRechnung.KundeId);
 
                     var paymentId = new PaymentId(Guid.NewGuid());
                     var payment = Payment.CreateIncoming(paymentId, new PaymentNumber(++paymentCounter), "", customer.Name, "",

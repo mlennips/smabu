@@ -16,8 +16,8 @@ namespace LIT.Smabu.UseCases.Invoices
         {
             public async Task<Result<InvoiceItemId>> Handle(UpdateInvoiceItemCommand request, CancellationToken cancellationToken)
             {
-                var invoice = await store.GetByAsync(request.InvoiceId);
-                var invoiceItemResult = invoice.UpdateItem(request.InvoiceItemId, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
+                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Result<InvoiceItem> invoiceItemResult = invoice.UpdateItem(request.InvoiceItemId, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
                 if (invoiceItemResult.IsFailure)
                 {
                     return invoiceItemResult.Error;

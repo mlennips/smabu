@@ -14,12 +14,8 @@ namespace LIT.Smabu.UseCases.Catalogs
 
             public async Task<Result> Handle(RemoveCatalogItemCommand request, CancellationToken cancellationToken)
             {
-                var result = await removeCatalogItemService.RemoveAsync(request.CatalogId, request.CatalogItemId);
-                if (result.IsFailure)
-                {
-                    return result.Error;
-                }
-                return Result.Success();
+                Result result = await removeCatalogItemService.RemoveAsync(request.CatalogId, request.CatalogItemId);
+                return result.IsFailure ? (Result)result.Error : Result.Success();
             }
         }
     }

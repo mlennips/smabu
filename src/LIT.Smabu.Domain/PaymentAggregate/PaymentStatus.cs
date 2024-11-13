@@ -24,6 +24,9 @@ namespace LIT.Smabu.Domain.PaymentAggregate
             }
         }
 
-        public static PaymentStatus[] GetAll() => ValidValues.Select(v => new PaymentStatus(v)).ToArray();
+        public static PaymentStatus[] GetAll()
+        {
+            return ValidValues.Select(v => new PaymentStatus(v)).ToArray();
+        }
     }
 }

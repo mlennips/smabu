@@ -8,6 +8,9 @@ namespace LIT.Smabu.Domain.OrderAggregate
     {
         public static OrderReferences Empty => new([], []);
 
-        public IEnumerable<IEntityId> GetAllReferenceIds() => OfferIds.Cast<IEntityId>().Concat(InvoiceIds.Cast<IEntityId>());
+        public IEnumerable<IEntityId> GetAllReferenceIds()
+        {
+            return OfferIds.Cast<IEntityId>().Concat(InvoiceIds.Cast<IEntityId>());
+        }
     }
 }

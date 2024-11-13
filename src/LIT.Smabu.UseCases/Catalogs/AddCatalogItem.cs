@@ -2,6 +2,7 @@
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
+using LIT.Smabu.Domain.InvoiceAggregate;
 
 namespace LIT.Smabu.UseCases.Catalogs
 {
@@ -13,8 +14,8 @@ namespace LIT.Smabu.UseCases.Catalogs
         {
             public async Task<Result> Handle(AddCatalogItemCommand request, CancellationToken cancellationToken)
             {
-                var catalog = await store.GetByAsync(request.CatalogId);
-                var addResult = catalog.AddItem(request.CatalogItemId, request.CatalogGroupId, request.Name, request.Description);
+                Catalog catalog = await store.GetByAsync(request.CatalogId);
+                Result<CatalogItem> addResult = catalog.AddItem(request.CatalogItemId, request.CatalogGroupId, request.Name, request.Description);
                 await store.UpdateAsync(catalog);
                 return addResult;
             }

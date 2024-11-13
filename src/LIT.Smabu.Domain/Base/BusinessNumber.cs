@@ -17,8 +17,11 @@ namespace LIT.Smabu.Domain.Base
             DisplayName = $"{ShortForm}-{(IsTemporary ? TempText : ConvertValueToFormattedString())}";
         }
 
-        public override int CompareTo(SimpleValueObject<long>? other) => other is not null
+        public override int CompareTo(SimpleValueObject<long>? other)
+        {
+            return other is not null
             ? string.Compare(DisplayName, ((BusinessNumber)other).DisplayName, StringComparison.Ordinal) : -1;
+        }
 
         private string ConvertValueToFormattedString()
         {

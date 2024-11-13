@@ -16,8 +16,8 @@ namespace LIT.Smabu.UseCases.Catalogs
 
             public async Task<Result> Handle(UpdateCatalogItemCommand request, CancellationToken cancellationToken)
             {
-                var catalog = await store.GetByAsync(request.CatalogId);
-                var updateResult = catalog.UpdateItem(request.CatalogItemId, request.Name, request.Description, request.IsActive,
+                Catalog catalog = await store.GetByAsync(request.CatalogId);
+                Result updateResult = catalog.UpdateItem(request.CatalogItemId, request.Name, request.Description, request.IsActive,
                     request.Unit, request.Prices, request.CustomerPrices);
                 await store.UpdateAsync(catalog);
                 return updateResult;

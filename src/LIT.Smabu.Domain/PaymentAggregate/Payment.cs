@@ -50,7 +50,7 @@ namespace LIT.Smabu.Domain.PaymentAggregate
         }
 
         public static Payment CreateIncoming(PaymentId id, PaymentNumber number, string details, string payer, string payee,
-            CustomerId customerId, InvoiceId invoiceId, string referenceNr, DateTime? referenceDate, DateTime accountingDate, 
+            CustomerId customerId, InvoiceId invoiceId, string referenceNr, DateTime? referenceDate, DateTime accountingDate,
             decimal amountDue, DateTime? dueDate)
         {
             return new Payment(id, number, PaymentDirection.Incoming, accountingDate, details, payer, payee, customerId, invoiceId,
@@ -104,11 +104,7 @@ namespace LIT.Smabu.Domain.PaymentAggregate
 
         public override Result Delete()
         {
-            if (Status == PaymentStatus.Paid)
-            {
-                return PaymentErrors.PaymentAlreadyPaid;
-            }
-            return base.Delete();
+            return Status == PaymentStatus.Paid ? (Result)PaymentErrors.PaymentAlreadyPaid : base.Delete();
         }
 
         public bool CheckIsOverdue(int toleranceDays = 2)

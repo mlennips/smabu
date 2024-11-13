@@ -35,7 +35,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                     Currency = Currency.EUR
                 };
 
-                var customers = await store.GetAllAsync<Customer>();
+                IReadOnlyList<Customer> customers = await store.GetAllAsync<Customer>();
 
                 var salesTasks = new Task[]
                 {
@@ -68,7 +68,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
 
             private async Task SetSalesByYearDatasetAsync(GetSalesDashboardReadModel result, IReadOnlyList<Customer> customers)
             {
-                var salesByYear = await salesStatisticsService.GetSalesByYearAsync();
+                GetSalesByYear salesByYear = await salesStatisticsService.GetSalesByYearAsync();
                 var startYear = salesByYear.Items.Min(x => x.Year);
                 var endYear = DateTime.Now.Year;
 
@@ -76,10 +76,10 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                 var yearSerie = new Dataset.Serie("Jahr", "year");
                 var customerSeries = customers.Select(x => new Dataset.Serie(x.CorporateDesign.ShortName, x.Id.ToString(), "customer")).ToList();
                 var series = new List<Dataset.Serie>
-            {
-                totalSerie,
-                yearSerie
-            };
+                {
+                    totalSerie,
+                    yearSerie
+                };
                 series.AddRange(customerSeries);
                 result.SalesByYear = new Dataset
                 {
@@ -90,13 +90,13 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                 foreach (var year in Enumerable.Range(startYear, endYear - startYear + 1))
                 {
                     result.SalesByYear.ValueLabels.Add(year.ToString("0000", CultureInfo.InvariantCulture));
-                    var yearItem = salesByYear.Items.FirstOrDefault(x => x.Year == year);
+                    GetSalesByYear.Item? yearItem = salesByYear.Items.FirstOrDefault(x => x.Year == year);
                     totalAmount += yearItem?.Amount ?? 0;
                     totalSerie.Values.Add(totalAmount);
                     yearSerie.Values.Add(yearItem?.Amount ?? 0);
-                    foreach (var customerSerie in customerSeries)
+                    foreach (Dataset.Serie? customerSerie in customerSeries)
                     {
-                        var customerData = yearItem?.Customers.FirstOrDefault(x => x.CustomerId.ToString() == customerSerie.Key);
+                        GetSalesByYear.Item.Customer? customerData = yearItem?.Customers.FirstOrDefault(x => x.CustomerId.ToString() == customerSerie.Key);
                         customerSerie.Values.Add(customerData?.TotalAmount ?? 0);
                     }
                 }
@@ -104,7 +104,7 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
 
             private async Task SetSalesByCustomerAsync(GetSalesDashboardReadModel result, IReadOnlyList<Customer> customers)
             {
-                var salesByCustomer = await salesStatisticsService.GetSalesByCustomerAsync();
+                Dictionary<CustomerId, decimal> salesByCustomer = await salesStatisticsService.GetSalesByCustomerAsync();
                 result.SalesByCustomer = salesByCustomer
                     .Select(x => new SalesAmountItem(
                         customers.Single(c => c.Id == x.Key).CorporateDesign.ShortName,

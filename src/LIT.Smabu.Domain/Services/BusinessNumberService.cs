@@ -52,8 +52,8 @@ namespace LIT.Smabu.Domain.Services
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>, IHasBusinessNumber<TBusinessNumber>
             where TBusinessNumber : BusinessNumber
         {
-            var last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate, TBusinessNumber>())).SingleOrDefault();
-            var lastNumber = last?.Number;
+            TAggregate? last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate, TBusinessNumber>())).SingleOrDefault();
+            TBusinessNumber? lastNumber = last?.Number;
             return lastNumber;
         }
 
@@ -61,8 +61,8 @@ namespace LIT.Smabu.Domain.Services
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>, IHasBusinessNumber<TBusinessNumber>
             where TBusinessNumber : BusinessNumber
         {
-            var last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate, TBusinessNumber>(year))).SingleOrDefault();
-            var lastNumber = last?.Number;
+            TAggregate? last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate, TBusinessNumber>(year))).SingleOrDefault();
+            TBusinessNumber? lastNumber = last?.Number;
             return lastNumber;
         }
     }

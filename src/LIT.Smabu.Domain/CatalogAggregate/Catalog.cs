@@ -9,11 +9,11 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public override CatalogId Id { get; } = id;
         public string Name { get; private set; } = name;
-        public IReadOnlyList<CatalogGroup> Groups  => _groups;
+        public IReadOnlyList<CatalogGroup> Groups => _groups;
 
         public static Catalog Create(CatalogId id, string name)
         {
-            var catalog = new Catalog(id, name, []);
+            Catalog catalog = new(id, name, []);
             return catalog;
         }
 
@@ -29,8 +29,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public CatalogGroup? GetGroup(CatalogGroupId id)
         {
-            var group = Groups.FirstOrDefault(g => g.Id == id);
-            return group;
+            return Groups.FirstOrDefault(g => g.Id == id);
         }
 
         public CatalogGroup GetGroupForItem(CatalogItemId id)
@@ -55,7 +54,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result RemoveGroup(CatalogGroupId id)
         {
-            var group = Groups.FirstOrDefault(g => g.Id == id);
+            CatalogGroup? group = Groups.FirstOrDefault(g => g.Id == id);
             if (group == null)
             {
                 return Result.Failure(CatalogErrors.GroupNotFound);
@@ -70,7 +69,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result UpdateGroup(CatalogGroupId id, string name, string description)
         {
-            var group = Groups.FirstOrDefault(g => g.Id == id);
+            CatalogGroup? group = Groups.FirstOrDefault(g => g.Id == id);
             if (group == null)
             {
                 return Result.Failure(CatalogErrors.GroupNotFound);
@@ -81,7 +80,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public CatalogItem? GetItem(CatalogItemId id)
         {
-            var item = GetAllItems().FirstOrDefault(i => i.Id == id);
+            CatalogItem? item = GetAllItems().FirstOrDefault(i => i.Id == id);
             return item;
         }
 
@@ -93,15 +92,15 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         public Result UpdateItem(CatalogItemId id, string name, string description, bool isActive, Unit unit,
             CatalogItemPrice[] prices, CustomerCatalogItemPrice[] customerPrices)
         {
-            var item = GetItem(id);
+            CatalogItem? item = GetItem(id);
             if (item == null)
             {
                 return Result.Failure(CatalogErrors.ItemNotFound);
             }
             else
             {
-                var updateResult = item.Update(name, description, isActive, unit);
-                var pricesResult = item.UpdatePrices(prices, customerPrices);
+                Result updateResult = item.Update(name, description, isActive, unit);
+                Result pricesResult = item.UpdatePrices(prices, customerPrices);
 
                 return updateResult.IsSuccess && pricesResult.IsSuccess
                     ? Result.Success()
@@ -119,13 +118,13 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             {
                 return CatalogErrors.NameAlreadyExists;
             }
-            var group = Groups.Single(x => x.Id == catalogGroupId);
-            var lastNumber = Groups.SelectMany(g => g.Items)
+            CatalogGroup group = Groups.Single(x => x.Id == catalogGroupId);
+            CatalogItemNumber? lastNumber = Groups.SelectMany(g => g.Items)
                 .Select(i => i.Number)
                 .OrderByDescending(i => i)
                 .FirstOrDefault();
-            var number = lastNumber != null ? CatalogItemNumber.CreateNext(lastNumber) : CatalogItemNumber.CreateFirst();
-            var result = group.AddItem(id, number, name, description, Unit.None);
+            CatalogItemNumber number = lastNumber != null ? CatalogItemNumber.CreateNext(lastNumber) : CatalogItemNumber.CreateFirst();
+            Result<CatalogItem> result = group.AddItem(id, number, name, description, Unit.None);
             return result.IsSuccess
                 ? result.Value!
                 : result.Error;
@@ -133,8 +132,8 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result RemoveItem(CatalogItemId id)
         {
-            var group = Groups.Single(g => g.Items.Any(i => i.Id == id));
-            var result = group.RemoveItem(id);
+            CatalogGroup group = Groups.Single(g => g.Items.Any(i => i.Id == id));
+            Result result = group.RemoveItem(id);
             return result;
         }
     }

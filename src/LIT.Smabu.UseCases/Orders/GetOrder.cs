@@ -4,6 +4,7 @@ using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
+using LIT.Smabu.Domain.CustomerAggregate;
 
 namespace LIT.Smabu.UseCases.Orders
 {
@@ -15,8 +16,8 @@ namespace LIT.Smabu.UseCases.Orders
         {
             public async Task<Result<OrderDTO>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
             {
-                var order = await store.GetByAsync(request.OrderId);
-                var customer = await store.GetByAsync(order.CustomerId);
+                Order order = await store.GetByAsync(request.OrderId);
+                Customer customer = await store.GetByAsync(order.CustomerId);
 
                 List<Invoice> invoices = order.References.InvoiceIds.Count != 0
                     ? (await store.GetByAsync(order.References.InvoiceIds)).Select(x => x.Value).ToList()

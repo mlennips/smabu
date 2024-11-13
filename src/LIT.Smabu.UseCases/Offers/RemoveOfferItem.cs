@@ -12,7 +12,7 @@ namespace LIT.Smabu.UseCases.Offers
         {
             public async Task<Result<bool>> Handle(RemoveOfferItemCommand request, CancellationToken cancellationToken)
             {
-                var offer = await store.GetByAsync(request.OfferId);
+                Offer offer = await store.GetByAsync(request.OfferId);
                 offer.RemoveItem(request.OfferItemId);
                 await store.UpdateAsync(offer);
                 return true;

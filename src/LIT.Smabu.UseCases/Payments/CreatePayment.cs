@@ -14,7 +14,7 @@ namespace LIT.Smabu.UseCases.Payments
     public static class CreatePayment
     {
         public record CreatePaymentCommand(PaymentId PaymentId, PaymentDirection Direction, DateTime AccountingDate, string Details,
-                string Payer, string Payee, CustomerId? CustomerId, InvoiceId? InvoiceId, string ReferenceNr, DateTime? ReferenceDate, 
+                string Payer, string Payee, CustomerId? CustomerId, InvoiceId? InvoiceId, string ReferenceNr, DateTime? ReferenceDate,
                 decimal AmountDue, DateTime? DueDate, bool? MarkAsPaid = false) : ICommand<PaymentId>
         {
             internal static CreatePaymentCommand Create(Invoice invoice, Customer customer)
@@ -37,24 +37,11 @@ namespace LIT.Smabu.UseCases.Payments
 
             internal bool Validate()
             {
-                if (PaymentId == null || Direction == null)
-                {
-                    return false;
-                }
-
-                if (Direction == PaymentDirection.Incoming
-                    && (CustomerId == null || InvoiceId == null))
-                {
-                    return false;
-                }
-
-                if (Direction == PaymentDirection.Outgoing
-                    && (CustomerId != null || InvoiceId != null))
-                {
-                    return false;
-                }
-
-                return true;
+                return PaymentId != null && Direction != null
+                    && (Direction != PaymentDirection.Incoming
+                                        || CustomerId != null && InvoiceId != null)
+                    && (Direction != PaymentDirection.Outgoing
+                                        || CustomerId == null && InvoiceId == null);
             }
         }
 
@@ -68,8 +55,8 @@ namespace LIT.Smabu.UseCases.Payments
                 {
                     return;
                 }
-                var invoice = await store.GetByAsync(request.InvoiceId);
-                var customer = await store.GetByAsync(invoice.CustomerId);
+                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Customer customer = await store.GetByAsync(invoice.CustomerId);
                 var command = CreatePaymentCommand.Create(invoice, customer);
                 await Handle(command, cancellationToken);
             }
@@ -81,9 +68,9 @@ namespace LIT.Smabu.UseCases.Payments
                     return PaymentErrors.InvalidCreate;
                 }
 
-                var number = await businessNumberService.CreatePaymentNumberAsync();
+                PaymentNumber number = await businessNumberService.CreatePaymentNumberAsync();
 
-                var payment = request.Direction switch
+                Payment payment = request.Direction switch
                 {
                     var direction when direction == PaymentDirection.Incoming
                         => Payment.CreateIncoming(request.PaymentId, number, request.Details, request.Payer, request.Payee,
@@ -96,7 +83,7 @@ namespace LIT.Smabu.UseCases.Payments
 
                 if (request.MarkAsPaid.GetValueOrDefault())
                 {
-                    var completeResult = payment.Complete(request.AmountDue, DateTime.UtcNow);
+                    Result completeResult = payment.Complete(request.AmountDue, DateTime.UtcNow);
                     if (completeResult.IsFailure)
                     {
                         return completeResult.Error;
@@ -109,7 +96,7 @@ namespace LIT.Smabu.UseCases.Payments
 
             private async Task<bool> CheckPaymentForInvoiceAlreadyExistsAsync(InvoiceId invoiceId)
             {
-                var detectedPayments = await store.ApplySpecificationTask(new DetectPaymentsWithInvoiceIdSpec(invoiceId));
+                IReadOnlyList<Payment> detectedPayments = await store.ApplySpecificationTask(new DetectPaymentsWithInvoiceIdSpec(invoiceId));
                 return detectedPayments.Any();
             }
         }

@@ -13,8 +13,8 @@ namespace LIT.Smabu.UseCases.Invoices
         {
             public async Task<Result> Handle(MoveInvoiceItemUpCommand request, CancellationToken cancellationToken)
             {
-                var invoice = await store.GetByAsync(request.InvoiceId);
-                var result = invoice.MoveItemUp(request.InvoiceItemId);
+                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Result result = invoice.MoveItemUp(request.InvoiceItemId);
                 if (result.IsFailure)
                 {
                     return result.Error;

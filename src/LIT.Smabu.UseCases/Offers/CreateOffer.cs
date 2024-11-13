@@ -16,8 +16,8 @@ namespace LIT.Smabu.UseCases.Offers
         {
             public async Task<Result<OfferId>> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
             {
-                var customer = await store.GetByAsync(request.CustomerId);
-                var number = request.Number ?? await businessNumberService.CreateOfferNumberAsync();
+                Customer customer = await store.GetByAsync(request.CustomerId);
+                OfferNumber number = request.Number ?? await businessNumberService.CreateOfferNumberAsync();
                 var offer = Offer.Create(request.OfferId, request.CustomerId, number, customer.MainAddress,
                     request.Currency, request.TaxRate ?? TaxRate.Default);
                 await store.CreateAsync(offer);

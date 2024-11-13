@@ -10,7 +10,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterDashboardEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/dashboards")
+            RouteGroupBuilder api = routes.MapGroup("/dashboards")
             .WithTags(["Dashboards"])
             .RequireAuthorization();
 

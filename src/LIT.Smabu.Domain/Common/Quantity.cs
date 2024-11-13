@@ -13,8 +13,14 @@ namespace LIT.Smabu.Domain.Common
             Unit = unit ?? throw new ArgumentException("Unit must be specified.");
         }
 
-        public static Quantity Empty() => new(0, Unit.None);
+        public static Quantity Empty()
+        {
+            return new(0, Unit.None);
+        }
 
-        public override string ToString() => $"{Value} {Unit.Value}";
+        public override string ToString()
+        {
+            return $"{Value} {Unit.Value}";
+        }
     }
 }
