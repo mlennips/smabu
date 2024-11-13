@@ -14,7 +14,7 @@ namespace LIT.Smabu.UseCases.Customers
         {
             public async Task<Result<CustomerId>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
             {
-                var number = await businessNumberService.CreateCustomerNumberAsync();
+                CustomerNumber number = await businessNumberService.CreateCustomerNumberAsync();
                 var customer = Customer.Create(request.CustomerId, number, request.Name, "");
                 await store.CreateAsync(customer);
                 return customer.Id;

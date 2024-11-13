@@ -13,8 +13,9 @@ namespace LIT.Smabu.UseCases.Offers
         {
             public async Task<Result<OfferDTO[]>> Handle(ListOffersQuery request, CancellationToken cancellationToken)
             {
-                var offers = await store.GetAllAsync<Offer>();
-                var customers = await store.GetByAsync(offers.Select(x => x.CustomerId).Distinct());
+                IReadOnlyList<Offer> offers = await store.GetAllAsync<Offer>();
+                Dictionary<IEntityId<Domain.CustomerAggregate.Customer>, Domain.CustomerAggregate.Customer> customers
+                    = await store.GetByAsync(offers.Select(x => x.CustomerId).Distinct());
                 return offers.Select(x => OfferDTO.Create(x, customers[x.CustomerId])).OrderByDescending(x => x.Number).ToArray();
             }
         }

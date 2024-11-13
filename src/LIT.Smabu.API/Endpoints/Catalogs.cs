@@ -13,6 +13,7 @@ using static LIT.Smabu.UseCases.Catalogs.UpdateCatalogItem;
 using static LIT.Smabu.UseCases.Catalogs.RemoveCatalogItem;
 using static LIT.Smabu.UseCases.Catalogs.UpdateCatalog;
 using static LIT.Smabu.UseCases.Catalogs.UpdateCatalogGroup;
+using LIT.Smabu.Domain.CatalogAggregate;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -20,7 +21,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterCatalogsEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/catalogs")
+            RouteGroupBuilder api = routes.MapGroup("/catalogs")
                 .WithTags(["Catalogs"])
                 .RequireAuthorization();
 
@@ -41,7 +42,7 @@ namespace LIT.Smabu.API.Endpoints
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
-                .Produces<CustomerId>();
+                .Produces(200);
 
             api.MapDelete("/{catalogId}", async (IMediator mediator, Guid catalogId) =>
                 await mediator.SendAndMatchAsync(new DeleteCatalogCommand(new(catalogId)),

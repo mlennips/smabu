@@ -13,8 +13,8 @@ namespace LIT.Smabu.UseCases.Catalogs
         {
             public async Task<Result> Handle(DeleteCatalogCommand request, CancellationToken cancellationToken)
             {
-                var catalog = await store.GetByAsync(request.CatalogId);
-                var result = catalog.Delete();
+                Catalog catalog = await store.GetByAsync(request.CatalogId);
+                Result result = catalog.Delete();
                 await store.DeleteAsync(catalog);
                 return result;
             }

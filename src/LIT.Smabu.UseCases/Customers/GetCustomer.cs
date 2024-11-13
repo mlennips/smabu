@@ -14,7 +14,7 @@ namespace LIT.Smabu.UseCases.Customers
 
             public async Task<Result<CustomerDTO>> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
             {
-                var customer = await store.GetByAsync(request.CustomerId);
+                Customer customer = await store.GetByAsync(request.CustomerId);
                 var result = CustomerDTO.Create(customer);
                 return result;
             }

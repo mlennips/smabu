@@ -8,14 +8,14 @@ namespace LIT.Smabu.Domain.Specifications
             where TAggregate : IAggregateRoot<IEntityId<TAggregate>>, IHasBusinessNumber<TNumber>
             where TNumber : BusinessNumber
     {
-        public LastBusinessNumberSpec() 
+        public LastBusinessNumberSpec()
             : base(x => true)
         {
             OrderByDescendingExpression = x => x.Number.DisplayName;
             Take = 1;
         }
 
-        public LastBusinessNumberSpec(int year) 
+        public LastBusinessNumberSpec(int year)
             : base(x => x.Number.Value.ToString(CultureInfo.InvariantCulture).StartsWith(year.ToString(CultureInfo.InvariantCulture)))
         {
             OrderByDescendingExpression = x => x.Number.DisplayName;

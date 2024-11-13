@@ -23,14 +23,14 @@ namespace LIT.Smabu.Domain.Common
 
         public static Color CreateComplementary(string hex)
         {
-            int rgbValue = GetRGB(hex);
-            int r = (rgbValue >> 16) & 0xFF;
-            int g = (rgbValue >> 8) & 0xFF;
-            int b = rgbValue & 0xFF;
+            var rgbValue = GetRGB(hex);
+            var r = (rgbValue >> 16) & 0xFF;
+            var g = (rgbValue >> 8) & 0xFF;
+            var b = rgbValue & 0xFF;
 
-            int luminance = (int)(0.299 * r + 0.587 * g + 0.114 * b);
+            var luminance = (int)(0.299 * r + 0.587 * g + 0.114 * b);
 
-            string complementaryColor = luminance > 128 ? "#000000" : "#FFFFFF";
+            var complementaryColor = luminance > 128 ? "#000000" : "#FFFFFF";
             return new Color(complementaryColor);
         }
 

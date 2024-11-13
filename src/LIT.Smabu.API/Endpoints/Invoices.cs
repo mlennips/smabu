@@ -22,7 +22,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterInvoicesEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/invoices")
+            RouteGroupBuilder api = routes.MapGroup("/invoices")
                 .WithTags(["Invoices"])
                 .RequireAuthorization();
 

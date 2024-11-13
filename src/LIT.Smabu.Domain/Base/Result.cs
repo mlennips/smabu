@@ -16,9 +16,15 @@
 
         public new TValue? Value { get; }
 
-        public static implicit operator Result<TValue>(TValue value) => new(value);
+        public static implicit operator Result<TValue>(TValue value)
+        {
+            return new(value);
+        }
 
-        public static implicit operator Result<TValue>(ErrorDetail error) => new(error);
+        public static implicit operator Result<TValue>(ErrorDetail error)
+        {
+            return new(error);
+        }
     }
 
     public class Result
@@ -38,18 +44,31 @@
 
         public bool IsFailure => !IsSuccess;
 
-        public static Result Success() => new();
+        public static Result Success()
+        {
+            return new();
+        }
 
-        public static Result Failure(ErrorDetail error) => new(error);
+        public static Result Failure(ErrorDetail error)
+        {
+            return new(error);
+        }
+
         public static Result Failure(List<ErrorDetail> errors)
         {
             return new Result(new ErrorDetail(string.Join(";",
                 errors.Select(e => e.Code)), string.Join(";", errors.Select(e => e.Description))));
         }
 
-        public static Result<TValue> Success<TValue>(TValue value) => new(value);
+        public static Result<TValue> Success<TValue>(TValue value)
+        {
+            return new(value);
+        }
 
-        public static implicit operator Result(ErrorDetail error) => new(error);
+        public static implicit operator Result(ErrorDetail error)
+        {
+            return new(error);
+        }
     }
 
     public sealed record ErrorDetail(string Code, string Description)

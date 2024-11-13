@@ -15,10 +15,21 @@ namespace LIT.Smabu.Domain.Base
             Value = value;
         }
 
-        public override int GetHashCode() => Value!.GetHashCode();
-        public virtual int CompareTo(SimpleValueObject<T>? other) => other is not null
+        public override int GetHashCode()
+        {
+            return Value!.GetHashCode();
+        }
+
+        public virtual int CompareTo(SimpleValueObject<T>? other)
+        {
+            return other is not null
             ? string.Compare(ToString(), other.ToString(), StringComparison.Ordinal) : -1;
-        public override string ToString() => Value?.ToString() ?? "";
+        }
+
+        public override string ToString()
+        {
+            return Value?.ToString() ?? "";
+        }
 
         public static bool operator <(SimpleValueObject<T> left, SimpleValueObject<T> right)
         {

@@ -13,10 +13,8 @@ namespace LIT.Smabu.UseCases.Customers
         {
             public async Task<Result<CustomerDTO[]>> Handle(ListCustomersQuery request, CancellationToken cancellationToken)
             {
-                var customers = await store.GetAllAsync<Customer>();
-                var result = customers.Select(x => CustomerDTO.Create(x))
-                    .OrderBy(x => x.Name)
-                    .ToArray();
+                IReadOnlyList<Customer> customers = await store.GetAllAsync<Customer>();
+                CustomerDTO[] result = [.. customers.Select(CustomerDTO.Create).OrderBy(x => x.Name)];
                 return result;
             }
         }

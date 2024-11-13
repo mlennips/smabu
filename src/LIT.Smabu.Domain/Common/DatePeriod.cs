@@ -24,18 +24,11 @@ namespace LIT.Smabu.Domain.Common
         public static DatePeriod Create(DateTime from, DateTime? to)
         {
             to = to == DateTime.MinValue ? null : to;
-            if (from == DateTime.MinValue)
-            {
-                throw new ArgumentNullException(nameof(from));
-            }
-            else if (to != null && from > to)
-            {
-                return new(DateOnly.FromDateTime(to.Value), DateOnly.FromDateTime(to.Value));
-            }
-            else
-            {
-                return new(DateOnly.FromDateTime(from), to != null ? DateOnly.FromDateTime(to.Value) : null);
-            }
+            return from == DateTime.MinValue
+                ? throw new ArgumentNullException(nameof(from))
+                : to != null && from > to
+                    ? new(DateOnly.FromDateTime(to.Value), DateOnly.FromDateTime(to.Value))
+                    : new(DateOnly.FromDateTime(from), to != null ? DateOnly.FromDateTime(to.Value) : null);
         }
 
         public override string ToString()
@@ -54,18 +47,9 @@ namespace LIT.Smabu.Domain.Common
 
         public string ToStringInMonths()
         {
-            if (To == null)
-            {
-                return $"{From.Month:00}.{From.Year}-??.????";
-            }
-            else if (From.Month == To?.Month)
-            {
-                return $"{To?.Month:00}.{To?.Year}";
-            }
-            else
-            {
-                return $"{From.Month:00}.{From.Year}-{To?.Month:00}.{To?.Year}";
-            }
+            return To == null
+                ? $"{From.Month:00}.{From.Year}-??.????"
+                : From.Month == To?.Month ? $"{To?.Month:00}.{To?.Year}" : $"{From.Month:00}.{From.Year}-{To?.Month:00}.{To?.Year}";
         }
     }
 }

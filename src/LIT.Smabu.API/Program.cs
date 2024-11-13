@@ -8,11 +8,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LIT.Smabu.API.Middlewares;
 using QuestPDF.Infrastructure;
-
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 QuestPDF.Settings.License = LicenseType.Community;
 
-var builder = WebApplication.CreateSlimBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
 var azureClientId = builder.Configuration["AzureAD:ClientId"]!;
 var azureClientSecret = builder.Configuration["AzureAD:ClientSecret"]!;
@@ -61,7 +61,8 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddDomainServices();
 builder.Services.AddUseCasesServices();
 
-var app = builder.Build();
+
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -100,7 +101,7 @@ static void AddSwagger(WebApplicationBuilder builder, string azureClientId)
 {
     builder.Services.AddSwaggerGen(c =>
     {
-        var scopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ')?.ToDictionary(x => x) ?? [];
+        Dictionary<string, string> scopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ')?.ToDictionary(x => x) ?? [];
         scopes.Add($"api://{azureClientId}/access_as_user", "Access application on user behalf");
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {

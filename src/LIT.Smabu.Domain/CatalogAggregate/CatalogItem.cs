@@ -34,13 +34,18 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return new CatalogItem(id, number, catalogId, catalogGroupId, true, name, description, unit, defaultPrices, null);
         }
 
-        public CatalogItemPrice GetCurrentPrice() => Prices
-            .Where(p => p.CheckIsValidToday())
-            .OrderByDescending(p => p.ValidFrom)
-            .FirstOrDefault(CatalogItemPrice.Empty)!;
+        public CatalogItemPrice GetCurrentPrice()
+        {
+            return Prices
+                .Where(p => p.CheckIsValidToday())
+                .OrderByDescending(p => p.ValidFrom)
+                .FirstOrDefault(CatalogItemPrice.Empty)!;
+        }
 
-        public CatalogItemPrice GetCurrentPrice(CustomerId customerId) =>
-            CustomerPrices?.FirstOrDefault(x => x.CustomerId == customerId) ?? GetCurrentPrice();
+        public CatalogItemPrice GetCurrentPrice(CustomerId customerId)
+        {
+            return CustomerPrices?.FirstOrDefault(x => x.CustomerId == customerId) ?? GetCurrentPrice();
+        }
 
         public Result Update(string name, string description, bool isActive, Unit unit)
         {

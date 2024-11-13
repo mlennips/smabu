@@ -23,25 +23,23 @@ namespace LIT.Smabu.UseCases.Orders
         {
             public async Task<Result<GetOrderReferencesResponse>> Handle(GetOrderReferencesQuery request, CancellationToken cancellationToken)
             {
-                var order = await store.GetByAsync(request.OrderId);
+                Order order = await store.GetByAsync(request.OrderId);
 
-                var offers = request.OnlyForCustomer
+                IReadOnlyList<Offer> offers = request.OnlyForCustomer
                     ? await store.ApplySpecificationTask(new OffersByCustomerIdSpec(order.CustomerId))
                     : await store.GetAllAsync<Offer>();
 
-                var invoices = request.OnlyForCustomer
+                IReadOnlyList<Invoice> invoices = request.OnlyForCustomer
                     ? await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(order.CustomerId))
                     : await store.GetAllAsync<Invoice>();
 
-                var offerReferences = offers.Select(x => new OrderReferenceDTO<OfferId>(
+                OrderReferenceDTO<OfferId>[] offerReferences = [.. offers.Select(x => new OrderReferenceDTO<OfferId>(
                     x.Id, x.Number.DisplayName, order.References.OfferIds.Contains(x.Id), x.OfferDate, x.Amount))
-                    .OrderByDescending(x => x.Date)
-                    .ToArray();
+                    .OrderByDescending(x => x.Date)];
 
-                var invoiceReferences = invoices.Select(x => new OrderReferenceDTO<InvoiceId>(
+                OrderReferenceDTO<InvoiceId>[] invoiceReferences = [.. invoices.Select(x => new OrderReferenceDTO<InvoiceId>(
                     x.Id, x.Number.DisplayName, order.References.InvoiceIds.Contains(x.Id), x.InvoiceDate, x.Amount))
-                    .OrderByDescending(x => x.Date)
-                    .ToArray();
+                    .OrderByDescending(x => x.Date)];
 
                 return new GetOrderReferencesResponse(offerReferences, invoiceReferences);
             }

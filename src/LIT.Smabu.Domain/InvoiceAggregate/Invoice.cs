@@ -50,8 +50,8 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public static Invoice CreateFromTemplate(InvoiceId id, CustomerId customerId, int fiscalYear, Address mainAddress, DatePeriod performancePeriod, Invoice template)
         {
-            var invoice = Create(id, customerId, fiscalYear, mainAddress, performancePeriod, template.Currency, template.TaxRate);
-            foreach (var item in template.Items)
+            Invoice invoice = Create(id, customerId, fiscalYear, mainAddress, performancePeriod, template.Currency, template.TaxRate);
+            foreach (InvoiceItem item in template.Items)
             {
                 invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), item.Details, item.Quantity, item.UnitPrice, item.CatalogItemId);
             }
@@ -60,7 +60,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public Result Update(DatePeriod performancePeriod, TaxRate taxRate, DateOnly? invoiceDate)
         {
-            var checkEditResult = CheckCanEdit();
+            Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {
                 return checkEditResult;
@@ -75,13 +75,13 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public override Result Delete()
         {
-            var checkEditResult = CheckCanEdit();
+            Result checkEditResult = CheckCanEdit();
             return checkEditResult.IsFailure ? Result.Failure(checkEditResult.Error) : Result.Success();
         }
 
         public Result<InvoiceItem> AddItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId = null)
         {
-            var checkEditResult = CheckCanEdit();
+            Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {
                 return checkEditResult.Error;
@@ -100,13 +100,13 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public Result<InvoiceItem> UpdateItem(InvoiceItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId)
         {
-            var checkEditResult = CheckCanEdit();
+            Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {
                 return checkEditResult.Error;
             }
 
-            var item = Items.Find(x => x.Id == id);
+            InvoiceItem? item = Items.Find(x => x.Id == id);
             if (item == null)
             {
                 return InvoiceErrors.ItemNotFound;
@@ -118,13 +118,13 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public Result RemoveItem(InvoiceItemId id)
         {
-            var checkEditResult = CheckCanEdit();
+            Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {
                 return checkEditResult.Error;
             }
 
-            var item = Items.Find(x => x.Id == id);
+            InvoiceItem? item = Items.Find(x => x.Id == id);
             if (item == null)
             {
                 return Result.Failure(new ErrorDetail("Invoice.ItemNotFound", "Item not found."));
@@ -137,13 +137,13 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public Result MoveItemDown(InvoiceItemId id)
         {
-            var checkEditResult = CheckCanEdit();
+            Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {
                 return checkEditResult.Error;
             }
 
-            var itemToMove = Items.Find(x => x.Id == id);
+            InvoiceItem? itemToMove = Items.Find(x => x.Id == id);
             if (itemToMove == null)
             {
                 return InvoiceErrors.ItemNotFound;
@@ -163,13 +163,13 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public Result MoveItemUp(InvoiceItemId id)
         {
-            var checkEditResult = CheckCanEdit();
+            Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {
                 return checkEditResult.Error;
             }
 
-            var itemToMove = Items.Find(x => x.Id == id);
+            InvoiceItem? itemToMove = Items.Find(x => x.Id == id);
             if (itemToMove == null)
             {
                 return InvoiceErrors.ItemNotFound;
@@ -188,8 +188,8 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         }
 
         public Result Release(InvoiceNumber number, DateTime? releasedAt)
-        { 
-            var checkEditResult = CheckCanEdit();
+        {
+            Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
             {
                 return checkEditResult.Error;
@@ -237,7 +237,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         private void ReorderItems()
         {
             var pos = 1;
-            foreach (var item in Items)
+            foreach (InvoiceItem item in Items)
             {
                 item.EditPosition(pos++);
             }
@@ -245,26 +245,13 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         private DateOnly DetermineSalesReportDate()
         {
-            if (ReleasedAt != null)
-            {
-                return DateOnly.FromDateTime(ReleasedAt.Value);
-            }
-            else if (PerformancePeriod?.To.HasValue ?? false)
-            {
-                return PerformancePeriod.To.Value;
-            }
-            else if (PerformancePeriod?.From != null)
-            {
-                return PerformancePeriod.From;
-            }
-            else if (Meta != null)
-            {
-                return DateOnly.FromDateTime(Meta.CreatedAt);
-            }
-            else
-            {
-                return DateOnly.FromDateTime(DateTime.Now);
-            }
+            return ReleasedAt != null
+                ? DateOnly.FromDateTime(ReleasedAt.Value)
+                : PerformancePeriod?.To.HasValue ?? false
+                    ? PerformancePeriod.To.Value
+                    : PerformancePeriod?.From != null
+                                    ? PerformancePeriod.From
+                                    : Meta != null ? DateOnly.FromDateTime(Meta.CreatedAt) : DateOnly.FromDateTime(DateTime.Now);
         }
 
         private Result CheckCanEdit()

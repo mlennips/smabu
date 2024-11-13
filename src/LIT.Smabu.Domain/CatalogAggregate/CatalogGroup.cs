@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.Common;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
-    public class CatalogGroup(CatalogGroupId id, CatalogId catalogId, string name, string description, 
+    public class CatalogGroup(CatalogGroupId id, CatalogId catalogId, string name, string description,
         List<CatalogItem> items) : Entity<CatalogGroupId>
     {
         private readonly List<CatalogItem> _items = items;
@@ -21,7 +21,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result Update(string name, string description)
         {
-            if (string.IsNullOrEmpty(name)) 
+            if (string.IsNullOrEmpty(name))
             {
                 return CatalogErrors.NameEmpty;
             }
@@ -33,13 +33,14 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result<CatalogItem> AddItem(CatalogItemId id, CatalogItemNumber number, string name, string description, Unit defaultUnit)
         {
-            if (string.IsNullOrEmpty(name)) {
+            if (string.IsNullOrEmpty(name))
+            {
                 return CatalogErrors.NameEmpty;
             }
             if (Items.Any(i => i.Name == name))
             {
                 return CatalogErrors.NameAlreadyExists;
-            }   
+            }
             var item = CatalogItem.Create(id, number, CatalogId, Id, name, description, defaultUnit);
             _items.Add(item);
             return item;
@@ -47,7 +48,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result RemoveItem(CatalogItemId id)
         {
-            var item = Items.SingleOrDefault(i => i.Id == id);
+            CatalogItem? item = Items.SingleOrDefault(i => i.Id == id);
             if (item == null)
             {
                 return Result.Failure(CatalogErrors.ItemNotFound);

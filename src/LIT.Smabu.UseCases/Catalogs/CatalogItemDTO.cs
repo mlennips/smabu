@@ -4,7 +4,7 @@ using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.Catalogs
 {
-    public record CatalogItemDTO(CatalogItemId Id, CatalogGroupId CatalogGroupId, CatalogId CatalogId, CatalogItemNumber Number, string Name, 
+    public record CatalogItemDTO(CatalogItemId Id, CatalogGroupId CatalogGroupId, CatalogId CatalogId, CatalogItemNumber Number, string Name,
         string Description, bool IsActive, string GroupName,
         CatalogItemPrice[] Prices, CustomerCatalogItemPrice[] CustomerPrices, Unit Unit, CatalogItemPrice CurrentPrice) : IDTO
     {
@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Catalogs
 
         public static CatalogItemDTO Create(CatalogItem item, CatalogGroup catalogGroup)
         {
-            return new CatalogItemDTO(item.Id, item.CatalogGroupId, item.CatalogId, item.Number, item.Name, item.Description, item.IsActive, 
+            return new CatalogItemDTO(item.Id, item.CatalogGroupId, item.CatalogId, item.Number, item.Name, item.Description, item.IsActive,
                 catalogGroup.Name, [.. item.Prices], [.. item.CustomerPrices], item.Unit, item.GetCurrentPrice());
         }
     }

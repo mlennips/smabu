@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Catalogs
 
         internal static Result<CatalogDTO> Create(Catalog catalog)
         {
-            var groups = catalog.Groups.Select(x => CatalogGroupDTO.Create(x)).ToArray();
+            CatalogGroupDTO[] groups = catalog.Groups.Select(CatalogGroupDTO.Create).ToArray();
             return new CatalogDTO(catalog.Id, catalog.Name, groups);
         }
     }

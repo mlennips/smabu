@@ -13,8 +13,8 @@ namespace LIT.Smabu.UseCases.Invoices
         {
             public async Task<Result<InvoiceDTO>> Handle(GetInvoiceQuery request, CancellationToken cancellationToken)
             {
-                var invoice = await store.GetByAsync(request.InvoiceId);
-                var customer = await store.GetByAsync(invoice.CustomerId);
+                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Domain.CustomerAggregate.Customer customer = await store.GetByAsync(invoice.CustomerId);
                 var result = InvoiceDTO.Create(invoice, customer, request.WithItems);
                 return result;
             }

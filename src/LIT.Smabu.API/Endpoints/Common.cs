@@ -6,7 +6,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterCommonEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/common")
+            RouteGroupBuilder api = routes.MapGroup("/common")
                 .WithTags(["Common"]);
 
             api.MapGet("/currencies", () => Currency.GetAll())

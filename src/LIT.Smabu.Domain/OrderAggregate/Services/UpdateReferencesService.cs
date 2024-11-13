@@ -8,14 +8,14 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
     {
         public async Task<Result> StartAsync(OrderId orderId, OrderReferences references)
         {
-            var order = await store.GetByAsync(orderId);
+            Order order = await store.GetByAsync(orderId);
 
             if (order == null)
             {
                 return Result.Failure(OrderErrors.NotFound);
             }
 
-            var checkResult = await CheckReferencesAsync(orderId, references);
+            Result checkResult = await CheckReferencesAsync(orderId, references);
             if (checkResult.IsSuccess)
             {
                 order.UpdateReferences(references);
@@ -27,22 +27,15 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
         private async Task<Result> CheckReferencesAsync(OrderId orderId, OrderReferences references)
         {
             var errors = new List<ErrorDetail>();
-            foreach (var entityId in references.GetAllReferenceIds())
+            foreach (IEntityId entityId in references.GetAllReferenceIds())
             {
-                var detectedOrder = (await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();
+                Order? detectedOrder = (await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();
                 if (detectedOrder != null && detectedOrder.Id != orderId)
                 {
                     errors.Add(OrderErrors.ReferenceAlreadyAdded(entityId, detectedOrder.Number));
                 }
             }
-            if (errors.Count != 0)
-            {
-                return Result.Failure(errors);
-            }
-            else
-            {
-                return Result.Success();
-            }
+            return errors.Count != 0 ? Result.Failure(errors) : Result.Success();
         }
     }
 }

@@ -13,13 +13,13 @@ namespace LIT.Smabu.UseCases.Catalogs
         {
             public async Task<Result<CatalogItemDTO>> Handle(GetCatalogItemQuery request, CancellationToken cancellationToken)
             {
-                var catalog = await store.GetByAsync(CatalogId.DefaultId);
-                var item = catalog.GetItem(request.CatalogItemId);
+                Catalog catalog = await store.GetByAsync(CatalogId.DefaultId);
+                CatalogItem? item = catalog.GetItem(request.CatalogItemId);
                 if (item == null)
                 {
                     return CatalogErrors.ItemNotFound;
                 }
-                var groupResult = catalog.GetGroupForItem(item.Id)!;
+                CatalogGroup groupResult = catalog.GetGroupForItem(item.Id)!;
                 return CatalogItemDTO.Create(item, groupResult!);
             }
         }

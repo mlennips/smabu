@@ -4,7 +4,7 @@ using LIT.Smabu.Domain.Common;
 namespace LIT.Smabu.Domain.CustomerAggregate
 {
     public class Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
-        Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign) 
+        Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign)
         : AggregateRoot<CustomerId>, IHasBusinessNumber<CustomerNumber>
     {
         public override CustomerId Id { get; } = id;
@@ -15,7 +15,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate
         public Address MainAddress { get; private set; } = mainAddress;
         public Communication Communication { get; private set; } = communication;
         public CorporateDesign CorporateDesign { get; private set; } = corporateDesign;
-        
+
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
             var corporateDesign = CorporateDesign.CreateDefault(name);
@@ -23,7 +23,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate
                 new Address(name, "", "", "", "", "", ""), Communication.Empty, corporateDesign);
         }
 
-        public Result Update(string name, string? industryBranch, Address? mainAddress, 
+        public Result Update(string name, string? industryBranch, Address? mainAddress,
             Communication? communication, CorporateDesign? corporateDesign)
         {
             Name = name;

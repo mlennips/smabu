@@ -16,9 +16,16 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             ValidFrom = validFrom;
         }
 
-        public static CatalogItemPrice Create(int price) => new(price, DateTime.UtcNow.Date);
+        public static CatalogItemPrice Create(int price)
+        {
+            return new(price, DateTime.UtcNow.Date);
+        }
+
         public static CatalogItemPrice? Empty => new(0, DateTime.UtcNow.Date);
 
-        public bool CheckIsValidToday() => ValidFrom.Date <= DateTime.UtcNow.Date;
+        public bool CheckIsValidToday()
+        {
+            return ValidFrom.Date <= DateTime.UtcNow.Date;
+        }
     }
 }

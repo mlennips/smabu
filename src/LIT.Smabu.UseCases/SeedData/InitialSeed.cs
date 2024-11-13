@@ -14,14 +14,14 @@ namespace LIT.Smabu.UseCases.SeedData
 
         private async Task SeedDefaultCatalogAsync()
         {
-            var items = await store.GetAllAsync<Catalog>();
+            IReadOnlyList<Catalog> items = await store.GetAllAsync<Catalog>();
             if (!items.Any())
             {
                 var catalog = Catalog.Create(CatalogId.DefaultId, "Default Catalog");
 
-                int itemNrIdx = 0;
+                var itemNrIdx = 0;
 
-                var group = catalog.AddGroup(new CatalogGroupId(Guid.NewGuid()), "Web Development", "Web Development Services").Value!;
+                CatalogGroup group = catalog.AddGroup(new CatalogGroupId(Guid.NewGuid()), "Web Development", "Web Development Services").Value!;
                 group.AddItem(new CatalogItemId(Guid.NewGuid()), new CatalogItemNumber(++itemNrIdx), "Custom Website", "", Unit.Project);
                 group.AddItem(new CatalogItemId(Guid.NewGuid()), new CatalogItemNumber(++itemNrIdx), "CMS Implementation", "", Unit.Project);
                 group.AddItem(new CatalogItemId(Guid.NewGuid()), new CatalogItemNumber(++itemNrIdx), "Landing Page", "", Unit.Project);

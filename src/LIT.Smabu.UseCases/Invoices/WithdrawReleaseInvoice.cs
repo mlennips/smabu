@@ -13,8 +13,8 @@ namespace LIT.Smabu.UseCases.Invoices
         {
             public async Task<Result> Handle(WithdrawReleaseInvoiceCommand request, CancellationToken cancellationToken)
             {
-                var invoice = await store.GetByAsync(request.InvoiceId);
-                var result = invoice.WithdrawRelease();
+                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Result result = invoice.WithdrawRelease();
                 if (result.IsFailure)
                 {
                     return result.Error;

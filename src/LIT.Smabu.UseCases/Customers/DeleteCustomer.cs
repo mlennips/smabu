@@ -13,12 +13,8 @@ namespace LIT.Smabu.UseCases.Customers
         {
             public async Task<Result> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
             {
-                var result = await deleteCustomerService.DeleteAsync(request.CustomerId);
-                if (result.IsFailure)
-                {
-                    return result.Error;
-                }
-                return Result.Success();
+                Result result = await deleteCustomerService.DeleteAsync(request.CustomerId);
+                return result.IsFailure ? (Result)result.Error : Result.Success();
             }
         }
     }

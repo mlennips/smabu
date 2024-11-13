@@ -16,7 +16,7 @@ namespace LIT.Smabu.API.Endpoints
     {
         public static void RegisterOrdersEndpoints(this IEndpointRouteBuilder routes)
         {
-            var api = routes.MapGroup("/orders")
+            RouteGroupBuilder api = routes.MapGroup("/orders")
                 .WithTags(["Orders"])
                 .RequireAuthorization();
 

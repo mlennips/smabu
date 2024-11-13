@@ -11,7 +11,7 @@ namespace LIT.Smabu.Domain.Common
 
         public FileReference(string fileUrl, string? fileName, string? fileId, DateTime uploadedAt)
         {
-            bool isValidUrl = CheckUrlIsValid(fileUrl);
+            var isValidUrl = CheckUrlIsValid(fileUrl);
 
             if (!isValidUrl)
             {
@@ -27,8 +27,8 @@ namespace LIT.Smabu.Domain.Common
         private static bool CheckUrlIsValid(string fileUrl)
         {
             return Uri.TryCreate(fileUrl, UriKind.Absolute, out Uri? uriResult)
-                && (uriResult != null 
-                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps));
+                && uriResult != null
+                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

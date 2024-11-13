@@ -13,8 +13,8 @@ namespace LIT.Smabu.UseCases.Catalogs
         {
             public async Task<Result<CatalogGroupDTO>> Handle(GetCatalogGroupQuery request, CancellationToken cancellationToken)
             {
-                var catalog = await store.GetByAsync(request.CatalogId);
-                var group = catalog.GetGroup(request.CatalogGroupId);
+                Catalog catalog = await store.GetByAsync(request.CatalogId);
+                CatalogGroup? group = catalog.GetGroup(request.CatalogGroupId);
                 return group != null
                     ? CatalogGroupDTO.Create(group)
                     : CatalogErrors.GroupNotFound;

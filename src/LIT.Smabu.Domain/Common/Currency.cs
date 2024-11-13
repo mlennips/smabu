@@ -15,11 +15,20 @@ namespace LIT.Smabu.Domain.Common
         public static Currency EUR => new("EUR", "Euro", "€");
         public static Currency USD => new("USD", "US-Dollar", "$");
 
-        public static Currency[] GetAll() => [EUR, USD];
+        public static Currency[] GetAll()
+        {
+            return [EUR, USD];
+        }
 
-        public override string ToString() => $"{Name} ({Sign})";
+        public override string ToString()
+        {
+            return $"{Name} ({Sign})";
+        }
 
-        public override int GetHashCode() => IsoCode.GetHashCode();
+        public override int GetHashCode()
+        {
+            return IsoCode.GetHashCode();
+        }
     }
 }
 

@@ -3,6 +3,8 @@ using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
 using LIT.Smabu.Domain.OfferAggregate.Specifications;
 using LIT.Smabu.Core;
+using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.OfferAggregate;
 
 namespace LIT.Smabu.Domain.CustomerAggregate.Services
 {
@@ -16,7 +18,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Services
                 return CommonErrors.HasReferences;
             }
 
-            var customer = await store.GetByAsync(id);
+            Customer customer = await store.GetByAsync(id);
             customer.Delete();
             await store.DeleteAsync(customer);
             return Result.Success();
@@ -24,13 +26,13 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Services
 
         private async Task<bool> CheckHasOffers(CustomerId id)
         {
-            var offers = await store.ApplySpecificationTask(new OffersByCustomerIdSpec(id));
+            IReadOnlyList<Offer> offers = await store.ApplySpecificationTask(new OffersByCustomerIdSpec(id));
             return offers.Any();
         }
 
         private async Task<bool> CheckHasInvoices(CustomerId id)
         {
-            var invoices = await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(id));
+            IReadOnlyList<Invoice> invoices = await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(id));
             return invoices.Any();
         }
     }

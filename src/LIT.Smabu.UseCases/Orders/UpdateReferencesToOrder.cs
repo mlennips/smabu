@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Orders
         {
             public async Task<Result> Handle(UpdateReferencesToOrderCommand request, CancellationToken cancellationToken)
             {
-                var result = await updateReferencesService.StartAsync(request.OrderId, request.References);
+                Result result = await updateReferencesService.StartAsync(request.OrderId, request.References);
                 return result;
             }
         }

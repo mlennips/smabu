@@ -6,7 +6,7 @@ using LIT.Smabu.Domain.CustomerAggregate;
 namespace LIT.Smabu.Domain.OfferAggregate
 {
     public class Offer(OfferId id, CustomerId customerId, OfferNumber number, Address customerAddress,
-        DateOnly offerDate, DateOnly expiresOn, Currency currency, TaxRate taxRate, List<OfferItem> items) 
+        DateOnly offerDate, DateOnly expiresOn, Currency currency, TaxRate taxRate, List<OfferItem> items)
         : AggregateRoot<OfferId>, IHasBusinessNumber<OfferNumber>
     {
         public override OfferId Id { get; } = id;
@@ -46,14 +46,14 @@ namespace LIT.Smabu.Domain.OfferAggregate
 
         public Result<OfferItem> UpdateItem(OfferItemId id, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId = null)
         {
-            var item = Items.Find(x => x.Id == id)!;
+            OfferItem item = Items.Find(x => x.Id == id)!;
             item.Edit(details, quantity, unitPrice, catalogItemId);
             return item;
         }
 
         public Result RemoveItem(OfferItemId id)
         {
-            var item = Items.Find(x => x.Id == id)!;
+            OfferItem item = Items.Find(x => x.Id == id)!;
             Items.Remove(item);
             ReorderItems();
             return Result.Success();
@@ -62,7 +62,7 @@ namespace LIT.Smabu.Domain.OfferAggregate
         private void ReorderItems()
         {
             var pos = 1;
-            foreach (var item in Items.OrderBy(x => x.Position))
+            foreach (OfferItem? item in Items.OrderBy(x => x.Position))
             {
                 item.EditPosition(pos++);
             }

@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Catalogs
         {
             public async Task<Result<CatalogDTO>> Handle(GetCatalogQuery request, CancellationToken cancellationToken)
             {
-                var catalog = await store.GetByAsync(CatalogId.DefaultId);
+                Catalog catalog = await store.GetByAsync(CatalogId.DefaultId);
                 return CatalogDTO.Create(catalog);
             }
         }
