@@ -20,7 +20,7 @@ namespace LIT.Smabu.API
                     }
                     else
                     {
-                        throw new ApplicationException("Wrong value type.");
+                        throw new InvalidOperationException("Wrong value type.");
                     }
                 }
                 else
@@ -30,7 +30,7 @@ namespace LIT.Smabu.API
             }
             else
             {
-                throw new ApplicationException("Wrong response type.");
+                throw new InvalidOperationException("Wrong response type.");
             }
         }
 
@@ -52,7 +52,7 @@ namespace LIT.Smabu.API
             }
             else
             {
-                throw new ApplicationException("Wrong response type.");
+                throw new InvalidOperationException("Wrong response type.");
             }
         }
     }
