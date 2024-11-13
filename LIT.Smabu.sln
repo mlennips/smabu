@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.DomainTests", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.API", "src\LIT.Smabu.API\LIT.Smabu.API.csproj", "{47E98396-707F-45BE-B644-16982A5EF8B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Shared", "src\LIT.Smabu.Shared\LIT.Smabu.Shared.csproj", "{07EAD7AF-E9C9-4C73-A9E9-BEB57747EEC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.Core", "src\LIT.Smabu.Core\LIT.Smabu.Core.csproj", "{07EAD7AF-E9C9-4C73-A9E9-BEB57747EEC2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIT.Smabu.ArchitectureTests", "src\LIT.Smabu.ArchitectureTests\LIT.Smabu.ArchitectureTests.csproj", "{7118A0A2-9BC1-4325-89B3-348333FBF745}"
 EndProject

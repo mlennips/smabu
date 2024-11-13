@@ -25,7 +25,7 @@ export interface CompletePaymentCommand {
      * @type {PaymentId}
      * @memberof CompletePaymentCommand
      */
-    id?: PaymentId;
+    paymentId?: PaymentId;
 
     /**
      * @type {number}

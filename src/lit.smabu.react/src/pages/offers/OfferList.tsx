@@ -37,7 +37,7 @@ const OfferList = () => {
                             <TableCell>#</TableCell>
                             <TableCell>Erstellt</TableCell>
                             <TableCell>Kunde</TableCell>
-                            <TableCell>Summe</TableCell>
+                            <TableCell align="right">Summe</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>

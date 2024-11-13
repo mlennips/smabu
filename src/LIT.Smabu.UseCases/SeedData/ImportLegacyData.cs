@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using Newtonsoft.Json;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.Domain.PaymentAggregate;
 using static LIT.Smabu.Domain.Services.GetSalesByYear.Item;
 using Customer = LIT.Smabu.Domain.CustomerAggregate.Customer;
@@ -45,7 +45,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var invoiceId = new InvoiceId(Guid.NewGuid());
                                 var invoice = Invoice.Create(invoiceId, customerId, importRechnung.Jahr,
                                     customer.MainAddress,
-                                    DatePeriod.CreateFrom(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
+                                    DatePeriod.Create(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
                                     Currency.EUR, TaxRate.Default);
                                 invoice.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
 
@@ -220,7 +220,7 @@ namespace LIT.Smabu.UseCases.SeedData
         }
     }
 
-    internal class ImportUser : ICurrentUser
+    internal sealed class ImportUser : ICurrentUser
     {
         public string Username => "SYSTEM";
         public string Name => "IMPORT";

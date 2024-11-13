@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     
     <!-- Configure code analysis -->
-    <AnalysisLevel>latest-minimum</AnalysisLevel>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AnalysisMode>all</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>

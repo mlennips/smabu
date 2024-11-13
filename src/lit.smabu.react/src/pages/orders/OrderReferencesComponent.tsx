@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GetOrderReferencesReadModel, InvoiceId, InvoiceIdOrderReferenceDTO, OfferId, OfferIdOrderReferenceDTO } from '../../types/domain';
+import { GetOrderReferencesResponse, InvoiceId, InvoiceIdOrderReferenceDTO, OfferId, OfferIdOrderReferenceDTO } from '../../types/domain';
 import { Chip, Grid2 as Grid, Stack } from '@mui/material';
 import { Cancel, Edit, Save } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
@@ -15,7 +15,7 @@ interface OrderReferencesComponentProps {
 }
 
 const OrderReferencesComponent: React.FC<OrderReferencesComponentProps> = ({ orderId, setError, setToolbar, setLoading }) => {
-    const [data, setData] = useState<GetOrderReferencesReadModel>();
+    const [data, setData] = useState<GetOrderReferencesResponse>();
     const [addMode, setAddMode] = useState(false);
     const { toast } = useNotification();
     const toolbar: ToolbarItem[] = []

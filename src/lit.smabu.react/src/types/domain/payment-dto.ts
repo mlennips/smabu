@@ -105,12 +105,11 @@ export interface PaymentDTO {
      */
     dueDate?: Date | null;
 
-
     /**
      * @type {boolean}
      * @memberof PaymentDTO
      */
-    isOverdue?: boolean | null;
+    isOverdue?: boolean;
 
     /**
      * @type {number}

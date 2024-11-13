@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
-internal class CustomJwtSecurityTokenHandler : JsonWebTokenHandler
+internal sealed class CustomJwtSecurityTokenHandler : JsonWebTokenHandler
 {
     public override SecurityToken ReadToken(string token)
     {

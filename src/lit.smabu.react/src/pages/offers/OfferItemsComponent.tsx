@@ -5,6 +5,7 @@ import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock'
 import { getOffer } from '../../services/offer.service';
 import { OfferDTO } from '../../types/domain';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
+import { grey } from '@mui/material/colors';
 
 interface OfferItemsComponentProps {
     offerId: string | undefined;
@@ -39,7 +40,7 @@ const OfferItemsComponent: React.FC<OfferItemsComponentProps> = ({ offerId, setE
             <Table size='small' >
                 <TableHead>
                     <TableRow>
-                        <TableCell variant='head'><b>Pos.</b></TableCell>
+                        <TableCell variant='head' style={{ width: 'auto' }}><b>Pos.</b></TableCell>
                         <TableCell variant='head'></TableCell>
                         <TableCell variant='head' align="right" style={{ width: 'auto' }}><b>Menge</b></TableCell>
                         <TableCell variant='head' align="right" style={{ width: 'auto' }}><b>Preis</b></TableCell>
@@ -56,7 +57,7 @@ const OfferItemsComponent: React.FC<OfferItemsComponentProps> = ({ offerId, setE
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.quantity?.value} {item.quantity?.unit?.shortName}</TableCell>
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.unitPrice?.toFixed(2)} {data?.currency?.isoCode}</TableCell>
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.totalPrice?.toFixed(2)} {data?.currency?.isoCode}</TableCell>
-                                <TableCell sx={{ verticalAlign: 'top' }} rowSpan={2}>
+                                <TableCell sx={{ verticalAlign: 'top' }} rowSpan={2} align="right">
                                     <ButtonGroup variant="text" size='small' color='secondary'>
                                         <Button LinkComponent="a" href={`/offers/${data?.id?.value}/items/${item.id?.value}`}><Edit /></Button>
                                         <Button LinkComponent="a" color='error' href={`/offers/${data?.id?.value}/items/${item.id?.value}/delete`}><Delete /></Button>
@@ -64,7 +65,7 @@ const OfferItemsComponent: React.FC<OfferItemsComponentProps> = ({ offerId, setE
                                 </TableCell>
                             </TableRow>
                             <TableRow key={`${index}-2`}>
-                                <TableCell colSpan={6} sx={{ fontSize: 'small' }}>{item.details}</TableCell>
+                                <TableCell colSpan={6} sx={{ fontSize: 'small', color: grey[600] }}>{item.details}</TableCell>
                             </TableRow>
                         </React.Fragment>
                     ))}

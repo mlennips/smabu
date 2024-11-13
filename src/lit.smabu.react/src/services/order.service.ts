@@ -1,5 +1,5 @@
 import axiosConfig from "../configs/axiosConfig";
-import { CreateOrderCommand, GetOrderReferencesReadModel, OrderDTO, UpdateOrderCommand, UpdateReferencesToOrderCommand } from "../types/domain";
+import { CreateOrderCommand, GetOrderReferencesResponse, OrderDTO, UpdateOrderCommand, UpdateReferencesToOrderCommand } from "../types/domain";
 
 export const createOrder = async (payload: CreateOrderCommand) => {
     const response = await axiosConfig.post<OrderDTO[]>(`orders`, payload);
@@ -27,7 +27,7 @@ export const deleteOrder = async (orderId: string) => {
 };
 
 export const getOrdersReferences = async (orderId: string) => {
-    const response = await axiosConfig.get<GetOrderReferencesReadModel>(`orders/${orderId}/references`);
+    const response = await axiosConfig.get<GetOrderReferencesResponse>(`orders/${orderId}/references`);
     return response.data;
 };
 

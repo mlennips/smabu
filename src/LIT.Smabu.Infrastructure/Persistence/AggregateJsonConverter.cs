@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared;
+﻿using LIT.Smabu.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

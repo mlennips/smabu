@@ -1,11 +1,11 @@
-﻿using LIT.Smabu.Domain.CustomerAggregate;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.Domain.PaymentAggregate;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.Specifications;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.Services
 {

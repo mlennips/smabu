@@ -29,25 +29,25 @@ export interface CreateInvoiceCommand {
      * @type {InvoiceId}
      * @memberof CreateInvoiceCommand
      */
-    invoiceId: InvoiceId;
+    invoiceId?: InvoiceId;
 
     /**
      * @type {CustomerId}
      * @memberof CreateInvoiceCommand
      */
-    customerId: CustomerId;
+    customerId?: CustomerId;
 
     /**
      * @type {number}
      * @memberof CreateInvoiceCommand
      */
-    fiscalYear: number;
+    fiscalYear?: number;
 
     /**
      * @type {Currency}
      * @memberof CreateInvoiceCommand
      */
-    currency: Currency;
+    currency?: Currency;
 
     /**
      * @type {DatePeriod}

@@ -26,13 +26,13 @@ export interface CreateCustomerCommand {
      * @type {CustomerId}
      * @memberof CreateCustomerCommand
      */
-    customerId: CustomerId;
+    customerId?: CustomerId;
 
     /**
      * @type {string}
      * @memberof CreateCustomerCommand
      */
-    name: string | null;
+    name?: string | null;
 
     /**
      * @type {CustomerNumber}

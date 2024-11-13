@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.UseCases.SeedData
 {

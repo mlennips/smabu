@@ -1,10 +1,13 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
 using System.Net;
 
 namespace LIT.Smabu.API.Middlewares
 {
     public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
     {
+        private static readonly Action<ILogger, Exception> LogUnhandledException =
+            LoggerMessage.Define(LogLevel.Error, new EventId(0, nameof(ExceptionHandlingMiddleware)), "An unhandled exception has occurred.");
+
         public async Task InvokeAsync(HttpContext context)
         {
             try
@@ -13,7 +16,7 @@ namespace LIT.Smabu.API.Middlewares
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An unhandled exception has occurred.");
+                LogUnhandledException(logger, ex);
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -39,7 +42,7 @@ namespace LIT.Smabu.API.Middlewares
             return context.Response.WriteAsync(response.Message);
         }
 
-        internal class Response
+        internal sealed class Response
         {
             public int StatusCode { get; internal set; }
             public string? Message { get; internal set; }

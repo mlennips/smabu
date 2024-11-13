@@ -1,8 +1,8 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.Shared;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate.Events;
+using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -42,7 +42,6 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             Items = items ?? [];
         }
 #pragma warning restore IDE0290 // Primären Konstruktor verwenden
-
 
         public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate)
         {
@@ -128,7 +127,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             var item = Items.Find(x => x.Id == id);
             if (item == null)
             {
-                return Result.Failure(new Error("Invoice.ItemNotFound", "Item not found."));
+                return Result.Failure(new ErrorDetail("Invoice.ItemNotFound", "Item not found."));
             }
 
             Items.Remove(item);
@@ -214,13 +213,12 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             Number = Number!.IsTemporary ? number : Number;
             ReleasedAt = releasedAt ?? DateTime.UtcNow;
             IsReleased = true;
-
             if (!PerformancePeriod.To.HasValue)
             {
-                PerformancePeriod = DatePeriod.CreateFrom(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
+                PerformancePeriod = DatePeriod.Create(PerformancePeriod.From.ToDateTime(TimeOnly.MinValue), DateTime.Now);
             }
-
             InvoiceDate ??= DateOnly.FromDateTime(ReleasedAt.Value);
+
             AddDomainEvent(new InvoiceReleasedEvent(Id));
             return Result.Success();
         }

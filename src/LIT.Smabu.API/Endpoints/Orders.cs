@@ -1,14 +1,14 @@
 ﻿using MediatR;
-using LIT.Smabu.UseCases.Orders.Create;
 using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.UseCases.Orders;
-using LIT.Smabu.UseCases.Orders.List;
-using LIT.Smabu.UseCases.Orders.Get;
-using LIT.Smabu.UseCases.Orders.Update;
-using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.UseCases.Orders.Delete;
-using LIT.Smabu.UseCases.Orders.UpdateReferences;
-using LIT.Smabu.UseCases.Orders.GetReferences;
+using LIT.Smabu.Domain.Base;
+using static LIT.Smabu.UseCases.Orders.CreateOrder;
+using static LIT.Smabu.UseCases.Orders.ListOrders;
+using static LIT.Smabu.UseCases.Orders.GetOrder;
+using static LIT.Smabu.UseCases.Orders.UpdateOrder;
+using static LIT.Smabu.UseCases.Orders.DeleteOrder;
+using static LIT.Smabu.UseCases.Orders.GetOrderReferences;
+using static LIT.Smabu.UseCases.Orders.UpdateReferencesToOrder;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -48,27 +48,27 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
                 .Produces<OrderId>()
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapDelete("/{orderId}", async (IMediator mediator, Guid orderId) =>
                 await mediator.SendAndMatchAsync(new DeleteOrderCommand(new(orderId)),
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
 
             api.MapGet("/{orderId}/references", async (IMediator mediator, Guid orderId) =>
                 await mediator.SendAndMatchAsync(new GetOrderReferencesQuery(new(orderId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<GetOrderReferencesReadModel>();
+                .Produces<GetOrderReferencesResponse>();
 
             api.MapPut("/{orderId}/references", async (IMediator mediator, Guid orderId, UpdateReferencesToOrderCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
     }
 }

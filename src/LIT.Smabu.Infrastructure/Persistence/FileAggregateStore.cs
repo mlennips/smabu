@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Infrastructure.Exceptions;
 using LIT.Smabu.Infrastructure.Messaging;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using Microsoft.Extensions.Logging;
 
 namespace LIT.Smabu.Infrastructure.Persistence

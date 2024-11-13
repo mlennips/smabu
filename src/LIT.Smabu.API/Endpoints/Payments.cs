@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using LIT.Smabu.UseCases.Payments.Get;
-using LIT.Smabu.UseCases.Payments.Create;
-using LIT.Smabu.UseCases.Payments.Update;
-using LIT.Smabu.UseCases.Payments.Delete;
-using LIT.Smabu.Domain.Shared;
-using LIT.Smabu.UseCases.Payments.Complete;
 using LIT.Smabu.UseCases.Payments;
 using LIT.Smabu.Domain.PaymentAggregate;
-using LIT.Smabu.UseCases.Payments.List;
+using LIT.Smabu.Domain.Base;
+using static LIT.Smabu.UseCases.Payments.ListPayments;
+using static LIT.Smabu.UseCases.Payments.GetPayment;
+using static LIT.Smabu.UseCases.Payments.CreatePayment;
+using static LIT.Smabu.UseCases.Payments.DeletePayment;
+using static LIT.Smabu.UseCases.Payments.UpdatePayment;
+using static LIT.Smabu.UseCases.Payments.CompletePayment;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -61,7 +61,7 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.BadRequest))
                 .Produces(200)
-                .Produces<Error>(400);
+                .Produces<ErrorDetail>(400);
         }
     }
 }

@@ -98,7 +98,7 @@ const PaymentCreate = () => {
             onLoading: setLoading,
             onSuccess: () => {
                 toast("Zahlung erfolgreich erstellt", "success");
-                navigate(`/payments/${data.paymentId.value}`);
+                navigate(`/payments/${data.paymentId!.value}`);
             },
             onError: setError
         });

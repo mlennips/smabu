@@ -1,11 +1,20 @@
-﻿using LIT.Smabu.Domain.CatalogAggregate;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
     public class InvoiceItem : Entity<InvoiceItemId>
     {
+        public override InvoiceItemId Id { get; }
+        public InvoiceId InvoiceId { get; }
+        public int Position { get; private set; }
+        public string Details { get; private set; }
+        public Quantity Quantity { get; private set; }
+        public decimal UnitPrice { get; private set; }
+        public decimal TotalPrice { get; private set; }
+        public CatalogItemId? CatalogItemId { get; private set; }
+
         public InvoiceItem(InvoiceItemId id, InvoiceId invoiceId, int position, string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId = null)
         {
             Id = id;
@@ -17,15 +26,6 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             CatalogItemId = catalogItemId;
             RefreshTotalPrice();
         }
-
-        public override InvoiceItemId Id { get; }
-        public InvoiceId InvoiceId { get; }
-        public int Position { get; private set; }
-        public string Details { get; private set; }
-        public Quantity Quantity { get; private set; }
-        public decimal UnitPrice { get; private set; }
-        public decimal TotalPrice { get; private set; }
-        public CatalogItemId? CatalogItemId { get; private set; }
 
         internal void Edit(string details, Quantity quantity, decimal unitPrice, CatalogItemId? catalogItemId)
         {

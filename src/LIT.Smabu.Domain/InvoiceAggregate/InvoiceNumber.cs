@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
+using System.Globalization;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -10,7 +11,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
 
         public static InvoiceNumber CreateFirst(int year)
         {
-            return new InvoiceNumber(int.Parse(year.ToString() + 1.ToString("0000")));
+            return new InvoiceNumber(long.Parse($"{year}0001", CultureInfo.InvariantCulture));
         }
 
         public static InvoiceNumber CreateNext(InvoiceNumber lastNumber)

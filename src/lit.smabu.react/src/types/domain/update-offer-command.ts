@@ -26,13 +26,13 @@ export interface UpdateOfferCommand {
      * @type {OfferId}
      * @memberof UpdateOfferCommand
      */
-    id: OfferId;
+    offerId?: OfferId;
 
     /**
      * @type {TaxRate}
      * @memberof UpdateOfferCommand
      */
-    taxRate: TaxRate;
+    taxRate?: TaxRate;
 
     /**
      * @type {string}

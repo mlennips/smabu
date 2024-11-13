@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.Common;
-using LIT.Smabu.UseCases.Shared;
+using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.Common
 {
@@ -7,7 +7,7 @@ namespace LIT.Smabu.UseCases.Common
     {
         public string DisplayName => "";
 
-        public static CommunicationDTO From(Communication communication)
+        public static CommunicationDTO Create(Communication communication)
         {
             return new CommunicationDTO(communication.Email, communication.Mobil, communication.Phone, communication.Website);
         }

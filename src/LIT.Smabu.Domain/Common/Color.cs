@@ -1,9 +1,12 @@
-﻿using LIT.Smabu.Shared;
+﻿using LIT.Smabu.Core;
+using System.Globalization;
 
 namespace LIT.Smabu.Domain.Common
 {
     public record Color : IValueObject
     {
+        public string Hex { get; }
+
         public Color(string hex)
         {
             if (!IsValidHexColor(hex))
@@ -31,8 +34,6 @@ namespace LIT.Smabu.Domain.Common
             return new Color(complementaryColor);
         }
 
-        public string Hex { get; }
-
         private static bool IsValidHexColor(string value)
         {
             return !string.IsNullOrEmpty(value) && value.StartsWith('#');
@@ -41,7 +42,7 @@ namespace LIT.Smabu.Domain.Common
         private static int GetRGB(string hexValue)
         {
             var hexWithoutHash = hexValue.TrimStart('#');
-            return int.Parse(hexWithoutHash, System.Globalization.NumberStyles.HexNumber);
+            return int.Parse(hexWithoutHash, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
         }
     }
 }

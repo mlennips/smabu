@@ -1,9 +1,14 @@
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.Common
 {
     public record FileReference : IValueObject
     {
+        public string FileUrl { get; set; }
+        public string FileName { get; set; }
+        public string? FileId { get; set; }
+        public DateTime UploadedAt { get; set; }
+
         public FileReference(string fileUrl, string? fileName, string? fileId, DateTime uploadedAt)
         {
             bool isValidUrl = CheckUrlIsValid(fileUrl);
@@ -18,11 +23,6 @@ namespace LIT.Smabu.Domain.Common
             FileId = fileId;
             UploadedAt = uploadedAt;
         }
-
-        public string FileUrl { get; set; }
-        public string FileName { get; set; }
-        public string? FileId { get; set; }
-        public DateTime UploadedAt { get; set; }
 
         private static bool CheckUrlIsValid(string fileUrl)
         {

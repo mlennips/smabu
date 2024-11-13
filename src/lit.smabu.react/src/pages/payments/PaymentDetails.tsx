@@ -51,7 +51,7 @@ const PaymentDetails = () => {
         event.preventDefault();
         handleAsyncTask({
             task: () => updatePayment(params.paymentId!, {
-                id: data?.id,
+                paymentId: data?.id,
                 accountingDate: data?.accountingDate,
                 status: data?.status,
                 amountDue: data?.amountDue,
@@ -73,7 +73,7 @@ const PaymentDetails = () => {
     const complete = () => {
         handleAsyncTask({
             task: () => completePayment(params.paymentId!, {
-                id: data?.id,
+                paymentId: data?.id,
                 amount: (data?.amountPaid ?? 0 >= 0 ? data?.amountPaid : data?.amountDue!),
                 paidAt: data?.paidAt ?? new Date()
             }),

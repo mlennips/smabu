@@ -28,19 +28,19 @@ export interface CreatePaymentCommand {
      * @type {PaymentId}
      * @memberof CreatePaymentCommand
      */
-    paymentId: PaymentId;
+    paymentId?: PaymentId;
 
     /**
      * @type {PaymentDirection}
      * @memberof CreatePaymentCommand
      */
-    direction: PaymentDirection;
+    direction?: PaymentDirection;
 
     /**
      * @type {Date}
      * @memberof CreatePaymentCommand
      */
-    accountingDate: Date;
+    accountingDate?: Date;
 
     /**
      * @type {string}
@@ -76,7 +76,7 @@ export interface CreatePaymentCommand {
      * @type {string}
      * @memberof CreatePaymentCommand
      */
-    referenceNr: string | null;
+    referenceNr?: string | null;
 
     /**
      * @type {Date}

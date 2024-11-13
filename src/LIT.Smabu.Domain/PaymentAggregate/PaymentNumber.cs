@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.Domain.PaymentAggregate
 {
@@ -10,7 +10,7 @@ namespace LIT.Smabu.Domain.PaymentAggregate
 
         public static PaymentNumber CreateFirst()
         {
-            return new PaymentNumber(int.Parse(1.ToString("00000000")));
+            return new PaymentNumber(1);
         }
 
         public static PaymentNumber CreateNext(PaymentNumber lastNumber)

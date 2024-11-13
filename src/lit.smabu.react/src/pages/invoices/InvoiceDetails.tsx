@@ -62,7 +62,7 @@ const InvoiceDetails = () => {
         event.preventDefault();
         handleAsyncTask({
             task: () => updateInvoice(params.invoiceId!, {
-                id: data?.id!,
+                invoiceId: data?.id!,
                 performancePeriod: data?.performancePeriod!,
                 taxRate: data?.taxRate!,
             }),
@@ -74,7 +74,7 @@ const InvoiceDetails = () => {
 
     const release = () => handleAsyncTask({
         task: () => releaseInvoice(params.invoiceId!, {
-            id: data?.id!,
+            invoiceId: data?.id!,
             releasedAt: undefined
         }),
         onLoading: setLoading,
@@ -87,7 +87,7 @@ const InvoiceDetails = () => {
 
     const withdrawRelease = () => handleAsyncTask({
         task: () => withdrawReleaseInvoice(params.invoiceId!, {
-            id: data?.id!,
+            invoiceId: data?.id!,
         }),
         onLoading: setLoading,
         onSuccess: () => {

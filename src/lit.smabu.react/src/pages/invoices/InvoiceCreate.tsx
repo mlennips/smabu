@@ -79,7 +79,7 @@ const InvoiceCreate = () => {
             onLoading: setLoading,
             onSuccess: (_response) => {
                 toast("Rechnung erfolgreich erstellt", "success");
-                navigate(`/invoices/${data.invoiceId.value}`);
+                navigate(`/invoices/${data.invoiceId?.value}`);
             },
             onError: setError
         });
@@ -92,7 +92,7 @@ const InvoiceCreate = () => {
                     <Paper sx={{ p: 2 }}>
                         <Grid container spacing={1}>
                             <Grid size={{ xs: 6 }}><TextField type='number' fullWidth label="Geschäftsjahr" name="fiscalYear" value={data?.fiscalYear} onChange={handleChange} required /></Grid>
-                            <Grid size={{ xs: 6 }}><TextField fullWidth label="Währung" name="currency" value={data?.currency.isoCode} onChange={handleChange} required disabled /></Grid>
+                            <Grid size={{ xs: 6 }}><TextField fullWidth label="Währung" name="currency" value={data?.currency?.isoCode} onChange={handleChange} required disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 6 }}>
                                 <SelectField
                                     label='Vorlage'
@@ -108,7 +108,7 @@ const InvoiceCreate = () => {
                                     label='Kunde'
                                     name='customerId'
                                     required
-                                    value={data?.customerId.value}
+                                    value={data?.customerId?.value}
                                     onChange={handleChange}
                                     items={customers ?? []}
                                     onGetValue={(item) => item.id.value}

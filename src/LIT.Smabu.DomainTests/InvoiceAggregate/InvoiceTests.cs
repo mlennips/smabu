@@ -10,7 +10,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         private readonly InvoiceId _invoiceId = new(Guid.NewGuid());
         private readonly CustomerId _customerId = new(Guid.NewGuid());
         private readonly Address _address = new("Name 1", "Name 2", "Street", "House number", "12345", "City", "Country");
-        private readonly DatePeriod _datePeriod = DatePeriod.CreateFrom(DateTime.Now, DateTime.Now.AddDays(1));
+        private readonly DatePeriod _datePeriod = DatePeriod.Create(DateTime.Now, DateTime.Now.AddDays(1));
         private readonly Currency _currency = Currency.EUR;
         private readonly TaxRate _taxRate = new("Default", 19, "Tax");
 
@@ -84,7 +84,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         {
             // Arrange
             var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
-            var newDatePeriod = DatePeriod.CreateFrom(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2));
+            var newDatePeriod = DatePeriod.Create(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2));
             var newTax = new TaxRate("New", 1, "New tax");
             var newInvoiceDate = DateOnly.FromDateTime(DateTime.Now);
 

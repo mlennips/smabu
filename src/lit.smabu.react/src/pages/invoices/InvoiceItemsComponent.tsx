@@ -6,6 +6,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { getInvoice, moveInvoiceItemDown, moveInvoiceItemUp } from '../../services/invoice.service';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
+import { grey } from '@mui/material/colors';
 
 interface InvoiceItemsComponentProps {
     invoiceId: string | undefined;
@@ -81,7 +82,7 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.quantity?.value} {item.quantity?.unit?.shortName}</TableCell>
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.unitPrice?.toFixed(2)} {data?.currency?.isoCode}</TableCell>
                                 <TableCell sx={{ borderBottom: 'none' }} align="right">{item.totalPrice?.toFixed(2)} {data?.currency?.isoCode}</TableCell>
-                                <TableCell sx={{ verticalAlign: 'top' }} rowSpan={2}>
+                                <TableCell sx={{ verticalAlign: 'top' }} rowSpan={2} align="right" >
                                     <ButtonGroup variant="text" size='small' color='secondary'>
                                         <Button onClick={() => moveItemUp(item.id!)} disabled={data.isReleased}><MoveUp /></Button>
                                         <Button onClick={() => moveItemDown(item.id!)} disabled={data.isReleased}><MoveDown /></Button>
@@ -91,7 +92,7 @@ const InvoiceItemsComponent: React.FC<InvoiceItemsComponentProps> = ({ invoiceId
                                 </TableCell>
                             </TableRow>
                             <TableRow key={`${index}-2`}>
-                                <TableCell colSpan={6} sx={{ fontSize: 'small' }}>{item.details}</TableCell>
+                                <TableCell colSpan={6} sx={{ fontSize: 'small', color: grey[600] }}>{item.details}</TableCell>
                             </TableRow>
                         </React.Fragment>
                     ))}

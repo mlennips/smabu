@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using LIT.Smabu.UseCases.Dashboards.Welcome;
 using LIT.Smabu.UseCases.Dashboards.Sales;
+using static LIT.Smabu.UseCases.Dashboards.Welcome.GetWelcomeDashboard;
+using static LIT.Smabu.UseCases.Dashboards.Sales.GetSalesDashboard;
 
 namespace LIT.Smabu.API.Endpoints
 {

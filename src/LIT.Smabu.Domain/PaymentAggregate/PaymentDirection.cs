@@ -1,13 +1,13 @@
-﻿using LIT.Smabu.Domain.Shared;
+﻿using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.Domain.PaymentAggregate
 {
     public record PaymentDirection : SimpleValueObject<string>
     {
+        private static readonly HashSet<string> ValidValues = [IncomingKey, OutgoingKey];
+
         private const string IncomingKey = "Incoming";
         private const string OutgoingKey = "Outgoing";
-
-        private static readonly HashSet<string> ValidValues = [IncomingKey, OutgoingKey];
 
         public PaymentDirection(string value) : base(value)
         {

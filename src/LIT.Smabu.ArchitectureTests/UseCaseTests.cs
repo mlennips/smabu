@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.UseCases.Shared;
+﻿using LIT.Smabu.UseCases.Base;
 using NetArchTest.Rules;
 using System.Reflection;
 
@@ -9,7 +9,7 @@ namespace LIT.Smabu.ArchitectureTests
     {
         private static readonly Assembly DomainAssembly = typeof(Domain.Common.Address).Assembly;
         private static readonly Assembly UseCasesAssembly = typeof(UseCases.Common.AddressDTO).Assembly;
-        private static readonly Assembly SharedAssembly = typeof(Shared.IReport).Assembly;
+        private static readonly Assembly SharedAssembly = typeof(Core.IReport).Assembly;
 
         [TestMethod]
         public void Handlers_ShouldHaveDependenciesToDomainAssembly()
@@ -27,7 +27,7 @@ namespace LIT.Smabu.ArchitectureTests
         }
 
         [TestMethod]
-        public void ReportHandlers_ShouldHaveDependenciesToSharedAssembly()
+        public void ReportHandlers_ShouldHaveDependenciesToCoreAssembly()
         {
             var result = Types.InAssembly(UseCasesAssembly)
                               .That()
@@ -35,9 +35,9 @@ namespace LIT.Smabu.ArchitectureTests
                               .Should()
                               .HaveDependencyOn(SharedAssembly.FullName)
                               .And()
-                              .HaveDependencyOn(typeof(Shared.IReport).FullName)
+                              .HaveDependencyOn(typeof(Core.IReport).FullName)
                               .And()
-                              .HaveDependencyOn(typeof(Shared.IReportFactory).FullName)
+                              .HaveDependencyOn(typeof(Core.IReportFactory).FullName)
                               .GetResult();
 
             Assert.IsTrue(result.IsSuccessful);

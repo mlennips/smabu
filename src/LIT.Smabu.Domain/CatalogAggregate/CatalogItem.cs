@@ -1,6 +1,6 @@
-﻿using LIT.Smabu.Domain.Common;
+﻿using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
-using LIT.Smabu.Domain.Shared;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {
@@ -12,7 +12,18 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         private readonly List<CatalogItemPrice> _prices = prices ?? [];
         private readonly List<CustomerCatalogItemPrice> _customerPrices = customerPrices ?? [];
 
-        public static CatalogItem Create(CatalogItemId id, CatalogItemNumber number, 
+        public override CatalogItemId Id { get; } = id;
+        public CatalogItemNumber Number { get; private set; } = number;
+        public CatalogId CatalogId { get; } = catalogId;
+        public CatalogGroupId CatalogGroupId { get; private set; } = catalogGroupId;
+        public bool IsActive { get; private set; } = isActive;
+        public string Name { get; private set; } = name;
+        public string Description { get; private set; } = description;
+        public Unit Unit { get; private set; } = unit;
+        public IReadOnlyList<CatalogItemPrice> Prices => _prices;
+        public IReadOnlyList<CustomerCatalogItemPrice> CustomerPrices => _customerPrices;
+
+        public static CatalogItem Create(CatalogItemId id, CatalogItemNumber number,
             CatalogId catalogId, CatalogGroupId catalogGroupId,
             string name, string description, Unit unit)
         {
@@ -22,19 +33,6 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             };
             return new CatalogItem(id, number, catalogId, catalogGroupId, true, name, description, unit, defaultPrices, null);
         }
-
-        public override CatalogItemId Id { get; } = id;
-        public CatalogItemNumber Number { get; private set; } = number;
-        public CatalogId CatalogId { get; } = catalogId;
-        public CatalogGroupId CatalogGroupId { get; private set; } = catalogGroupId;
-
-        public bool IsActive { get; private set; } = isActive;
-        public string Name { get; private set; } = name;
-        public string Description { get; private set; } = description;
-        public Unit Unit { get; private set; } = unit;
-
-        public IReadOnlyList<CatalogItemPrice> Prices => _prices;
-        public IReadOnlyList<CustomerCatalogItemPrice> CustomerPrices => _customerPrices;
 
         public CatalogItemPrice GetCurrentPrice() => Prices
             .Where(p => p.CheckIsValidToday())
@@ -46,7 +44,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
 
         public Result Update(string name, string description, bool isActive, Unit unit)
         {
-            List<Error> validationErrors = Validate(name, unit);
+            List<ErrorDetail> validationErrors = Validate(name, unit);
             if (validationErrors.Count != 0)
             {
                 return Result.Failure(validationErrors);
@@ -76,9 +74,9 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             return Result.Success();
         }
 
-        private static List<Error> Validate(string name, Unit unit)
+        private static List<ErrorDetail> Validate(string name, Unit unit)
         {
-            var validationErrors = new List<Error>();
+            var validationErrors = new List<ErrorDetail>();
             if (string.IsNullOrEmpty(name))
             {
                 validationErrors.Add(CatalogErrors.NameEmpty);
@@ -89,11 +87,6 @@ namespace LIT.Smabu.Domain.CatalogAggregate
             }
 
             return validationErrors;
-        }
-
-        internal object Update(string name, string description, bool isActive, Unit unit, IReadOnlyList<CatalogItemPrice> prices, IReadOnlyDictionary<CustomerId, CatalogItemPrice> customerPrices)
-        {
-            throw new NotImplementedException();
         }
     }
 }

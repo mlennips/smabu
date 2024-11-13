@@ -28,31 +28,31 @@ export interface UpdateInvoiceItemCommand {
      * @type {InvoiceItemId}
      * @memberof UpdateInvoiceItemCommand
      */
-    id: InvoiceItemId;
+    invoiceItemId?: InvoiceItemId;
 
     /**
      * @type {InvoiceId}
      * @memberof UpdateInvoiceItemCommand
      */
-    invoiceId: InvoiceId;
+    invoiceId?: InvoiceId;
 
     /**
      * @type {string}
      * @memberof UpdateInvoiceItemCommand
      */
-    details: string | null;
+    details?: string | null;
 
     /**
      * @type {Quantity}
      * @memberof UpdateInvoiceItemCommand
      */
-    quantity: Quantity;
+    quantity?: Quantity;
 
     /**
      * @type {number}
      * @memberof UpdateInvoiceItemCommand
      */
-    unitPrice: number;
+    unitPrice?: number;
 
     /**
      * @type {CatalogItemId}

@@ -26,7 +26,7 @@ export interface UpdatePaymentCommand {
      * @type {PaymentId}
      * @memberof UpdatePaymentCommand
      */
-    id?: PaymentId;
+    paymentId?: PaymentId;
 
     /**
      * @type {string}

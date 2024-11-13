@@ -44,7 +44,7 @@ const OfferItemDetails = () => {
         
         handleAsyncTask({
             task: () => updateOfferItem(params.offerId!, params.offerItemId!, {
-                id: data?.id!,
+                offerItemId: data?.id!,
                 offerId: data?.offerId!,
                 quantity: data?.quantity!,
                 unitPrice: data?.unitPrice!,
