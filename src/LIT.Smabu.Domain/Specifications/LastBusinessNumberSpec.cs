@@ -1,5 +1,5 @@
 ﻿using LIT.Smabu.Domain.Base;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using System.Globalization;
 
 namespace LIT.Smabu.Domain.Specifications

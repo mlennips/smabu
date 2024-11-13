@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.PaymentAggregate;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.Payments

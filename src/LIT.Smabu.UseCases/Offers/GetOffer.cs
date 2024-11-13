@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.Offers

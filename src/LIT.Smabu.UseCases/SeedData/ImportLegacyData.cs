@@ -3,7 +3,7 @@ using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using Newtonsoft.Json;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.Domain.PaymentAggregate;
 using static LIT.Smabu.Domain.Services.GetSalesByYear.Item;
 using Customer = LIT.Smabu.Domain.CustomerAggregate.Customer;

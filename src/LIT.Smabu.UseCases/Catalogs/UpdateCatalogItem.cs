@@ -1,7 +1,7 @@
 ﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.Catalogs

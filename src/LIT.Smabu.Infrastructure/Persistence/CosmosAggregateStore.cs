@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Infrastructure.Exceptions;
 using LIT.Smabu.Infrastructure.Messaging;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace LIT.Smabu.Shared
+namespace LIT.Smabu.Core
 {
     public interface IDomainEvent : IRequest
     {

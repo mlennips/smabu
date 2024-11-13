@@ -5,7 +5,7 @@ using LIT.Smabu.Domain.InvoiceAggregate.Events;
 using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.Domain.PaymentAggregate.Specifications;
 using LIT.Smabu.Domain.Services;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
 using MediatR;
 

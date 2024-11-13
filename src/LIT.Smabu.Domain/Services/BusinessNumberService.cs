@@ -5,7 +5,7 @@ using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.Domain.Specifications;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.Services
 {

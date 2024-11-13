@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared
+﻿namespace LIT.Smabu.Core
 {
     public interface IEntity<out TEntityId> : IEntity where TEntityId : IEntityId
     {

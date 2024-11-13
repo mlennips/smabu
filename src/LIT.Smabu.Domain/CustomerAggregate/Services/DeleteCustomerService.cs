@@ -2,7 +2,7 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate.Specifications;
 using LIT.Smabu.Domain.OfferAggregate.Specifications;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.CustomerAggregate.Services
 {

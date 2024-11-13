@@ -2,7 +2,7 @@
 using LIT.Smabu.Infrastructure.Messaging;
 using LIT.Smabu.Infrastructure.Persistence;
 using LIT.Smabu.Infrastructure.Reports;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
 using LIT.Smabu.UseCases.SeedData;
 using MediatR;

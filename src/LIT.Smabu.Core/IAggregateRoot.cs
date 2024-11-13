@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared
+﻿namespace LIT.Smabu.Core
 {
     public interface IAggregateRoot<out TEntityId> : IAggregateRoot, IEntity<TEntityId>
         where TEntityId : class, IEntityId

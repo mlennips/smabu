@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.OrderAggregate;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.OrderAggregate.Specifications
 {

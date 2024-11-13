@@ -1,4 +1,4 @@
-﻿namespace LIT.Smabu.Shared
+﻿namespace LIT.Smabu.Core
 {
     internal interface IUnitOfWork
     {

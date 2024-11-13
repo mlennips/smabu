@@ -1,6 +1,6 @@
 ﻿using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Invoices;
 using LIT.Smabu.UseCases.Offers;
 using System.Globalization;

@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 
-namespace LIT.Smabu.Shared
+namespace LIT.Smabu.Core
 {
-    public abstract class Specification<TAggregate>(Expression<Func<TAggregate, bool>> criteria) 
+    public abstract class Specification<TAggregate>(Expression<Func<TAggregate, bool>> criteria)
         where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
     {
         public Expression<Func<TAggregate, bool>> Criteria { get; } = criteria;

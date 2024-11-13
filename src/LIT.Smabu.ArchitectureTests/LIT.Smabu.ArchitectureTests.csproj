@@ -24,7 +24,6 @@
     <ProjectReference Include="..\LIT.Smabu.API\LIT.Smabu.API.csproj" />
     <ProjectReference Include="..\LIT.Smabu.Domain\LIT.Smabu.Domain.csproj" />
     <ProjectReference Include="..\LIT.Smabu.Infrastructure\LIT.Smabu.Infrastructure.csproj" />
-    <ProjectReference Include="..\LIT.Smabu.Shared\LIT.Smabu.Shared.csproj" />
     <ProjectReference Include="..\LIT.Smabu.UseCases\LIT.Smabu.UseCases.csproj" />
   </ItemGroup>
 

@@ -2,7 +2,7 @@
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.Services;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 using Moq;
 
 namespace LIT.Smabu.DomainTests.Services

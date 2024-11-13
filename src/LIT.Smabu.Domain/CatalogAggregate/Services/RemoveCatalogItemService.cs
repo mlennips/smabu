@@ -2,7 +2,7 @@
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
-using LIT.Smabu.Shared;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.CatalogAggregate.Services
 {

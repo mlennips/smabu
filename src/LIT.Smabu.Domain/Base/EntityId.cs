@@ -1,4 +1,4 @@
-﻿using LIT.Smabu.Shared;
+﻿using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.Base
 {
