@@ -79,4 +79,10 @@ export interface CustomerDTO {
      * @memberof CustomerDTO
      */
     corporateDesign?: CorporateDesign;
+    
+    /**
+     * @type {string}
+     * @memberof CustomerDTO
+     */
+    vatId?: string | null;
 }

@@ -4,8 +4,8 @@ using LIT.Smabu.Domain.Common;
 namespace LIT.Smabu.Domain.CustomerAggregate
 {
     public class Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
-        Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign)
-        : AggregateRoot<CustomerId>, IHasBusinessNumber<CustomerNumber>
+            Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign, string vatId)
+            : AggregateRoot<CustomerId>, IHasBusinessNumber<CustomerNumber>
     {
         public override CustomerId Id { get; } = id;
         public CustomerNumber Number { get; private set; } = number;
@@ -15,19 +15,21 @@ namespace LIT.Smabu.Domain.CustomerAggregate
         public Address MainAddress { get; private set; } = mainAddress;
         public Communication Communication { get; private set; } = communication;
         public CorporateDesign CorporateDesign { get; private set; } = corporateDesign;
+        public string VatId { get; private set; } = vatId;
 
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
             var corporateDesign = CorporateDesign.CreateDefault(name);
             return new Customer(id, number, name, industryBranch, Currency.EUR,
-                new Address(name, "", "", "", "", "", ""), Communication.Empty, corporateDesign);
+                new Address(name, "", "", "", "", "", ""), Communication.Empty, corporateDesign, string.Empty);
         }
 
         public Result Update(string name, string? industryBranch, Address? mainAddress,
-            Communication? communication, CorporateDesign? corporateDesign)
+            Communication? communication, CorporateDesign? corporateDesign, string vatId)
         {
             Name = name;
             IndustryBranch = industryBranch ?? "";
+            VatId = vatId;
             if (mainAddress != null)
             {
                 MainAddress = mainAddress;

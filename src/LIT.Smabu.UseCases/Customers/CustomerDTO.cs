@@ -16,9 +16,10 @@ namespace LIT.Smabu.UseCases.Customers
         public AddressDTO MainAddress { get; set; }
         public CommunicationDTO Communication { get; set; }
         public CorporateDesign CorporateDesign { get; set; }
+        public string VatId { get; set; }
 
         public CustomerDTO(CustomerId id, CustomerNumber number, string name, string industryBranch,
-            Currency currency, AddressDTO mainAddress, CommunicationDTO communication, CorporateDesign corporateDesign)
+            Currency currency, AddressDTO mainAddress, CommunicationDTO communication, CorporateDesign corporateDesign, string vatId)
         {
             Id = id;
             Number = number;
@@ -28,12 +29,13 @@ namespace LIT.Smabu.UseCases.Customers
             MainAddress = mainAddress;
             Communication = communication;
             CorporateDesign = corporateDesign;
+            VatId = vatId;
         }
 
         public static CustomerDTO Create(Customer customer)
         {
             return new CustomerDTO(customer.Id, customer.Number, customer.Name, customer.IndustryBranch, customer.Currency,
-                AddressDTO.Create(customer.MainAddress), CommunicationDTO.Create(customer.Communication), customer.CorporateDesign);
+                AddressDTO.Create(customer.MainAddress), CommunicationDTO.Create(customer.Communication), customer.CorporateDesign, customer.VatId);
         }
     }
 }

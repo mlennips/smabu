@@ -59,4 +59,10 @@ export interface UpdateCustomerCommand {
      * @memberof UpdateCustomerCommand
      */
     corporateDesign?: CorporateDesign;
+
+    /**
+     * @type {string}
+     * @memberof UpdateCustomerCommand
+     */
+    vatId?: string | null;
 }

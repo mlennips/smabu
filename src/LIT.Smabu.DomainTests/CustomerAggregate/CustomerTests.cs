@@ -39,17 +39,19 @@ namespace LIT.Smabu.DomainTests.CustomerAggregate
             // Arrange
             string otherName = "99 name";
             string otherIndustryBranch = "99 industry branch";
+            string otherVatId = "99";
 
             // Act
             testee.Update(otherName,
                           otherIndustryBranch,
                           new Address("a", "b", "c", "d", "e", "f", "g"),
                           new("d@d.e", "012", "0123", "www.internet.de"),
-                          null);
+                          null, otherVatId);
 
             // Assert
             Assert.AreEqual(otherName, testee.Name);
             Assert.AreEqual(otherIndustryBranch, testee.IndustryBranch);
+            Assert.AreEqual(otherVatId, testee.VatId);
             Assert.IsNotNull(testee.MainAddress);
             Assert.IsNotNull(testee.Communication);
         }
