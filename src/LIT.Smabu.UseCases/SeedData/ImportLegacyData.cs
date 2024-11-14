@@ -35,7 +35,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             customer.Update(customer.Name, customer.IndustryBranch,
                                 new Address(importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
                                 importKunde.Strasse, importKunde.Hausnummer, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land),
-                                null, null, "");
+                                null, null, "", PaymentMethod.Default);
                             await store.CreateAsync(customer);
 
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
@@ -110,7 +110,7 @@ namespace LIT.Smabu.UseCases.SeedData
                     var payment = Payment.CreateIncoming(paymentId, new PaymentNumber(++paymentCounter), "", customer.Name, "",
                         customer.Id, invoice.Id, invoice.Number.DisplayName, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
                         invoice.PerformancePeriod.To!.Value.ToDateTime(TimeOnly.MinValue), importRechnung.Summe,
-                        invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15));
+                        invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15), PaymentMethod.Default);
 
                     if (importRechnung.IsBeglichen)
                     {

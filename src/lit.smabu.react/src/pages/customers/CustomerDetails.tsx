@@ -8,6 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getCustomer, updateCustomer } from '../../services/customer.service';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
+import { PaymentMethodSelectField } from '../../components/controls/SelectField';
 
 const CustomerDetails = () => {
     const params = useParams();
@@ -47,7 +48,8 @@ const CustomerDetails = () => {
                 mainAddress: data?.mainAddress,
                 communication: data?.communication,
                 corporateDesign: data?.corporateDesign,
-                vatId: data?.vatId
+                vatId: data?.vatId,
+                preferredPaymentMethod: data?.preferredPaymentMethod
             }),
             onLoading: setLoading,
             onSuccess: () => {
@@ -99,6 +101,8 @@ const CustomerDetails = () => {
                                         value={data?.currency?.name} disabled /></Grid>
                                     <Grid size={{ xs: 10, sm: 4, md: 4 }}><TextField fullWidth label="USt-Nr" name="vatId"
                                         value={data?.vatId} onChange={handleChange} /></Grid>
+                                    <Grid size={{ xs: 12, sm: 6, md: 6 }}><PaymentMethodSelectField label='Bevorzugte Zahlungsweise' name="preferredPaymentMethod" value={data?.preferredPaymentMethod?.value}
+                                        onChange={handleChange} required /></Grid>
                                 </Grid>
                             </Paper>
                         </DefaultContentContainer >

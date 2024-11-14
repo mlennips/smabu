@@ -1,5 +1,6 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.UseCases.Base;
 using LIT.Smabu.UseCases.Common;
 
@@ -17,9 +18,11 @@ namespace LIT.Smabu.UseCases.Customers
         public CommunicationDTO Communication { get; set; }
         public CorporateDesign CorporateDesign { get; set; }
         public string VatId { get; set; }
+        public PaymentMethod PreferredPaymentMethod { get; }
 
         public CustomerDTO(CustomerId id, CustomerNumber number, string name, string industryBranch,
-            Currency currency, AddressDTO mainAddress, CommunicationDTO communication, CorporateDesign corporateDesign, string vatId)
+            Currency currency, AddressDTO mainAddress, CommunicationDTO communication, CorporateDesign corporateDesign,
+            string vatId, PaymentMethod preferredPaymentMethod)
         {
             Id = id;
             Number = number;
@@ -30,12 +33,14 @@ namespace LIT.Smabu.UseCases.Customers
             Communication = communication;
             CorporateDesign = corporateDesign;
             VatId = vatId;
+            PreferredPaymentMethod = preferredPaymentMethod;
         }
 
         public static CustomerDTO Create(Customer customer)
         {
             return new CustomerDTO(customer.Id, customer.Number, customer.Name, customer.IndustryBranch, customer.Currency,
-                AddressDTO.Create(customer.MainAddress), CommunicationDTO.Create(customer.Communication), customer.CorporateDesign, customer.VatId);
+                AddressDTO.Create(customer.MainAddress), CommunicationDTO.Create(customer.Communication), customer.CorporateDesign,
+                customer.VatId, customer.PreferredPaymentMethod);
         }
     }
 }

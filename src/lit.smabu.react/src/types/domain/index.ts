@@ -55,6 +55,7 @@ export * from './order-references-dto';
 export * from './payment-dto';
 export * from './payment-direction';
 export * from './payment-id';
+export * from './payment-method';
 export * from './payment-number';
 export * from './payment-status';
 export * from './quantity';

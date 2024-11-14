@@ -18,6 +18,7 @@ import { CorporateDesign } from './corporate-design';
 import { Currency } from './currency';
 import { CustomerId } from './customer-id';
 import { CustomerNumber } from './customer-number';
+import { PaymentMethod } from './payment-method';
  /**
  * 
  *
@@ -79,10 +80,16 @@ export interface CustomerDTO {
      * @memberof CustomerDTO
      */
     corporateDesign?: CorporateDesign;
-    
+
     /**
      * @type {string}
      * @memberof CustomerDTO
      */
     vatId?: string | null;
+
+    /**
+     * @type {PaymentMethod}
+     * @memberof CustomerDTO
+     */
+    preferredPaymentMethod?: PaymentMethod;
 }

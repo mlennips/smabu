@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -16,7 +17,10 @@ namespace LIT.Smabu.API.Endpoints
                 .Produces<TaxRate[]>();
 
             api.MapGet("/units", () => Unit.GetAll())
-                .Produces<string[]>();
+                .Produces<Unit[]>();
+
+            api.MapGet("/paymentmethods", () => PaymentMethod.GetAll())
+                .Produces<PaymentMethod[]>();
         }
     }
 }

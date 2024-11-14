@@ -13,6 +13,7 @@
  */
 
 import { PaymentId } from './payment-id';
+import { PaymentMethod } from './payment-method';
 import { PaymentStatus } from './payment-status';
  /**
  * 
@@ -75,6 +76,12 @@ export interface UpdatePaymentCommand {
      * @memberof UpdatePaymentCommand
      */
     dueDate?: Date | null;
+
+    /**
+     * @type {PaymentMethod}
+     * @memberof UpdatePaymentCommand
+     */
+    paymentMethod?: PaymentMethod;
 
     /**
      * @type {PaymentStatus}

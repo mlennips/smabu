@@ -17,6 +17,7 @@ import { CustomerId } from './customer-id';
 import { InvoiceId } from './invoice-id';
 import { PaymentDirection } from './payment-direction';
 import { PaymentId } from './payment-id';
+import { PaymentMethod } from './payment-method';
 import { PaymentNumber } from './payment-number';
 import { PaymentStatus } from './payment-status';
  /**
@@ -128,6 +129,12 @@ export interface PaymentDTO {
      * @memberof PaymentDTO
      */
     currency?: Currency;
+
+    /**
+     * @type {PaymentMethod}
+     * @memberof PaymentDTO
+     */
+    paymentMethod?: PaymentMethod;
 
     /**
      * @type {PaymentStatus}

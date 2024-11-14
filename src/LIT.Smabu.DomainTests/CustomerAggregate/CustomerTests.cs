@@ -1,5 +1,6 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
+using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.DomainTests.CustomerAggregate
 {
@@ -40,18 +41,20 @@ namespace LIT.Smabu.DomainTests.CustomerAggregate
             string otherName = "99 name";
             string otherIndustryBranch = "99 industry branch";
             string otherVatId = "99";
+            PaymentMethod otherPaymentMethod = PaymentMethod.DirectDebit;
 
             // Act
             testee.Update(otherName,
                           otherIndustryBranch,
                           new Address("a", "b", "c", "d", "e", "f", "g"),
                           new("d@d.e", "012", "0123", "www.internet.de"),
-                          null, otherVatId);
+                          null, otherVatId, otherPaymentMethod);
 
             // Assert
             Assert.AreEqual(otherName, testee.Name);
             Assert.AreEqual(otherIndustryBranch, testee.IndustryBranch);
             Assert.AreEqual(otherVatId, testee.VatId);
+            Assert.AreEqual(otherPaymentMethod, testee.PreferredPaymentMethod);
             Assert.IsNotNull(testee.MainAddress);
             Assert.IsNotNull(testee.Communication);
         }

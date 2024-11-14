@@ -1,10 +1,12 @@
 ﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.Domain.CustomerAggregate
 {
     public class Customer(CustomerId id, CustomerNumber number, string name, string industryBranch,
-            Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign, string vatId)
+            Currency currency, Address mainAddress, Communication communication, CorporateDesign corporateDesign,
+            string vatId, PaymentMethod preferredPaymentMethod)
             : AggregateRoot<CustomerId>, IHasBusinessNumber<CustomerNumber>
     {
         public override CustomerId Id { get; } = id;
@@ -16,20 +18,24 @@ namespace LIT.Smabu.Domain.CustomerAggregate
         public Communication Communication { get; private set; } = communication;
         public CorporateDesign CorporateDesign { get; private set; } = corporateDesign;
         public string VatId { get; private set; } = vatId;
+        public PaymentMethod PreferredPaymentMethod { get; private set; } = preferredPaymentMethod;
 
         public static Customer Create(CustomerId id, CustomerNumber number, string name, string industryBranch)
         {
             var corporateDesign = CorporateDesign.CreateDefault(name);
             return new Customer(id, number, name, industryBranch, Currency.EUR,
-                new Address(name, "", "", "", "", "", ""), Communication.Empty, corporateDesign, string.Empty);
+                new Address(name, "", "", "", "", "", ""), Communication.Empty, corporateDesign,
+                "", PaymentMethod.Default);
         }
 
         public Result Update(string name, string? industryBranch, Address? mainAddress,
-            Communication? communication, CorporateDesign? corporateDesign, string vatId)
+            Communication? communication, CorporateDesign? corporateDesign, string vatId,
+            PaymentMethod preferredPaymentMethod)
         {
             Name = name;
             IndustryBranch = industryBranch ?? "";
             VatId = vatId;
+            PreferredPaymentMethod = preferredPaymentMethod;
             if (mainAddress != null)
             {
                 MainAddress = mainAddress;

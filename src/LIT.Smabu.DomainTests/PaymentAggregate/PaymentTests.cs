@@ -25,9 +25,10 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             var accountingDate = DateTime.Now;
             var amountDue = 100m;
             var dueDate = DateTime.Now.AddDays(30);
+            var paymentMethod = PaymentMethod.Default;
 
             // Act
-            var payment = Payment.CreateIncoming(id, number, details, payer, payee, customerId, invoiceId, documentNr, documentDate, accountingDate, amountDue, dueDate);
+            var payment = Payment.CreateIncoming(id, number, details, payer, payee, customerId, invoiceId, documentNr, documentDate, accountingDate, amountDue, dueDate, paymentMethod);
 
             // Assert
             Assert.AreEqual(id, payment.Id);
@@ -46,6 +47,7 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             Assert.AreEqual(0, payment.AmountPaid);
             Assert.AreEqual(Currency.EUR, payment.Currency);
             Assert.AreEqual(PaymentStatus.Pending, payment.Status);
+            Assert.AreEqual(paymentMethod, payment.PaymentMethod);
         }
 
         [TestMethod]
@@ -62,9 +64,10 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             var accountingDate = DateTime.Now;
             var amountDue = 100m;
             var dueDate = DateTime.Now.AddDays(30);
+            var paymentMethod = PaymentMethod.Default;
 
             // Act
-            var payment = Payment.CreateOutgoing(id, number, details, payer, payee, documentNr, documentDate, accountingDate, amountDue, dueDate);
+            var payment = Payment.CreateOutgoing(id, number, details, payer, payee, documentNr, documentDate, accountingDate, amountDue, dueDate, paymentMethod);
 
             // Assert
             Assert.AreEqual(id, payment.Id);
@@ -80,6 +83,7 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             Assert.AreEqual(0, payment.AmountPaid);
             Assert.AreEqual(Currency.EUR, payment.Currency);
             Assert.AreEqual(PaymentStatus.Pending, payment.Status);
+            Assert.AreEqual(paymentMethod, payment.PaymentMethod);
         }
 
         [TestMethod]
@@ -91,7 +95,7 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             var customerId = new CustomerId(Guid.NewGuid());
             var invoiceId = new InvoiceId(Guid.NewGuid());
             var payment = Payment.CreateIncoming(id, number, "Initial Details", "Initial Payer", "Initial Payee", 
-                customerId, invoiceId, "12345", DateTime.Now, DateTime.Now, 100m, DateTime.Now.AddDays(30));
+                customerId, invoiceId, "12345", DateTime.Now, DateTime.Now, 100m, DateTime.Now.AddDays(30), PaymentMethod.BankTransfer);
             var newDetails = "Updated Details";
             var newPayer = "Updated Payer";
             var newPayee = "Updated Payee";
@@ -100,9 +104,10 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             var newAmountDue = 200m;
             var newDueDate = DateTime.Now.AddDays(60);
             var newStatus = PaymentStatus.Partial;
+            var newPaymentMethod = PaymentMethod.DirectDebit;
 
             // Act
-            var result = payment.Update(newDetails, newPayer, newPayee, newDocumentNr, newDocumentDate, newAmountDue, newDueDate, newStatus);
+            var result = payment.Update(newDetails, newPayer, newPayee, newDocumentNr, newDocumentDate, newAmountDue, newDueDate, newPaymentMethod, newStatus);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
@@ -114,6 +119,7 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             Assert.AreEqual(newAmountDue, payment.AmountDue);
             Assert.AreEqual(newDueDate, payment.DueDate);
             Assert.AreEqual(newStatus, payment.Status);
+            Assert.AreEqual(newPaymentMethod, payment.PaymentMethod);
         }
 
         [TestMethod]
@@ -124,7 +130,7 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             var number = new PaymentNumber(1234);
             var customerId = new CustomerId(Guid.NewGuid());
             var invoiceId = new InvoiceId(Guid.NewGuid());
-            var payment = Payment.CreateIncoming(id, number, "Details", "Payer", "Payee", customerId, invoiceId, "12345", DateTime.Now, DateTime.Now, 100m, DateTime.Now.AddDays(30));
+            var payment = Payment.CreateIncoming(id, number, "Details", "Payer", "Payee", customerId, invoiceId, "12345", DateTime.Now, DateTime.Now, 100m, DateTime.Now.AddDays(30), PaymentMethod.Default);
             var amountPaid = 100m;
             var paidAt = DateTime.Now;
 

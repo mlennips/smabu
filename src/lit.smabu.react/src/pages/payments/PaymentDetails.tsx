@@ -10,6 +10,7 @@ import { completePayment, getPayment, updatePayment } from '../../services/payme
 import { PaymentDTO } from '../../types/domain';
 import { formatForTextField } from '../../utils/formatDate';
 import { Check, Redo } from '@mui/icons-material';
+import { PaymentMethodSelectField } from '../../components/controls/SelectField';
 
 const PaymentDetails = () => {
     const params = useParams();
@@ -61,6 +62,7 @@ const PaymentDetails = () => {
                 details: data?.details,
                 payer: data?.payer,
                 payee: data?.payee,
+                paymentMethod: data?.paymentMethod,
             }),
             onLoading: setLoading,
             onSuccess: () => {
@@ -117,10 +119,12 @@ const PaymentDetails = () => {
                                         value={data?.amountDue} onChange={handleChange} /></Grid>
                                     <Grid size={{ xs: 12, sm: 6 }}><TextField type='date' fullWidth label="Fällig am" name="dueDate"
                                         value={data?.dueDate} onChange={handleChange} /></Grid>
-                                    <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Beglichener Betrag" name="amountPaid"
+                                    <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Beglichener Betrag" name="amountPaid"
                                         value={data?.amountPaid} onChange={handleChange} /></Grid>
-                                    <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Beglichen am" name="paidAt"
-                                        type='date' value={formatForTextField(data?.paidAt, 'date')} onChange={handleChange} /></Grid>
+                                    <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Beglichen am" name="paidAt"
+                                        type='date' value={formatForTextField(data?.paidAt, 'date')} onChange={handleChange} /></Grid>                                    
+                                    <Grid size={{ xs: 12, sm: 4 }}><PaymentMethodSelectField label='Zahlungsweise' name="paymentMethod" value={data?.paymentMethod?.value}
+                                        onChange={handleChange} required /></Grid>
                                     <Grid size={{ xs: 12 }}><TextField fullWidth label="Details" name="details"
                                         value={data?.details} onChange={handleChange} /></Grid>
                                 </Grid>
