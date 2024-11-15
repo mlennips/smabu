@@ -11,7 +11,7 @@ namespace LIT.Smabu.UseCases.Customers
     {
         public record UpdateCustomerCommand(CustomerId CustomerId, string Name, string IndustryBranch,
             Address? MainAddress, Communication? Communication, CorporateDesign? CorporateDesign, string VatId,
-            PaymentMethod PreferredPaymentMethod) : ICommand<CustomerId>;
+            PaymentMethod PreferredPaymentMethod, PaymentCondition PaymentCondition) : ICommand<CustomerId>;
 
         public class UpdateCustomerHandler(IAggregateStore store) : ICommandHandler<UpdateCustomerCommand, CustomerId>
         {
@@ -19,7 +19,7 @@ namespace LIT.Smabu.UseCases.Customers
             {
                 Customer customer = await store.GetByAsync(request.CustomerId);
                 customer.Update(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication, request.CorporateDesign,
-                    request.VatId, request.PreferredPaymentMethod);
+                    request.VatId, request.PreferredPaymentMethod, request.PaymentCondition);
                 await store.UpdateAsync(customer);
                 return customer.Id;
             }

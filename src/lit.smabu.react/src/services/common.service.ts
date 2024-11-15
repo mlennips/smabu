@@ -1,5 +1,5 @@
 import axiosConfig from "../configs/axiosConfig";
-import { Currency, PaymentMethod, TaxRate, Unit } from "../types/domain";
+import { Currency, PaymentCondition, PaymentMethod, TaxRate, Unit } from "../types/domain";
 
 export const getCurrencies = async (): Promise<Currency[]> => {
     const response = await axiosConfig.get<Currency[]>(`common/currencies`);
@@ -18,5 +18,10 @@ export const getTaxRates = async (): Promise<TaxRate[]> => {
 
 export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
     const response = await  axiosConfig.get<PaymentMethod[]>(`common/paymentMethods`);
+    return response?.data;
+};
+
+export const getPaymentConditions = async (): Promise<PaymentCondition[]> => {
+    const response = await  axiosConfig.get<PaymentCondition[]>(`common/paymentconditions`);
     return response?.data;
 };

@@ -14,6 +14,7 @@
 
 import { CustomerId } from './customer-id';
 import { InvoiceId } from './invoice-id';
+import { PaymentCondition } from './payment-condition';
 import { PaymentDirection } from './payment-direction';
 import { PaymentId } from './payment-id';
 import { PaymentMethod } from './payment-method';
@@ -102,6 +103,12 @@ export interface CreatePaymentCommand {
      * @memberof CreatePaymentCommand
      */
     paymentMethod?: PaymentMethod;
+
+    /**
+     * @type {PaymentCondition}
+     * @memberof CreatePaymentCommand
+     */
+    paymentCondition?: PaymentCondition;
 
     /**
      * @type {boolean}

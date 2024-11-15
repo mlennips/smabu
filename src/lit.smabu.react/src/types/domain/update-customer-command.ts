@@ -16,6 +16,7 @@ import { Address } from './address';
 import { Communication } from './communication';
 import { CorporateDesign } from './corporate-design';
 import { CustomerId } from './customer-id';
+import { PaymentCondition } from './payment-condition';
 import { PaymentMethod } from './payment-method';
  /**
  * 
@@ -72,4 +73,10 @@ export interface UpdateCustomerCommand {
      * @memberof UpdateCustomerCommand
      */
     preferredPaymentMethod?: PaymentMethod;
+
+    /**
+     * @type {PaymentCondition}
+     * @memberof UpdateCustomerCommand
+     */
+    paymentCondition?: PaymentCondition;
 }

@@ -21,6 +21,9 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapGet("/paymentmethods", () => PaymentMethod.GetAll())
                 .Produces<PaymentMethod[]>();
+
+            api.MapGet("/paymentconditions", () => PaymentCondition.GetAll())
+                .Produces<PaymentCondition[]>();
         }
     }
 }

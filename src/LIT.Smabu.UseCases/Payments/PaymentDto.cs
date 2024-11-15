@@ -9,7 +9,7 @@ namespace LIT.Smabu.UseCases.Payments
     public class PaymentDTO(PaymentId id, PaymentNumber number, PaymentDirection direction, DateTime accountingDate, string details,
             string payer, string payee, CustomerId? customerId, InvoiceId? invoiceId, string referenceNr, DateTime? referenceDate,
             decimal amountDue, DateTime? dueDate, bool isOverdue, decimal amountPaid, DateTime? paidAt, Currency currency,
-            PaymentMethod paymentMethod, PaymentStatus status) : IDTO
+            PaymentMethod paymentMethod, PaymentStatus status, PaymentCondition paymentCondition) : IDTO
     {
         public PaymentId Id { get; } = id;
         public PaymentNumber Number { get; } = number;
@@ -30,6 +30,7 @@ namespace LIT.Smabu.UseCases.Payments
         public Currency Currency { get; } = currency;
         public PaymentMethod PaymentMethod { get; } = paymentMethod;
         public PaymentStatus Status { get; } = status;
+        public PaymentCondition PaymentCondition { get; } = paymentCondition;
 
         public string DisplayName => $"{Direction.Value} {Number.DisplayName} / {Payer}{Payee} / {ReferenceNr}";
 
@@ -38,7 +39,7 @@ namespace LIT.Smabu.UseCases.Payments
             return new PaymentDTO(payment.Id, payment.Number, payment.Direction, payment.AccountingDate, payment.Details, payment.Payer, payment.Payee,
                 payment.CustomerId, payment.InvoiceId, payment.ReferenceNr, payment.ReferenceDate,
                 payment.AmountDue, payment.DueDate, payment.CheckIsOverdue(), payment.AmountPaid, payment.PaidAt, payment.Currency,
-                payment.PaymentMethod, payment.Status);
+                payment.PaymentMethod, payment.Status, payment.PaymentCondition);
         }
     }
 }

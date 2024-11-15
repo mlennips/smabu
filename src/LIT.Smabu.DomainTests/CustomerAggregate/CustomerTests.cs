@@ -41,14 +41,16 @@ namespace LIT.Smabu.DomainTests.CustomerAggregate
             string otherName = "99 name";
             string otherIndustryBranch = "99 industry branch";
             string otherVatId = "99";
-            PaymentMethod otherPaymentMethod = PaymentMethod.DirectDebit;
+            var otherPaymentMethod = PaymentMethod.DirectDebit;
+            var otherPaymentCondition = PaymentCondition.Template30DaysNet14Days2PercentDiscount;
 
             // Act
             testee.Update(otherName,
                           otherIndustryBranch,
                           new Address("a", "b", "c", "d", "e", "f", "g"),
                           new("d@d.e", "012", "0123", "www.internet.de"),
-                          null, otherVatId, otherPaymentMethod);
+                          CorporateDesign.CreateDefault(otherName),
+                          otherVatId, otherPaymentMethod, otherPaymentCondition);
 
             // Assert
             Assert.AreEqual(otherName, testee.Name);
@@ -57,6 +59,7 @@ namespace LIT.Smabu.DomainTests.CustomerAggregate
             Assert.AreEqual(otherPaymentMethod, testee.PreferredPaymentMethod);
             Assert.IsNotNull(testee.MainAddress);
             Assert.IsNotNull(testee.Communication);
+            Assert.AreEqual(otherPaymentCondition, testee.PaymentCondition);
         }
 
         [TestMethod()]

@@ -1,6 +1,7 @@
 ﻿using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.UseCases.Base;
 using LIT.Smabu.UseCases.Customers;
 
@@ -22,9 +23,10 @@ namespace LIT.Smabu.UseCases.Invoices
         public bool IsReleased { get; set; }
         public DateTime? ReleasedAt { get; set; }
         public List<InvoiceItemDTO>? Items { get; set; }
+        public PaymentCondition PaymentCondition { get; }
 
         public InvoiceDTO(InvoiceId id, DateTime? createdAt, CustomerDTO customer, InvoiceNumber number, DateOnly? invoiceDate, decimal amount,
-                          Currency currency, DatePeriod performancePeriod, int fiscalYear, TaxRate taxRate, bool isReleased, DateTime? releasedAt)
+                          Currency currency, DatePeriod performancePeriod, int fiscalYear, TaxRate taxRate, bool isReleased, DateTime? releasedAt, PaymentCondition paymentCondition)
         {
             Id = id;
             CreatedAt = createdAt;
@@ -38,12 +40,13 @@ namespace LIT.Smabu.UseCases.Invoices
             TaxRate = taxRate;
             IsReleased = isReleased;
             ReleasedAt = releasedAt;
+            PaymentCondition = paymentCondition;
         }
 
         public static InvoiceDTO Create(Invoice invoice, Customer customer, bool withItems = false)
         {
             var result = new InvoiceDTO(invoice.Id, invoice.Meta?.CreatedAt, CustomerDTO.Create(customer), invoice.Number, invoice.InvoiceDate,
-                invoice.Amount, invoice.Currency, invoice.PerformancePeriod, invoice.FiscalYear, invoice.TaxRate, invoice.IsReleased, invoice.ReleasedAt);
+                invoice.Amount, invoice.Currency, invoice.PerformancePeriod, invoice.FiscalYear, invoice.TaxRate, invoice.IsReleased, invoice.ReleasedAt, invoice.PaymentCondition);
 
             if (withItems)
             {

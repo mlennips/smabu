@@ -3,6 +3,7 @@ using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate.Events;
 using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
@@ -21,12 +22,12 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
         public List<InvoiceItem> Items { get; }
         public decimal Amount => Items.Sum(x => x.TotalPrice);
         public Currency Currency { get; }
-        public DateOnly SalesReportDate => DetermineSalesReportDate();
+        public PaymentCondition PaymentCondition { get; private set; }
 
 #pragma warning disable IDE0290 // Primären Konstruktor verwenden
         public Invoice(InvoiceId id, CustomerId customerId, int fiscalYear, InvoiceNumber number,
                        Address customerAddress, DatePeriod performancePeriod, bool isReleased, DateTime? releasedAt,
-                       DateOnly? invoiceDate, Currency currency, TaxRate taxRate, List<InvoiceItem> items)
+                       DateOnly? invoiceDate, Currency currency, TaxRate taxRate, List<InvoiceItem> items, PaymentCondition paymentCondition)
         {
             Id = id;
             CustomerId = customerId;
@@ -40,17 +41,19 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             Currency = currency;
             TaxRate = taxRate;
             Items = items ?? [];
+            PaymentCondition = paymentCondition;
         }
 #pragma warning restore IDE0290 // Primären Konstruktor verwenden
 
-        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress, DatePeriod performancePeriod, Currency currency, TaxRate taxRate)
+        public static Invoice Create(InvoiceId id, CustomerId customerId, int fiscalYear, Address customerAddress,
+            DatePeriod performancePeriod, Currency currency, TaxRate taxRate, PaymentCondition paymentCondition)
         {
-            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, []);
+            return new Invoice(id, customerId, fiscalYear, InvoiceNumber.CreateTmp(), customerAddress, performancePeriod, false, null, null, currency, taxRate, [], paymentCondition);
         }
 
         public static Invoice CreateFromTemplate(InvoiceId id, CustomerId customerId, int fiscalYear, Address mainAddress, DatePeriod performancePeriod, Invoice template)
         {
-            Invoice invoice = Create(id, customerId, fiscalYear, mainAddress, performancePeriod, template.Currency, template.TaxRate);
+            Invoice invoice = Create(id, customerId, fiscalYear, mainAddress, performancePeriod, template.Currency, template.TaxRate, template.PaymentCondition);
             foreach (InvoiceItem item in template.Items)
             {
                 invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), item.Details, item.Quantity, item.UnitPrice, item.CatalogItemId);
@@ -58,7 +61,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             return invoice;
         }
 
-        public Result Update(DatePeriod performancePeriod, TaxRate taxRate, DateOnly? invoiceDate)
+        public Result Update(DatePeriod performancePeriod, TaxRate taxRate, DateOnly? invoiceDate, PaymentCondition paymentCondition)
         {
             Result checkEditResult = CheckCanEdit();
             if (checkEditResult.IsFailure)
@@ -69,6 +72,7 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             PerformancePeriod = performancePeriod;
             TaxRate = taxRate;
             InvoiceDate = invoiceDate;
+            PaymentCondition = paymentCondition;
 
             return Result.Success();
         }
@@ -241,17 +245,6 @@ namespace LIT.Smabu.Domain.InvoiceAggregate
             {
                 item.EditPosition(pos++);
             }
-        }
-
-        private DateOnly DetermineSalesReportDate()
-        {
-            return ReleasedAt != null
-                ? DateOnly.FromDateTime(ReleasedAt.Value)
-                : PerformancePeriod?.To.HasValue ?? false
-                    ? PerformancePeriod.To.Value
-                    : PerformancePeriod?.From != null
-                                    ? PerformancePeriod.From
-                                    : Meta != null ? DateOnly.FromDateTime(Meta.CreatedAt) : DateOnly.FromDateTime(DateTime.Now);
         }
 
         private Result CheckCanEdit()
