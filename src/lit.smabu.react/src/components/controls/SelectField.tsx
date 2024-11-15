@@ -2,7 +2,6 @@ import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getPaymentMethods, getUnits } from '../../services/common.service';
 import { PaymentMethod, Unit } from '../../types/domain';
-import { Label } from '@mui/icons-material';
 
 interface SelectFieldProps<T> {
     label: string;
