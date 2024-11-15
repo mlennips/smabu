@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { getUnits } from '../../services/common.service';
-import { Unit } from '../../types/domain';
+import { getPaymentConditions, getPaymentMethods, getUnits } from '../../services/common.service';
+import { PaymentCondition, PaymentMethod, Unit } from '../../types/domain';
 
 interface SelectFieldProps<T> {
     label: string;
@@ -22,7 +22,65 @@ interface TypedSelectFieldProps {
     onChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
-export const UnitSelectField: React.FC<TypedSelectFieldProps> = ({ name, value, required, onChange }) => {
+export const PaymentConditionSelectField: React.FC<TypedSelectFieldProps> = ({ name, label, value, required, onChange }) => {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(undefined);
+    const [units, setUnits] = useState<PaymentCondition[]>([]);
+
+    useEffect(() => {
+        getPaymentConditions()
+            .then(response => {
+                setLoading(false);
+                setUnits(response);
+            })
+            .catch(error => {
+                setLoading(false);
+                setError(error);
+            });
+    }, [name]);
+
+    if (units && !loading && !error) {
+        return <SelectField items={units} label={label} name={name} value={value}
+            required={required} onChange={onChange}
+            onGetLabel={(item) => item.name}
+            onGetValue={(item) => item.name} />;
+    } else if (loading) {
+        return <TextField label={label} name={name} value={"..."} disabled={true} />
+    } else {
+        return <TextField label={label} name={name} value={error} disabled={true} color='error' />
+    }
+}
+
+export const PaymentMethodSelectField: React.FC<TypedSelectFieldProps> = ({ name, label, value, required, onChange }) => {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(undefined);
+    const [units, setUnits] = useState<PaymentMethod[]>([]);
+
+    useEffect(() => {
+        getPaymentMethods()
+            .then(response => {
+                setLoading(false);
+                setUnits(response);
+            })
+            .catch(error => {
+                setLoading(false);
+                setError(error);
+            });
+    }, [name]);
+
+    if (units && !loading && !error) {
+        return <SelectField items={units} label={label} name={name} value={value}
+            required={required} onChange={onChange}
+            onGetLabel={(item) => item.value}
+            onGetValue={(item) => item.value} />;
+    } else if (loading) {
+        return <TextField label={label} name={name} value={"..."} disabled={true} />
+    } else {
+        return <TextField label={label} name={name} value={error} disabled={true} color='error' />
+    }
+}
+
+export const UnitSelectField: React.FC<TypedSelectFieldProps> = ({ name, label, value, required, onChange }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
     const [units, setUnits] = useState<Unit[]>([]);
@@ -37,17 +95,17 @@ export const UnitSelectField: React.FC<TypedSelectFieldProps> = ({ name, value, 
                 setLoading(false);
                 setError(error);
             });
-    }, []);
+    }, [name]);
 
     if (units && !loading && !error) {
-        return <SelectField items={units} label={"Einheit"} name={name} value={value}
+        return <SelectField items={units} label={label} name={name} value={value}
             required={required} onChange={onChange}
             onGetLabel={(item) => item.name}
             onGetValue={(item) => item.value} />;
     } else if (loading) {
-        return <TextField label="Einheit" name={name} value={"..."} disabled={true} />
+        return <TextField label={label} name={name} value={"..."} disabled={true} />
     } else {
-        return <TextField label="Einheit" name={name} value={error} disabled={true} color='error' />
+        return <TextField label={label} name={name} value={error} disabled={true} color='error' />
     }
 }
 

@@ -15,8 +15,8 @@ namespace LIT.Smabu.Domain.Specifications
             Take = 1;
         }
 
-        public LastBusinessNumberSpec(int year)
-            : base(x => x.Number.Value.ToString(CultureInfo.InvariantCulture).StartsWith(year.ToString(CultureInfo.InvariantCulture)))
+        public LastBusinessNumberSpec(string year)
+            : base(x => x.Number.Value.ToString(CultureInfo.InvariantCulture).StartsWith(year))
         {
             OrderByDescendingExpression = x => x.Number.DisplayName;
             Take = 1;

@@ -20,7 +20,6 @@ const deepSet = (obj: any, path: string, val: any) => {
         if (nextKey && nextKey.includes("[")) {
             nextKey = parseInt(nextKey.substring(1, nextKey.length - 1));
         }
-
         if (currentKey === "__proto__" || currentKey === "constructor") continue;
         if (typeof nextKey !== "undefined") {
             obj[currentKey] = obj[currentKey] ? obj[currentKey] : (isNaN(nextKey) ? {} : []);

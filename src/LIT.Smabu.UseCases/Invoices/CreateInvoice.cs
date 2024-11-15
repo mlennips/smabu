@@ -28,7 +28,7 @@ namespace LIT.Smabu.UseCases.Invoices
                 else
                 {
                     invoice = Invoice.Create(request.InvoiceId, request.CustomerId, request.FiscalYear, customer.MainAddress, performancePeriod,
-                        request.Currency, request.TaxRate ?? TaxRate.Default);
+                        request.Currency, request.TaxRate ?? TaxRate.Default, customer.PaymentCondition);
                 }
 
                 await store.CreateAsync(invoice);

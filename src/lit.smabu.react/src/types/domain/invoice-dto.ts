@@ -18,6 +18,7 @@ import { DatePeriod } from './date-period';
 import { InvoiceId } from './invoice-id';
 import { InvoiceItemDTO } from './invoice-item-dto';
 import { InvoiceNumber } from './invoice-number';
+import { PaymentCondition } from './payment-condition';
 import { TaxRate } from './tax-rate';
  /**
  * 
@@ -110,4 +111,10 @@ export interface InvoiceDTO {
      * @memberof InvoiceDTO
      */
     items?: Array<InvoiceItemDTO> | null;
+
+    /**
+     * @type {PaymentCondition}
+     * @memberof InvoiceDTO
+     */
+    paymentCondition?: PaymentCondition;
 }
