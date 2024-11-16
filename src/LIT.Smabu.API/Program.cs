@@ -94,6 +94,7 @@ app.RegisterInvoicesEndpoints();
 app.RegisterOrdersEndpoints();
 app.RegisterOffersEndpoints();
 app.RegisterPaymentsEndpoints();
+app.RegisterFinancialEndpoints();
 
 app.Run();
 

@@ -21,7 +21,6 @@ const PaymentCreate = () => {
     const [data, setData] = useState<CreatePaymentCommand>({
         paymentId: createId(),
         direction: { value: tabValue },
-        accountingDate: new Date(),
         details: "",
         payer: "",
         payee: "",
@@ -86,7 +85,6 @@ const PaymentCreate = () => {
             data.referenceDate = invoice?.invoiceDate ? new Date(invoice.invoiceDate) : undefined;
             data.referenceNr = invoice?.number?.displayName!;
             data.payer = invoice?.customer?.name;
-            data.accountingDate = invoice?.invoiceDate ? new Date(invoice.invoiceDate) : new Date();
         }
         setData(deepValueChange(data, name, value));
     };
@@ -151,13 +149,11 @@ const PaymentCreate = () => {
                         onGetValue={(item) => item.id.value}
                         onGetLabel={(item) => item.displayName} />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Buchungsdatum" name="accountingDate"
-                    type='date' value={formatForTextField(data.accountingDate, 'date')} onChange={handleChange} required /></Grid>
-                <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Zahlerender" name="payer"
+                <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Zahlender" name="payer"
                     value={data.payer} onChange={handleChange} required /></Grid>
-                <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Referenz Nr." name="referenceNr"
+                <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Referenz Nr." name="referenceNr"
                     value={data.referenceNr} onChange={handleChange} required /></Grid>
-                <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Referenz Datum" name="referenceDate"
+                <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Referenz Datum" name="referenceDate"
                     type='date' value={formatForTextField(data.referenceDate, 'date')} onChange={handleChange} required /></Grid>
                 <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Betrag" name="amountDue" type="number"
                     value={data.amountDue} onChange={handleChange} /></Grid>
@@ -172,11 +168,9 @@ const PaymentCreate = () => {
     function renderOutgoingTab() {
         return <TabPanel value="Outgoing">
             <Grid container spacing={1}>
-                <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Buchungsdatum" name="accountingDate"
-                    type='date' value={formatForTextField(data.accountingDate, 'date')} onChange={handleChange} required /></Grid>
-                <Grid size={{ xs: 12, sm: 8 }}><TextField fullWidth label="Zahlungsempfänger" name="payee"
+                <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Zahlungsempfänger" name="payee"
                     value={data.payee} onChange={handleChange} required /></Grid>
-                <Grid size={{ xs: 12, sm: 8 }}><TextField fullWidth label="Referenz Nr." name="referenceNr"
+                <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Referenz Nr." name="referenceNr"
                     value={data.referenceNr} onChange={handleChange} required /></Grid>
                 <Grid size={{ xs: 12, sm: 4 }}><TextField fullWidth label="Referenz Datum" name="referenceDate"
                     type='date' value={formatForTextField(data.referenceDate, 'date')} onChange={handleChange} required /></Grid>

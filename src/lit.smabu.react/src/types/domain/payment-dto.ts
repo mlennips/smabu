@@ -48,12 +48,6 @@ export interface PaymentDTO {
     direction?: PaymentDirection;
 
     /**
-     * @type {Date}
-     * @memberof PaymentDTO
-     */
-    accountingDate?: Date;
-
-    /**
      * @type {string}
      * @memberof PaymentDTO
      */
@@ -124,6 +118,12 @@ export interface PaymentDTO {
      * @memberof PaymentDTO
      */
     paidAt?: Date | null;
+
+    /**
+     * @type {Date}
+     * @memberof PaymentDTO
+     */
+    accountingDate?: Date | null;
 
     /**
      * @type {Currency}

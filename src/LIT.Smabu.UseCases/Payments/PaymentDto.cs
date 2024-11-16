@@ -6,7 +6,7 @@ using LIT.Smabu.UseCases.Base;
 
 namespace LIT.Smabu.UseCases.Payments
 {
-    public class PaymentDTO(PaymentId id, PaymentNumber number, PaymentDirection direction, DateTime accountingDate, string details,
+    public class PaymentDTO(PaymentId id, PaymentNumber number, PaymentDirection direction, DateTime? accountingDate, string details,
             string payer, string payee, CustomerId? customerId, InvoiceId? invoiceId, string referenceNr, DateTime? referenceDate,
             decimal amountDue, DateTime? dueDate, bool isOverdue, decimal amountPaid, DateTime? paidAt, Currency currency,
             PaymentMethod paymentMethod, PaymentStatus status, PaymentCondition paymentCondition) : IDTO
@@ -14,7 +14,6 @@ namespace LIT.Smabu.UseCases.Payments
         public PaymentId Id { get; } = id;
         public PaymentNumber Number { get; } = number;
         public PaymentDirection Direction { get; } = direction;
-        public DateTime AccountingDate { get; } = accountingDate;
         public string Details { get; } = details;
         public string Payer { get; } = payer;
         public string Payee { get; } = payee;
@@ -27,6 +26,7 @@ namespace LIT.Smabu.UseCases.Payments
         public bool IsOverdue { get; } = isOverdue;
         public decimal AmountPaid { get; } = amountPaid;
         public DateTime? PaidAt { get; } = paidAt;
+        public DateTime? AccountingDate { get; } = accountingDate;
         public Currency Currency { get; } = currency;
         public PaymentMethod PaymentMethod { get; } = paymentMethod;
         public PaymentStatus Status { get; } = status;

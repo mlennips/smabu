@@ -53,7 +53,6 @@ const PaymentDetails = () => {
         handleAsyncTask({
             task: () => updatePayment(params.paymentId!, {
                 paymentId: data?.id,
-                accountingDate: data?.accountingDate,
                 status: data?.status,
                 amountDue: data?.amountDue,
                 dueDate: data?.dueDate,
@@ -106,7 +105,7 @@ const PaymentDetails = () => {
                             <Grid size={{ xs: 12, sm: 3 }}><TextField fullWidth label="Status" name="status"
                                 value={data?.status?.value} onChange={handleChange} required disabled /></Grid>
                             <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Buchungsdatum" name="accountingDate"
-                                type='date' value={formatForTextField(data?.accountingDate, 'date')} onChange={handleChange} required /></Grid>
+                                type='date' value={formatForTextField(data?.accountingDate, 'date')} onChange={handleChange} /></Grid>
                             <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Zahler" name="payer"
                                 value={data?.payer} onChange={handleChange} /></Grid>
                             <Grid size={{ xs: 12, sm: 6 }}><TextField fullWidth label="Zahlungsempfänger" name="payee"

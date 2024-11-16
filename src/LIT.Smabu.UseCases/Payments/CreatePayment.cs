@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Payments
 {
     public static class CreatePayment
     {
-        public record CreatePaymentCommand(PaymentId PaymentId, PaymentDirection Direction, DateTime AccountingDate, string Details,
+        public record CreatePaymentCommand(PaymentId PaymentId, PaymentDirection Direction, string Details,
                 string Payer, string Payee, CustomerId? CustomerId, InvoiceId? InvoiceId, string ReferenceNr, DateTime? ReferenceDate,
                 decimal AmountDue, DateTime? DueDate, PaymentMethod PaymentMethod, PaymentCondition PaymentCondition, bool? MarkAsPaid = false) : ICommand<PaymentId>
         {
@@ -22,7 +22,6 @@ namespace LIT.Smabu.UseCases.Payments
                 return new CreatePaymentCommand(
                     new PaymentId(Guid.NewGuid()),
                     PaymentDirection.Incoming,
-                    invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
                     "",
                     customer.Name,
                     "",
@@ -76,11 +75,11 @@ namespace LIT.Smabu.UseCases.Payments
                 {
                     var direction when direction == PaymentDirection.Incoming
                         => Payment.CreateIncoming(request.PaymentId, number, request.Details, request.Payer, request.Payee,
-                            request.CustomerId!, request.InvoiceId!, request.ReferenceNr, request.ReferenceDate, request.AccountingDate,
+                            request.CustomerId!, request.InvoiceId!, request.ReferenceNr, request.ReferenceDate,
                             request.AmountDue, request.DueDate, request.PaymentMethod, request.PaymentCondition),
                     var direction when direction == PaymentDirection.Outgoing
                         => Payment.CreateOutgoing(request.PaymentId, number, request.Details, request.Payer, request.Payee,
-                            request.ReferenceNr, request.ReferenceDate, request.AccountingDate,
+                            request.ReferenceNr, request.ReferenceDate,
                             request.AmountDue, request.DueDate, request.PaymentMethod, request.PaymentCondition),
                     _ => throw new InvalidOperationException($"Unknown payment direction: {request.Direction}")
                 };
