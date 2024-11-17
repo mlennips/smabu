@@ -63,7 +63,7 @@ namespace LIT.Smabu.Domain.Services
             where TBusinessNumber : BusinessNumber
         {
             TAggregate? last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate,
-                TBusinessNumber>(year.ToString(CultureInfo.InvariantCulture)))).SingleOrDefault();
+                TBusinessNumber>(year))).SingleOrDefault();
             TBusinessNumber? lastNumber = last?.Number;
             return lastNumber;
         }

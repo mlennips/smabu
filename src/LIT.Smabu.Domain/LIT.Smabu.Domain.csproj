@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="CustomerAggregate\Specifications\" />
+    <Folder Include="PaymentAggregate\Services\" />
   </ItemGroup>
   
   <ItemGroup>

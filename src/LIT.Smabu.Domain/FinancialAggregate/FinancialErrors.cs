@@ -8,5 +8,6 @@ namespace LIT.Smabu.Domain.FinancialAggregate
         public static ErrorDetail FinancialStatementAlreadyOpen => new("FinancialStatement.AlreadyOpen", "The financial statement is already open.");
         public static ErrorDetail InvalidCategoryInTransaction => new("FinancialStatement.InvalidCategoryInTransaction", "The category of transaction is invalid.");
         public static ErrorDetail FinancialStatementNotFound => new("FinancialStatement.NotFound", "The financial statement is not found.");
+        public static ErrorDetail FiscalYearAlreadyExists => new("FinancialStatement.FiscalYearAlreadyExists", "The fiscal year already exists.");
     }
 }

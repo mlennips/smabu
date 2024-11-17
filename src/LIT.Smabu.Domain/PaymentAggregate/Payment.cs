@@ -58,7 +58,7 @@ namespace LIT.Smabu.Domain.PaymentAggregate
         {
             if (dueDate == null && referenceDate != null)
             {
-                dueDate = referenceDate.Value.AddDays(paymentCondition.CalculateLatestDueDate(referenceDate.Value).Day);
+                dueDate = paymentCondition.CalculateLatestDueDate(referenceDate.Value);
             }
             return new Payment(id, number, PaymentDirection.Incoming, details, payer, payee, customerId, invoiceId,
                 referenceNr, referenceDate, amountDue, dueDate, 0, null, Currency.EUR, PaymentStatus.Pending, paymentMethod, paymentCondition);

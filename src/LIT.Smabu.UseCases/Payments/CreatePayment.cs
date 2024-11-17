@@ -8,6 +8,7 @@ using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
 using MediatR;
+using LIT.Smabu.Domain.FinancialAggregate.Services;
 
 namespace LIT.Smabu.UseCases.Payments
 {
@@ -46,22 +47,9 @@ namespace LIT.Smabu.UseCases.Payments
             }
         }
 
-        public class CreatePaymentHandler(IAggregateStore store, BusinessNumberService businessNumberService)
-            : ICommandHandler<CreatePaymentCommand, PaymentId>, IRequestHandler<InvoiceReleasedEvent>
+        public class CreatePaymentHandler(IAggregateStore store, BusinessNumberService businessNumberService, FinancialRelationsService financialRelationsService)
+            : ICommandHandler<CreatePaymentCommand, PaymentId>
         {
-            public async Task Handle(InvoiceReleasedEvent request, CancellationToken cancellationToken)
-            {
-                var alreadyExists = await CheckPaymentForInvoiceAlreadyExistsAsync(request.InvoiceId);
-                if (alreadyExists)
-                {
-                    return;
-                }
-                Invoice invoice = await store.GetByAsync(request.InvoiceId);
-                Customer customer = await store.GetByAsync(invoice.CustomerId);
-                var command = CreatePaymentCommand.Create(invoice, customer);
-                await Handle(command, cancellationToken);
-            }
-
             public async Task<Result<PaymentId>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
             {
                 if (!request.Validate())
@@ -69,6 +57,30 @@ namespace LIT.Smabu.UseCases.Payments
                     return PaymentErrors.InvalidCreate;
                 }
 
+                Payment payment = await CreatePaymentAsync(businessNumberService, request);
+
+                if (request.MarkAsPaid.GetValueOrDefault())
+                {
+                    DateTime paidDate = DateTime.UtcNow;
+                    Result financialResult = await financialRelationsService.CheckCanUseDateAsync(paidDate);
+                    if (financialResult.IsFailure)
+                    {
+                        return financialResult.Error;
+                    }
+
+                    Result completeResult = payment.Complete(request.AmountDue, paidDate);
+                    if (completeResult.IsFailure)
+                    {
+                        return completeResult.Error;
+                    }
+                }
+
+                await store.CreateAsync(payment);
+                return payment.Id;
+            }
+
+            private static async Task<Payment> CreatePaymentAsync(BusinessNumberService businessNumberService, CreatePaymentCommand request)
+            {
                 PaymentNumber number = await businessNumberService.CreatePaymentNumberAsync();
 
                 Payment payment = request.Direction switch
@@ -83,24 +95,7 @@ namespace LIT.Smabu.UseCases.Payments
                             request.AmountDue, request.DueDate, request.PaymentMethod, request.PaymentCondition),
                     _ => throw new InvalidOperationException($"Unknown payment direction: {request.Direction}")
                 };
-
-                if (request.MarkAsPaid.GetValueOrDefault())
-                {
-                    Result completeResult = payment.Complete(request.AmountDue, DateTime.UtcNow);
-                    if (completeResult.IsFailure)
-                    {
-                        return completeResult.Error;
-                    }
-                }
-
-                await store.CreateAsync(payment);
-                return payment.Id;
-            }
-
-            private async Task<bool> CheckPaymentForInvoiceAlreadyExistsAsync(InvoiceId invoiceId)
-            {
-                IReadOnlyList<Payment> detectedPayments = await store.ApplySpecificationTask(new DetectPaymentsWithInvoiceIdSpec(invoiceId));
-                return detectedPayments.Any();
+                return payment;
             }
         }
     }

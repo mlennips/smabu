@@ -2,6 +2,7 @@
 using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
+using LIT.Smabu.Domain.FinancialAggregate.Services;
 
 namespace LIT.Smabu.UseCases.Payments
 {
@@ -9,10 +10,16 @@ namespace LIT.Smabu.UseCases.Payments
     {
         public record CompletePaymentCommand(PaymentId PaymentId, decimal Amount, DateTime PaidAt) : ICommand;
 
-        public class CompletePaymentHandler(IAggregateStore store) : ICommandHandler<CompletePaymentCommand>
+        public class CompletePaymentHandler(IAggregateStore store, FinancialRelationsService financialRelationsService) : ICommandHandler<CompletePaymentCommand>
         {
             public async Task<Result> Handle(CompletePaymentCommand request, CancellationToken cancellationToken)
             {
+                Result financialResult = await financialRelationsService.CheckCanChangeRelatedItemAsync(request.PaymentId);
+                if (financialResult.IsFailure)
+                {
+                    return financialResult;
+                }
+
                 Payment payment = await store.GetByAsync(request.PaymentId);
                 if (payment == null)
                 {
