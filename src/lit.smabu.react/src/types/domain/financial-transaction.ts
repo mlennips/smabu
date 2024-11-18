@@ -18,49 +18,43 @@ import { PaymentId } from './payment-id';
  * 
  *
  * @export
- * @interface Transaction
+ * @interface FinancialTransaction
  */
-export interface Transaction {
-
-    /**
-     * @type {string}
-     * @memberof Transaction
-     */
-    id?: string;
+export interface FinancialTransaction {
 
     /**
      * @type {Date}
-     * @memberof Transaction
+     * @memberof FinancialTransaction
      */
     date?: Date;
 
     /**
      * @type {number}
-     * @memberof Transaction
+     * @memberof FinancialTransaction
      */
     amount?: number;
 
     /**
      * @type {string}
-     * @memberof Transaction
+     * @memberof FinancialTransaction
      */
     description?: string | null;
 
     /**
      * @type {FinancialCategory}
-     * @memberof Transaction
+     * @memberof FinancialTransaction
      */
     category?: FinancialCategory;
 
     /**
      * @type {PaymentId}
-     * @memberof Transaction
+     * @memberof FinancialTransaction
      */
     paymentId?: PaymentId;
 
     /**
      * @type {boolean}
-     * @memberof Transaction
+     * @memberof FinancialTransaction
      */
-    isRelatedToPayment?: boolean;
+    isImported?: boolean;
 }

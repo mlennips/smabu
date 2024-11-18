@@ -14,8 +14,9 @@
 
 import { AnnualFinancialStatementId } from './annual-financial-statement-id';
 import { Currency } from './currency';
+import { DatePeriod } from './date-period';
 import { FinancialStatementStatus } from './financial-statement-status';
-import { Transaction } from './transaction';
+import { FinancialTransaction } from './financial-transaction';
  /**
  * 
  *
@@ -40,13 +41,13 @@ export interface AnnualFinancialStatementDTO {
      * @type {string}
      * @memberof AnnualFinancialStatementDTO
      */
-    startDate?: string;
+    displayName?: string;
 
     /**
-     * @type {string}
+     * @type {DatePeriod}
      * @memberof AnnualFinancialStatementDTO
      */
-    endDate?: string;
+    period?: DatePeriod;
 
     /**
      * @type {Currency}
@@ -55,16 +56,16 @@ export interface AnnualFinancialStatementDTO {
     currency?: Currency;
 
     /**
-     * @type {Array<Transaction>}
+     * @type {Array<FinancialTransaction>}
      * @memberof AnnualFinancialStatementDTO
      */
-    incomes?: Array<Transaction> | null;
+    incomes?: Array<FinancialTransaction> | null;
 
     /**
-     * @type {Array<Transaction>}
+     * @type {Array<FinancialTransaction>}
      * @memberof AnnualFinancialStatementDTO
      */
-    expenditures?: Array<Transaction> | null;
+    expenditures?: Array<FinancialTransaction> | null;
 
     /**
      * @type {FinancialStatementStatus}

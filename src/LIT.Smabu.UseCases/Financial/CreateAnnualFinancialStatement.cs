@@ -12,8 +12,7 @@ namespace LIT.Smabu.UseCases.Financial
 {
     public static class CreateAnnualFinancialStatement
     {
-        public record CreateAnnualFinancialStatementCommand(AnnualFinancialStatementId Id, int FiscalYear, DateOnly StartDate, DateOnly EndDate,
-            List<Transaction> Incomes, List<Transaction> Expenditures, FinancialStatementStatus Status) : ICommand<AnnualFinancialStatementId>;
+        public record CreateAnnualFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId, int FiscalYear) : ICommand<AnnualFinancialStatementId>;
 
         public class CreateAnnualFinancialStatementHandler(IAggregateStore store)
             : ICommandHandler<CreateAnnualFinancialStatementCommand, AnnualFinancialStatementId>
@@ -26,7 +25,7 @@ namespace LIT.Smabu.UseCases.Financial
                     return checkFiscalYearResult.Error;
                 }
 
-                var financialStatement = new AnnualFinancialStatement(request.Id, request.FiscalYear, request.StartDate, request.EndDate, request.Incomes, request.Expenditures, request.Status);
+                var financialStatement = AnnualFinancialStatement.Create(request.AnnualFinancialStatementId, request.FiscalYear);
                 await store.CreateAsync(financialStatement);
                 return Result.Success(financialStatement.Id);
             }

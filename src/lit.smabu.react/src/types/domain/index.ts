@@ -70,7 +70,7 @@ export * from './release-invoice-command';
 export * from './sales-amount-item';
 export * from './serie';
 export * from './tax-rate';
-export * from './transaction';
+export * from './financial-transaction';
 export * from './unit';
 export * from './update-annual-financial-statement-command';
 export * from './update-catalog-command';

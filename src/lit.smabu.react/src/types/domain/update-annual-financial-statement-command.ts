@@ -13,7 +13,7 @@
  */
 
 import { AnnualFinancialStatementId } from './annual-financial-statement-id';
-import { Transaction } from './transaction';
+import { FinancialTransaction } from './financial-transaction';
  /**
  * 
  *
@@ -35,14 +35,14 @@ export interface UpdateAnnualFinancialStatementCommand {
     fiscalYear?: number;
 
     /**
-     * @type {Array<Transaction>}
+     * @type {Array<FinancialTransaction>}
      * @memberof UpdateAnnualFinancialStatementCommand
      */
-    incomes?: Array<Transaction> | null;
+    incomes?: Array<FinancialTransaction> | null;
 
     /**
-     * @type {Array<Transaction>}
+     * @type {Array<FinancialTransaction>}
      * @memberof UpdateAnnualFinancialStatementCommand
      */
-    expenditures?: Array<Transaction> | null;
+    expenditures?: Array<FinancialTransaction> | null;
 }

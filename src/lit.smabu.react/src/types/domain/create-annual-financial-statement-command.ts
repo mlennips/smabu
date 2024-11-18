@@ -13,8 +13,6 @@
  */
 
 import { AnnualFinancialStatementId } from './annual-financial-statement-id';
-import { FinancialStatementStatus } from './financial-statement-status';
-import { Transaction } from './transaction';
  /**
  * 
  *
@@ -27,41 +25,11 @@ export interface CreateAnnualFinancialStatementCommand {
      * @type {AnnualFinancialStatementId}
      * @memberof CreateAnnualFinancialStatementCommand
      */
-    id?: AnnualFinancialStatementId;
+    annualFinancialStatementId?: AnnualFinancialStatementId;
 
     /**
      * @type {number}
      * @memberof CreateAnnualFinancialStatementCommand
      */
     fiscalYear?: number;
-
-    /**
-     * @type {string}
-     * @memberof CreateAnnualFinancialStatementCommand
-     */
-    startDate?: string;
-
-    /**
-     * @type {string}
-     * @memberof CreateAnnualFinancialStatementCommand
-     */
-    endDate?: string;
-
-    /**
-     * @type {Array<Transaction>}
-     * @memberof CreateAnnualFinancialStatementCommand
-     */
-    incomes?: Array<Transaction> | null;
-
-    /**
-     * @type {Array<Transaction>}
-     * @memberof CreateAnnualFinancialStatementCommand
-     */
-    expenditures?: Array<Transaction> | null;
-
-    /**
-     * @type {FinancialStatementStatus}
-     * @memberof CreateAnnualFinancialStatementCommand
-     */
-    status?: FinancialStatementStatus;
 }
