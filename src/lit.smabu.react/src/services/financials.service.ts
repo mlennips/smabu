@@ -1,5 +1,5 @@
 import axiosConfig from "../configs/axiosConfig";
-import { AnnualFinancialStatementId, CreateAnnualFinancialStatementCommand } from "../types/domain";
+import { AnnualFinancialStatementId, CreateAnnualFinancialStatementCommand, UpdateAnnualFinancialStatementCommand } from "../types/domain";
 import { AnnualFinancialStatementDTO } from '../types/domain/annual-financial-statement-dto';
 
 export const createAnnualFinancialStatement = async (payload: CreateAnnualFinancialStatementCommand): Promise<AnnualFinancialStatementId> => {
@@ -17,7 +17,7 @@ export const getAnnualFinancialStatement = async (id: string): Promise<AnnualFin
     return response.data;
 };
 
-export const updateAnnualFinancialStatement = async (id: string, statement: AnnualFinancialStatementDTO): Promise<void> => {
+export const updateAnnualFinancialStatement = async (id: string, statement: UpdateAnnualFinancialStatementCommand): Promise<void> => {
     await axiosConfig.put(`/financial/annualstatements/${id}`, statement);
 };
 

@@ -8,7 +8,7 @@ namespace LIT.Smabu.UseCases.Financial
 {
     public static class UpdateAnnualFinancialStatement
     {
-        public record UpdateAnnualFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId, int FiscalYear,
+        public record UpdateAnnualFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId,
             List<FinancialTransaction> Incomes, List<FinancialTransaction> Expenditures) : ICommand;
 
         public class UpdateAnnualFinancialStatementHandler(IAggregateStore store) : ICommandHandler<UpdateAnnualFinancialStatementCommand>

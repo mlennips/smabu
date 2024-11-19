@@ -29,24 +29,24 @@ namespace LIT.Smabu.Domain.FinancialAggregate
         public static readonly FinancialCategory Insurance = new("Insurance"); // Versicherungen: Beiträge für Betriebshaftpflicht, Inventarversicherung etc.
         public static readonly FinancialCategory OtherOperatingExpenses = new("Other Operating Expenses"); // Sonstige betriebliche Aufwendungen: z.B. Werbung, Fortbildungskosten, Mitgliedsbeiträge.
 
-        public static FinancialCategory[] GetAllIncome()
+        public static FinancialCategory[] GetAllIncomes()
         {
             return [Revenue, OtherIncome, AssetSaleIncome];
         }
 
-        public static FinancialCategory[] GetAllExpenses()
+        public static FinancialCategory[] GetAllExpenditures()
         {
             return [GoodsPurchase, OperatingCosts, PersonnelExpenses, VehicleCosts, OfficeSupplies, Depreciation, TravelExpenses, Insurance, OtherOperatingExpenses];
         }
 
         public static bool CheckIsIncome(FinancialCategory category)
         {
-            return GetAllIncome().Contains(category);
+            return GetAllIncomes().Contains(category);
         }
 
-        public static bool CheckIsExpense(FinancialCategory category)
+        public static bool CheckIsExpenditure(FinancialCategory category)
         {
-            return GetAllExpenses().Contains(category);
+            return GetAllExpenditures().Contains(category);
         }
     }
 }

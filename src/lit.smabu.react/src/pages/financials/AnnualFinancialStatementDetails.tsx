@@ -7,10 +7,13 @@ import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { useNotification } from '../../contexts/notificationContext';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Grid2 as Grid, InputAdornment, List, ListItem, ListItemText, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Grid2 as Grid, IconButton, InputAdornment, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { AppError } from '../../utils/errorConverter';
-import { Add, ImportExport } from '@mui/icons-material';
+import { AddCircle, ImportExport, Lock, Remove } from '@mui/icons-material';
+import { formatForTextField } from '../../utils/formatDate';
+import { FinancialCategorySelectField } from '../../components/controls/SelectField';
+import { Currency, DatePeriod, FinancialTransaction } from '../../types/domain';
 
 const AnnualFinancialStatementDetails: React.FC = () => {
     const { annualStatementId: annualFinancialStatementId } = useParams<{ annualStatementId: string }>();
@@ -30,10 +33,6 @@ const AnnualFinancialStatementDetails: React.FC = () => {
                     onSuccess: loadData,
                     onError: setError
                 })
-        },
-        {
-            text: "Neu",
-            icon: <Add />,
         }
     ];
 
@@ -58,9 +57,14 @@ const AnnualFinancialStatementDetails: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         handleAsyncTask({
-            task: () => updateAnnualFinancialStatement(annualFinancialStatementId!, {}),
+            task: () => updateAnnualFinancialStatement(annualFinancialStatementId!, {
+                annualFinancialStatementId: data?.id,
+                incomes: data?.incomes,
+                expenditures: data?.expenditures
+            }),
             onLoading: setLoading,
             onSuccess: () => {
+                loadData();
                 toast("Jahresabschluss erfolgreich gespeichert", "success");
             },
             onError: setError
@@ -72,9 +76,13 @@ const AnnualFinancialStatementDetails: React.FC = () => {
             <Stack spacing={2}>
                 {renderHeaderBlock(data, loading, error, toolbarItems)}
 
-                {renderIncomeBlock(data, handleChange, loading, toolbarItemsIncome)}
+                <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItemsIncome} error={error} >
+                    {data && renderTransactionsBlock(data.incomes!, handleChange, 'incomes', data.totalIncome!, data.currency!, data.period!)}
+                </DefaultContentContainer>
 
-                {renderExpensesBlock(data, loading, toolbarItems)}
+                <DefaultContentContainer title={"Ausgaben"} loading={loading} toolbarItems={toolbarItemsIncome} error={error}>
+                    {data && renderTransactionsBlock(data.expenditures!, handleChange, 'expenditures', data.totalExpenditure!, data.currency!, data.period!)}
+                </DefaultContentContainer>
 
                 <DetailsActions formId="form" deleteUrl={`/financials/annualstatements/${data?.id?.value}/delete`} disabled={loading} />
             </Stack>
@@ -143,78 +151,120 @@ const renderHeaderBlock = (data: AnnualFinancialStatementDTO | undefined, loadin
     </DefaultContentContainer>;
 }
 
-const renderIncomeBlock = (data: AnnualFinancialStatementDTO | undefined, handleChange: (e: any) => void, loading: boolean, toolbarItems: ToolbarItem[]) => {
-    return <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItems} >
-        <TableContainer component={Paper}>
+const renderTransactionsBlock = (transactions: FinancialTransaction[], handleChange: (e: any) => void, transactionsName: 'incomes' | 'expenditures', total: number, currency: Currency, period: DatePeriod) => {
+    const add = () => {
+        transactions.push({ date: new Date(), description: '', amount: 0, category: { value: '' } });
+        handleChange({ target: { name: transactionsName, value: transactions } });
+    }
+
+    const remove = (transaction: any) => () => {
+        transactions.splice(transactions.indexOf(transaction), 1);
+        handleChange({ target: { name: transactionsName, value: transactions } });
+    }
+
+    const prepareHandleChange = (e: any, item: FinancialTransaction) => {
+        let { name, value } = e.target;
+        item[name as keyof FinancialTransaction] = value;
+        handleChange({ target: { name: transactionsName, value: transactions } });
+    }
+
+    return <TableContainer component={Paper}>
             <Table width="100%">
                 <TableHead>
                     <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell>Datum</TableCell>
                         <TableCell>Beschreibung</TableCell>
-                        <TableCell>Import?</TableCell>
                         <TableCell>Kategorie</TableCell>
                         <TableCell align='right'>Betrag</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data?.incomes?.map((income, index) => (
+                    {transactions.map((transaction, index) => (
                         <TableRow key={index}>
+                            <TableCell>
+                                {transaction.isImported && <IconButton size="small" title='Importiert'>
+                                    <Lock fontSize="small" />
+                                </IconButton>}                                
+                                {!transaction.isImported && <IconButton size="small" title=''
+                                    onClick={remove(transaction)}>
+                                    <Remove fontSize="small" />
+                                </IconButton>}
+                            </TableCell>
+                            <TableCell>
+                                <TextField
+                                    fullWidth
+                                    type='date'
+                                    size='small'
+                                    value={formatForTextField(transaction.date, 'date')}
+                                    name={`date`}
+                                    onChange={(e) => prepareHandleChange(e, transaction)}
+                                    disabled={transaction.isImported}
+                                    variant="standard"
+                                    slotProps={{
+                                        input: { disableUnderline: true },
+                                        htmlInput: {
+                                            max: new Date().toISOString().split("T")[0],
+                                            min: period?.from
+                                        }
+                                    }}
+                                />
+                            </TableCell>
                             <TableCell component="th" scope="row">
                                 <TextField
                                     fullWidth
                                     size='small'
-                                    value={income.description}
-                                    name={`incomes[${index}].description`}
-                                    onChange={handleChange}
-                                    disabled={income.isImported}
+                                    value={transaction.description}
+                                    name={`description`}
+                                    onChange={(e) => prepareHandleChange(e, transaction)}
+                                    disabled={transaction.isImported}
                                     variant="standard"
                                     slotProps={{ input: { disableUnderline: true } }}
                                 />
                             </TableCell>
-                            <TableCell>{income.isImported ? "Ja" : ""}</TableCell>
-                            <TableCell>{income.category?.value}</TableCell>
+                            <TableCell>
+                                    <FinancialCategorySelectField 
+                                        name='category'
+                                        label=""
+                                        value={transaction.category?.value}
+                                        type={transactionsName} 
+                                        required={true} 
+                                        disabled={transaction.isImported}
+                                        onChange={(e) => prepareHandleChange(e, transaction)}
+                                        slotProps={{ input: { disableUnderline: true } }} />
+                            </TableCell>
                             <TableCell align='right'>
                                 <TextField
-                                    type="number"
+                                    type='number'
                                     size='small'
-                                    value={income.amount?.toFixed(2)}
-                                    name={`incomes[${index}].amount`}
-                                    onChange={handleChange}
-                                    disabled={income.isImported}
-                                    variant="standard"
+                                    value={transaction.amount}
+                                    name={`amount`}
+                                    onChange={(e) => prepareHandleChange(e, transaction)}
+                                    disabled={transaction.isImported}
+                                    variant='standard'
                                     slotProps={{
                                         input: {
                                             disableUnderline: true,
-                                            endAdornment: <InputAdornment position="end">{data?.currency?.sign}</InputAdornment>
-                                         },
-                                         htmlInput: { style: { textAlign: 'right' } }                        
-                                    }}                    
+                                            endAdornment: <InputAdornment position="end">{currency?.sign}</InputAdornment>
+                                        },
+                                        htmlInput: { style: { textAlign: 'right' } }
+                                    }}
                                 />
-                        </TableCell>
+                            </TableCell>
                         </TableRow>
                     ))}
-                <TableRow key={"total"}>
-                    <TableCell component="th" scope="row"><b>Summe</b></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell align='right'><b>{data?.totalIncome?.toFixed(2)} {data?.currency?.sign}</b></TableCell>
-                </TableRow>
-            </TableBody>
-        </Table>
+                    <TableRow key={"total"}>
+                        <TableCell>
+                            <IconButton onClick={add} size="small" title="Neu">
+                                <AddCircle />
+                            </IconButton>
+                        </TableCell>
+                        <TableCell component="th" scope="row"></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell align='right'><b>{total.toFixed(2)} {currency?.sign}</b></TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
     </TableContainer>
-    </DefaultContentContainer >
 }
-
-const renderExpensesBlock = (data: AnnualFinancialStatementDTO | undefined, loading: boolean, toolbarItems: ToolbarItem[]) => {
-    return <DefaultContentContainer title={"Ausgaben"} loading={loading} toolbarItems={toolbarItems} >
-        <Paper sx={{ p: 2 }}>
-            <List>
-                {data?.expenditures?.map((expenditure, index) => (
-                    <ListItem key={index}>
-                        <ListItemText primary={expenditure.description} secondary={`Amount: ${expenditure.amount}`} />
-                    </ListItem>
-                ))}
-            </List>
-        </Paper>
-    </DefaultContentContainer>
-}
-

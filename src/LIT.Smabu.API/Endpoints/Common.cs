@@ -26,10 +26,10 @@ namespace LIT.Smabu.API.Endpoints
             api.MapGet("/paymentconditions", () => PaymentCondition.GetAll())
                 .Produces<PaymentCondition[]>();
 
-            api.MapGet("/financialcategories/income", () => FinancialCategory.GetAllIncome())
+            api.MapGet("/financialcategories/incomes", () => FinancialCategory.GetAllIncomes())
                 .Produces<FinancialCategory[]>();
 
-            api.MapGet("/financialcategories/expenses", () => FinancialCategory.GetAllExpenses())
+            api.MapGet("/financialcategories/expenditures", () => FinancialCategory.GetAllExpenditures())
                 .Produces<FinancialCategory[]>();
         }
     }

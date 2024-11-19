@@ -29,12 +29,6 @@ export interface UpdateAnnualFinancialStatementCommand {
     annualFinancialStatementId?: AnnualFinancialStatementId;
 
     /**
-     * @type {number}
-     * @memberof UpdateAnnualFinancialStatementCommand
-     */
-    fiscalYear?: number;
-
-    /**
      * @type {Array<FinancialTransaction>}
      * @memberof UpdateAnnualFinancialStatementCommand
      */

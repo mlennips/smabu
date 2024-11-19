@@ -43,18 +43,10 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
         public Result UpdateIncomes(FinancialTransaction[] incomes)
         {
-            var checkResults = new List<ErrorDetail>();
-            if (incomes.Any(income => !FinancialCategory.CheckIsIncome(income.Category)))
+            if (incomes.Any(income => !FinancialCategory.CheckIsIncome(income.Category))
+                || ValidateTransaction(incomes).IsFailure)
             {
-                checkResults.Add(FinancialErrors.InvalidCategoryInTransaction);
-            }
-            if (incomes.Any(income => income.Date.Year != FiscalYear))
-            {
-                checkResults.Add(FinancialErrors.InvalidDateInTransaction);
-            }
-            if (checkResults.Count > 0)
-            {
-                return Result.Failure(checkResults);
+                return FinancialErrors.InvalidTransaction;
             }
 
             _incomes.Clear();
@@ -64,10 +56,12 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
         public Result UpdateExpenditures(FinancialTransaction[] expenditures)
         {
-            if (expenditures.Any(expenditure => !FinancialCategory.CheckIsIncome(expenditure.Category)))
+            if (expenditures.Any(expenditure => !FinancialCategory.CheckIsExpenditure(expenditure.Category))
+                || ValidateTransaction(expenditures).IsFailure)
             {
-                return FinancialErrors.InvalidCategoryInTransaction;
+                return FinancialErrors.InvalidTransaction;
             }
+
             _expenditures.Clear();
             _expenditures.AddRange(expenditures);
             return Result.Success();
@@ -93,6 +87,17 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
             Status = FinancialStatementStatus.Open;
             return Result.Success();
+        }
+
+        private Result ValidateTransaction(FinancialTransaction[] transactions)
+        {
+            return transactions.Any(income => income.Date.Year != FiscalYear)
+                ? (Result)FinancialErrors.InvalidTransaction
+                : transactions.Any(income => string.IsNullOrWhiteSpace(income.Description))
+                    ? (Result)FinancialErrors.InvalidTransaction
+                    : transactions.Any(income => income.Amount <= 0)
+                        ? (Result)FinancialErrors.InvalidTransaction
+                        : Result.Success();
         }
     }
 }
