@@ -35,6 +35,12 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
         public Result ImportIncomes(Payment[] payments)
         {
+            Result checkCanEdit = CheckCanEdit();
+            if (checkCanEdit.IsFailure)
+            {
+                return checkCanEdit;
+            }
+
             var incomes = _incomes.ToList();
             incomes.RemoveAll(x => x.PaymentId != null);
             incomes.AddRange(payments.Select(FinancialTransaction.CreateForPayment));
@@ -43,10 +49,23 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
         public Result UpdateIncomes(FinancialTransaction[] incomes)
         {
+            Result checkCanEdit = CheckCanEdit();
+            if (checkCanEdit.IsFailure)
+            {
+                return checkCanEdit;
+            }
+
             if (incomes.Any(income => !FinancialCategory.CheckIsIncome(income.Category))
                 || ValidateTransaction(incomes).IsFailure)
             {
                 return FinancialErrors.InvalidTransaction;
+            }
+            var checkImportetValuesManipulated =
+                _incomes.Any(existingIncome => incomes.Any(newIncome =>
+                    existingIncome.PaymentId != null && existingIncome.PaymentId == newIncome.PaymentId && existingIncome.Amount != newIncome.Amount));
+            if (checkImportetValuesManipulated)
+            {
+                return FinancialErrors.ManipulatedImportedValues;
             }
 
             _incomes.Clear();
@@ -56,10 +75,23 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
         public Result UpdateExpenditures(FinancialTransaction[] expenditures)
         {
+            Result checkCanEdit = CheckCanEdit();
+            if (checkCanEdit.IsFailure)
+            {
+                return checkCanEdit;
+            }
+
             if (expenditures.Any(expenditure => !FinancialCategory.CheckIsExpenditure(expenditure.Category))
                 || ValidateTransaction(expenditures).IsFailure)
             {
                 return FinancialErrors.InvalidTransaction;
+            }
+            var checkImportetValuesManipulated =
+                _expenditures.Any(existingExpenditures => expenditures.Any(newExpenditures =>
+                    existingExpenditures.PaymentId != null && existingExpenditures.PaymentId == newExpenditures.PaymentId && existingExpenditures.Amount != newExpenditures.Amount));
+            if (checkImportetValuesManipulated)
+            {
+                return FinancialErrors.ManipulatedImportedValues;
             }
 
             _expenditures.Clear();
@@ -87,6 +119,13 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
             Status = FinancialStatementStatus.Open;
             return Result.Success();
+        }
+
+        private Result CheckCanEdit()
+        {
+            return Status == FinancialStatementStatus.Completed
+                ? FinancialErrors.FinancialStatementAlreadyCompleted
+                : Result.Success();
         }
 
         private Result ValidateTransaction(FinancialTransaction[] transactions)

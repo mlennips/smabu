@@ -19,7 +19,7 @@ namespace LIT.Smabu.UseCases.Financial
                 AnnualFinancialStatement annualFinancialStatement
                     = await store.GetByAsync(request.AnnualFinancialStatementId);
                 Payment[] detectedPayments
-                    = await store.ApplySpecificationTask(new DetectPaymentsForFiscalYearSpec(annualFinancialStatement.FiscalYear));
+                    = await store.ApplySpecificationTask(new PaymentsForFiscalYearSpec(annualFinancialStatement.FiscalYear));
 
                 Result result = annualFinancialStatement.ImportIncomes(detectedPayments);
                 if (result.IsFailure)

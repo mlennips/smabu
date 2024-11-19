@@ -57,7 +57,11 @@ namespace LIT.Smabu.UseCases.Payments
                     return PaymentErrors.InvalidCreate;
                 }
 
-                Payment payment = await CreatePaymentAsync(businessNumberService, request);
+                CreatePaymentCommand updatedRequest = request with
+                {
+                    PaymentCondition = request.PaymentCondition ?? await DetectPaymentConditionAsync(request)
+                };
+                Payment payment = await CreatePaymentAsync(updatedRequest);
 
                 if (request.MarkAsPaid.GetValueOrDefault())
                 {
@@ -79,7 +83,21 @@ namespace LIT.Smabu.UseCases.Payments
                 return payment.Id;
             }
 
-            private static async Task<Payment> CreatePaymentAsync(BusinessNumberService businessNumberService, CreatePaymentCommand request)
+            private async Task<PaymentCondition> DetectPaymentConditionAsync(CreatePaymentCommand request)
+            {
+                PaymentCondition result = PaymentCondition.Default;
+                if (request.CustomerId != null)
+                {
+                    Customer customer = await store.GetByAsync(request.CustomerId);
+                    if (customer != null)
+                    {
+                        result = customer.PaymentCondition;
+                    }
+                }
+                return result;
+            }
+
+            private async Task<Payment> CreatePaymentAsync(CreatePaymentCommand request)
             {
                 PaymentNumber number = await businessNumberService.CreatePaymentNumberAsync();
 

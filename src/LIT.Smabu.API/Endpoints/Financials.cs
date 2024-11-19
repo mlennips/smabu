@@ -1,6 +1,7 @@
 using LIT.Smabu.Domain.FinancialAggregate;
 using LIT.Smabu.UseCases.Financial;
 using MediatR;
+using static LIT.Smabu.UseCases.Financial.CompleteAnnualFinancialStatement;
 using static LIT.Smabu.UseCases.Financial.CreateAnnualFinancialStatement;
 using static LIT.Smabu.UseCases.Financial.DeleteAnnualFinancialStatement;
 using static LIT.Smabu.UseCases.Financial.GetAnnualFinancialStatement;
@@ -50,6 +51,13 @@ namespace LIT.Smabu.API.Endpoints
                     onSuccess: () => Results.Ok(),
                     onFailure: Results.NotFound))
                 .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound);
+
+            api.MapPut("/annualstatements/{annualFinancialStatementId}/complete", async (IMediator mediator, Guid annualFinancialStatementId) =>
+                await mediator.SendAndMatchAsync(new CompleteAnnualFinancialStatementCommand(new(annualFinancialStatementId)),
+                    onSuccess: Results.NoContent,
+                    onFailure: Results.NotFound))
+                .Produces(StatusCodes.Status204NoContent)
                 .Produces(StatusCodes.Status404NotFound);
 
             api.MapDelete("/annualstatements/{annualFinancialStatementId}", async (IMediator mediator, Guid annualFinancialStatementId) =>

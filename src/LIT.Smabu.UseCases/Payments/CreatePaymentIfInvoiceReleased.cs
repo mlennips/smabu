@@ -31,7 +31,7 @@ namespace LIT.Smabu.UseCases.Payments
 
             private async Task<bool> CheckPaymentForInvoiceAlreadyExistsAsync(InvoiceId invoiceId)
             {
-                IReadOnlyList<Payment> detectedPayments = await store.ApplySpecificationTask(new DetectPaymentsWithInvoiceIdSpec(invoiceId));
+                IReadOnlyList<Payment> detectedPayments = await store.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec(invoiceId));
                 return detectedPayments.Any();
             }
         }

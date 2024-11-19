@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AnnualFinancialStatementDTO } from '../../types/domain/annual-financial-statement-dto';
-import { getAnnualFinancialStatement, importAnnualFinancialStatementTransactions, updateAnnualFinancialStatement } from '../../services/financials.service';
+import { completeAnnualFinancialStatement, getAnnualFinancialStatement, importAnnualFinancialStatementTransactions, updateAnnualFinancialStatement } from '../../services/financials.service';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { useNotification } from '../../contexts/notificationContext';
@@ -21,7 +21,19 @@ const AnnualFinancialStatementDetails: React.FC = () => {
     const [data, setData] = useState<AnnualFinancialStatementDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AppError | undefined>(undefined);
-    const toolbarItems: ToolbarItem[] = [];
+    const toolbarItems: ToolbarItem[] = [
+        {
+            text: "Abschließen",
+            icon: <Lock />,
+            action: () => 
+                handleAsyncTask({
+                    task: () => completeAnnualFinancialStatement(annualFinancialStatementId!),
+                    onLoading: setLoading,
+                    onSuccess: loadData,
+                    onError: setError
+                }),
+        }
+    ];
     const toolbarItemsIncome: ToolbarItem[] = [
         {
             text: "Importieren",
@@ -80,7 +92,7 @@ const AnnualFinancialStatementDetails: React.FC = () => {
                     {data && renderTransactionsBlock(data.incomes!, handleChange, 'incomes', data.totalIncome!, data.currency!, data.period!)}
                 </DefaultContentContainer>
 
-                <DefaultContentContainer title={"Ausgaben"} loading={loading} toolbarItems={toolbarItemsIncome} error={error}>
+                <DefaultContentContainer title={"Ausgaben"} loading={loading}error={error}>
                     {data && renderTransactionsBlock(data.expenditures!, handleChange, 'expenditures', data.totalExpenditure!, data.currency!, data.period!)}
                 </DefaultContentContainer>
 
@@ -169,7 +181,7 @@ const renderTransactionsBlock = (transactions: FinancialTransaction[], handleCha
     }
 
     return <TableContainer component={Paper}>
-            <Table width="100%">
+            <Table width="100%" size='small'>
                 <TableHead>
                     <TableRow>
                         <TableCell></TableCell>
