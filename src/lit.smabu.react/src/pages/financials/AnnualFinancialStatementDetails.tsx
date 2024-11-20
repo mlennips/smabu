@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AnnualFinancialStatementDTO } from '../../types/domain/annual-financial-statement-dto';
-import { completeAnnualFinancialStatement, getAnnualFinancialStatement, importAnnualFinancialStatementTransactions, updateAnnualFinancialStatement } from '../../services/financials.service';
+import { completeAnnualFinancialStatement, getAnnualFinancialStatement, importAnnualFinancialStatementTransactions, reopenAnnualFinancialStatement, updateAnnualFinancialStatement } from '../../services/financials.service';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { useNotification } from '../../contexts/notificationContext';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Grid2 as Grid, IconButton, InputAdornment, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Grid2 as Grid, IconButton, InputAdornment, Paper, SnackbarContent, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { AppError } from '../../utils/errorConverter';
-import { AddCircle, ImportExport, Lock, Remove } from '@mui/icons-material';
+import { AddCircle, ImportExport, Lock, LockOpen, Remove } from '@mui/icons-material';
 import { formatForTextField } from '../../utils/formatDate';
 import { FinancialCategorySelectField } from '../../components/controls/SelectField';
 import { Currency, DatePeriod, FinancialTransaction } from '../../types/domain';
@@ -21,17 +21,26 @@ const AnnualFinancialStatementDetails: React.FC = () => {
     const [data, setData] = useState<AnnualFinancialStatementDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<AppError | undefined>(undefined);
+
+    const isCompleted = data?.status?.value === 'Completed';
+
     const toolbarItems: ToolbarItem[] = [
         {
-            text: "Abschließen",
-            icon: <Lock />,
-            action: () => 
-                handleAsyncTask({
+            text: isCompleted ? "Aufheben" : "Abschließen",
+            icon: isCompleted ? <Lock /> : <LockOpen />,
+            action: () => isCompleted 
+             ? handleAsyncTask({
+                    task: () => reopenAnnualFinancialStatement(annualFinancialStatementId!),
+                    onLoading: setLoading,
+                    onSuccess: loadData,
+                    onError: setError
+                })
+            : handleAsyncTask({
                     task: () => completeAnnualFinancialStatement(annualFinancialStatementId!),
                     onLoading: setLoading,
                     onSuccess: loadData,
                     onError: setError
-                }),
+                })
         }
     ];
     const toolbarItemsIncome: ToolbarItem[] = [
@@ -86,6 +95,12 @@ const AnnualFinancialStatementDetails: React.FC = () => {
     return (
         <form id="form" onSubmit={handleSubmit} >
             <Stack spacing={2}>
+                {data?.status?.value === 'Completed' && <SnackbarContent
+                    sx={{ backgroundColor: 'warning.main' }}
+                    message="Jahresabschluss abgeschlossen"
+                    action={[]}
+                >
+                </SnackbarContent>}
                 {renderHeaderBlock(data, loading, error, toolbarItems)}
 
                 <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItemsIncome} error={error} >

@@ -7,6 +7,7 @@ using static LIT.Smabu.UseCases.Financial.DeleteAnnualFinancialStatement;
 using static LIT.Smabu.UseCases.Financial.GetAnnualFinancialStatement;
 using static LIT.Smabu.UseCases.Financial.ImportAnnualFinancialStatementTransactions;
 using static LIT.Smabu.UseCases.Financial.ListAnnualFinancialStatements;
+using static LIT.Smabu.UseCases.Financial.ReopenFinancialStatement;
 using static LIT.Smabu.UseCases.Financial.UpdateAnnualFinancialStatement;
 
 namespace LIT.Smabu.API.Endpoints
@@ -55,6 +56,13 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapPut("/annualstatements/{annualFinancialStatementId}/complete", async (IMediator mediator, Guid annualFinancialStatementId) =>
                 await mediator.SendAndMatchAsync(new CompleteAnnualFinancialStatementCommand(new(annualFinancialStatementId)),
+                    onSuccess: Results.NoContent,
+                    onFailure: Results.NotFound))
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status404NotFound);
+
+            api.MapPut("/annualstatements/{annualFinancialStatementId}/reopen", async (IMediator mediator, Guid annualFinancialStatementId) =>
+                await mediator.SendAndMatchAsync(new ReopenFinancialStatementCommand(new(annualFinancialStatementId)),
                     onSuccess: Results.NoContent,
                     onFailure: Results.NotFound))
                 .Produces(StatusCodes.Status204NoContent)

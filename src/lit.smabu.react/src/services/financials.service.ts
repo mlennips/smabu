@@ -28,3 +28,7 @@ export const importAnnualFinancialStatementTransactions = async (id: string): Pr
 export const completeAnnualFinancialStatement = async (id: string): Promise<void> => {
     await axiosConfig.put(`/financial/annualstatements/${id}/complete`);
 };
+
+export const reopenAnnualFinancialStatement = async (id: string): Promise<void> => {
+    await axiosConfig.put(`/financial/annualstatements/${id}/reopen`);
+};

@@ -18,9 +18,12 @@ namespace LIT.Smabu.UseCases.Financial
                 {
                     return FinancialErrors.FinancialStatementNotFound;
                 }
-
-                await store.UpdateAsync(financialStatement);
-                return financialStatement.Reopen();
+                Result reopenResult = financialStatement.Reopen();
+                if (reopenResult.IsSuccess)
+                {
+                    await store.UpdateAsync(financialStatement);
+                }
+                return reopenResult;
             }
         }
     }
