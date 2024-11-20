@@ -109,8 +109,7 @@ namespace LIT.Smabu.UseCases.SeedData
                     var paymentId = new PaymentId(Guid.NewGuid());
                     var payment = Payment.CreateIncoming(paymentId, new PaymentNumber(++paymentCounter), "", customer.Name, "",
                         customer.Id, invoice.Id, invoice.Number.DisplayName, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
-                        invoice.PerformancePeriod.To!.Value.ToDateTime(TimeOnly.MinValue), importRechnung.Summe,
-                        invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15), PaymentMethod.Default, PaymentCondition.Default);
+                        importRechnung.Summe, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15), PaymentMethod.Default, PaymentCondition.Default);
 
                     if (importRechnung.IsBeglichen)
                     {

@@ -39,12 +39,6 @@ export interface CreatePaymentCommand {
     direction?: PaymentDirection;
 
     /**
-     * @type {Date}
-     * @memberof CreatePaymentCommand
-     */
-    accountingDate?: Date;
-
-    /**
      * @type {string}
      * @memberof CreatePaymentCommand
      */

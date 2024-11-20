@@ -1,4 +1,5 @@
 ﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.FinancialAggregate;
 using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.API.Endpoints
@@ -24,6 +25,12 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapGet("/paymentconditions", () => PaymentCondition.GetAll())
                 .Produces<PaymentCondition[]>();
+
+            api.MapGet("/financialcategories/incomes", () => FinancialCategory.GetAllIncomes())
+                .Produces<FinancialCategory[]>();
+
+            api.MapGet("/financialcategories/expenditures", () => FinancialCategory.GetAllExpenditures())
+                .Produces<FinancialCategory[]>();
         }
     }
 }
