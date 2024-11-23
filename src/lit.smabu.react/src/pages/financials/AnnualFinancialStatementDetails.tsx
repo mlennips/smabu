@@ -123,7 +123,7 @@ const renderHeaderBlock = (data: AnnualFinancialStatementDTO | undefined, loadin
     return <DefaultContentContainer subtitle={data?.displayName} loading={loading} error={error} toolbarItems={toolbarItems}>
         <Paper sx={{ p: 2 }}>
             <Grid container spacing={2}>
-                <Grid size={{ xs: 6 }}>
+                <Grid size={{ xs: 6, md: 2 }}>
                     <TextField
                         type="date"
                         fullWidth
@@ -133,7 +133,7 @@ const renderHeaderBlock = (data: AnnualFinancialStatementDTO | undefined, loadin
                         value={data?.period?.from}
                         disabled />
                 </Grid>
-                <Grid size={{ xs: 6 }}>
+                <Grid size={{ xs: 6, md: 2 }}>
                     <TextField
                         type="date"
                         fullWidth
@@ -143,35 +143,56 @@ const renderHeaderBlock = (data: AnnualFinancialStatementDTO | undefined, loadin
                         value={data?.period?.to}
                         disabled />
                 </Grid>
-                <Grid size={{ xs: 6, sm: 4 }}>
+                <Grid size={{ xs: 6, sm: 4, md: 2 }}>
                     <TextField
                         type='number'
                         fullWidth
                         id="totalIncome"
                         name="totalIncome"
                         label="Einnahmen"
-                        value={data?.totalIncome}
-                        disabled />
+                        value={data?.totalIncome?.toFixed(2)}
+                        disabled 
+                        slotProps={{
+                            input: {
+                                disableUnderline: true,
+                                startAdornment: <InputAdornment position="end">{data?.currency?.sign}</InputAdornment>
+                            },
+                            htmlInput: { style: { textAlign: 'left' } }
+                        }}/>
                 </Grid>
-                <Grid size={{ xs: 6, sm: 4 }}>
+                <Grid size={{ xs: 6, sm: 4, md: 2 }}>
                     <TextField
                         type='number'
                         fullWidth
                         id="totalExpenditure"
                         name="totalExpenditure"
                         label="Ausgaben"
-                        value={data?.totalExpenditure}
-                        disabled />
+                        value={data?.totalExpenditure?.toFixed(2)}
+                        disabled
+                        slotProps={{
+                            input: {
+                                disableUnderline: true,
+                                startAdornment: <InputAdornment position="end">{data?.currency?.sign}</InputAdornment>
+                            },
+                            htmlInput: { style: { textAlign: 'left' } }
+                        }} />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 4 }}>
+                <Grid size={{ xs: 12, sm: 4, md: 4 }}>
                     <TextField
                         type='number'
                         fullWidth
                         id="netIncome"
                         name="netIncome"
                         label="Gewinn/Verlust"
-                        value={data?.netIncome}
-                        disabled />
+                        value={data?.netIncome?.toFixed(2)}
+                        disabled 
+                        slotProps={{
+                            input: {
+                                disableUnderline: true,
+                                startAdornment: <InputAdornment position="end">{data?.currency?.sign}</InputAdornment>
+                            },
+                            htmlInput: { style: { textAlign: 'left' } }
+                        }}/>
                 </Grid>
             </Grid>
         </Paper>
