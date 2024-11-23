@@ -8,6 +8,7 @@ import { useNotification } from '../../contexts/notificationContext';
 import { getCustomer, updateCustomer } from '../../services/customer.service';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
+import { PaymentConditionSelectField, PaymentMethodSelectField } from '../../components/controls/SelectField';
 
 const CustomerDetails = () => {
     const params = useParams();
@@ -47,6 +48,9 @@ const CustomerDetails = () => {
                 mainAddress: data?.mainAddress,
                 communication: data?.communication,
                 corporateDesign: data?.corporateDesign,
+                vatId: data?.vatId,
+                preferredPaymentMethod: data?.preferredPaymentMethod,
+                paymentCondition: data?.paymentCondition
             }),
             onLoading: setLoading,
             onSuccess: () => {
@@ -78,7 +82,7 @@ const CustomerDetails = () => {
                                     <Typography variant="subtitle2">{data?.corporateDesign?.slogan}</Typography>
                                 </Grid>
                                 <Grid size="auto" textAlign='end' sx={{ display: { xs: 'none', sm: 'initial' } }}>
-                                    { data?.corporateDesign?.logo?.fileUrl && <img src={data?.corporateDesign?.logo?.fileUrl ?? undefined} alt="Logo"
+                                    {data?.corporateDesign?.logo?.fileUrl && <img src={data?.corporateDesign?.logo?.fileUrl ?? undefined} alt="Logo"
                                         style={{ maxHeight: '42px', minWidth: '100px' }} />}
                                 </Grid>
                             </Grid>
@@ -88,14 +92,20 @@ const CustomerDetails = () => {
                         <DefaultContentContainer subtitle={data?.name} loading={loading} error={error} toolbarItems={toolbarItems} >
                             <Paper sx={{ p: 2 }}>
                                 <Grid container spacing={2}>
-                                    <Grid size={{ xs: 12, sm: 3, md: 3 }}><TextField fullWidth label="#" name="number"
+                                    <Grid size={{ xs: 6, sm: 3, md: 2 }}><TextField fullWidth label="#" name="number"
                                         value={data?.number?.displayName} disabled /></Grid>
-                                    <Grid size={{ xs: 12, sm: 9, md: 9 }}><TextField fullWidth label="Name" name="name"
-                                        value={data?.name} onChange={handleChange} required /></Grid>
-                                    <Grid size={{ xs: 12, sm: 8, md: 8 }}><TextField fullWidth label="Branche" name="industryBranch"
+                                    <Grid size={{ xs: 6, sm: 3, md: 2 }}><TextField fullWidth label="Branche" name="industryBranch"
                                         value={data?.industryBranch} onChange={handleChange} required /></Grid>
-                                    <Grid size={{ xs: 12, sm: 4, md: 4 }}><TextField fullWidth label="Währung" name="currency"
+                                    <Grid size={{ xs: 12, sm: 6, md: 8 }}><TextField fullWidth label="Name" name="name"
+                                        value={data?.name} onChange={handleChange} required /></Grid>
+                                    <Grid size={{ xs: 2, sm: 1, md: 1 }}><TextField fullWidth label="Währung" name="currency"
                                         value={data?.currency?.name} disabled /></Grid>
+                                    <Grid size={{ xs: 10, sm: 3, md: 3 }}><TextField fullWidth label="USt-Nr" name="vatId"
+                                        value={data?.vatId} onChange={handleChange} /></Grid>
+                                    <Grid size={{ xs: 12, sm: 4, md: 4 }}><PaymentMethodSelectField label='Bevorzugte Zahlungsweise' name="preferredPaymentMethod" value={data?.preferredPaymentMethod?.value}
+                                        onChange={handleChange} required /></Grid>
+                                    <Grid size={{ xs: 12, sm: 4, md: 4 }}><PaymentConditionSelectField label='Zahlungskonditionen' name="paymentCondition" value={data?.paymentCondition?.name}
+                                        onChange={handleChange} required /></Grid>
                                 </Grid>
                             </Paper>
                         </DefaultContentContainer >

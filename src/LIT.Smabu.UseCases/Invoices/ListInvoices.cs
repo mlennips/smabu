@@ -21,8 +21,8 @@ namespace LIT.Smabu.UseCases.Invoices
                     : await store.GetAllAsync<Invoice>();
 
                 var customerIds = invoices.Select(x => x.CustomerId).ToList();
-                Dictionary<IEntityId<Customer>, Customer> customers = await store.GetByAsync(customerIds);
-                InvoiceDTO[] result = [.. invoices.Select(x => InvoiceDTO.Create(x, customers[x.CustomerId]))
+                Customer[] customers = await store.GetByAsync(customerIds);
+                InvoiceDTO[] result = [.. invoices.Select(x => InvoiceDTO.Create(x, customers.Single(y => y.Id == x.CustomerId)))
                     .OrderBy(x => x.Number.IsTemporary ? 0 : 1)
                     .ThenByDescending(x => x.Number)
                     .ThenByDescending(x => x.CreatedAt)];

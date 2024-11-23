@@ -46,6 +46,9 @@ import PaymentList from '../pages/payments/PaymentList';
 import PaymentCreate from '../pages/payments/PaymentCreate';
 import PaymentDetails from '../pages/payments/PaymentDetails';
 import PaymentDelete from '../pages/payments/PaymentDelete';
+import AnnualFinancialStatementList from '../pages/financials/AnnualFinancialStatementList';
+import AnnualFinancialStatementDetails from '../pages/financials/AnnualFinancialStatementDetails';
+import AnnualFinancialStatementCreate from '../pages/financials/AnnualFinancialStatementCreate';
 
 interface NavigationGroup {
     name: string;
@@ -338,10 +341,27 @@ export const navConfig: Navigation = {
             name: "Finanzen",
             children: [
                 {
-                    name: "EÜR-Berechnung",
+                    name: "Jahresabschluss",
                     icon: CurrencyExchangeIcon,
-                    route: "/incomesurpluscalculation",
-                    showInNav: true
+                    route: "/financial/annualstatements",
+                    element: React.createElement(AnnualFinancialStatementList),
+                    showInNav: true,
+                    children: [
+                        {
+                            name: "Jahresabschluss Details",
+                            icon: CurrencyExchangeIcon,
+                            route: "/financial/annualstatements/:annualStatementId",
+                            showInNav: false,
+                            element: React.createElement(AnnualFinancialStatementDetails),
+                        },
+                        {
+                            name: "Jahresabschluss erstellen",
+                            icon: CurrencyExchangeIcon,
+                            route: "/financial/annualstatements/create",
+                            showInNav: false,
+                            element: React.createElement(AnnualFinancialStatementCreate),
+                        }
+                    ]
                 }
             ]
         },

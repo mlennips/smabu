@@ -24,13 +24,25 @@ export interface Currency {
      * @type {string}
      * @memberof Currency
      */
-    isoCode?: string | null;
+    value?: string | null;
+
+    /**
+     * @type {string}
+     * @memberof Currency
+     */
+    shortName?: string | null;
 
     /**
      * @type {string}
      * @memberof Currency
      */
     name?: string | null;
+
+    /**
+     * @type {string}
+     * @memberof Currency
+     */
+    isoCode?: string | null;
 
     /**
      * @type {string}

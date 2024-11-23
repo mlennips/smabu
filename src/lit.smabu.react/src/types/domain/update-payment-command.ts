@@ -12,7 +12,9 @@
  * Do not edit the class manually.
  */
 
+import { PaymentCondition } from './payment-condition';
 import { PaymentId } from './payment-id';
+import { PaymentMethod } from './payment-method';
 import { PaymentStatus } from './payment-status';
  /**
  * 
@@ -77,8 +79,20 @@ export interface UpdatePaymentCommand {
     dueDate?: Date | null;
 
     /**
+     * @type {PaymentMethod}
+     * @memberof UpdatePaymentCommand
+     */
+    paymentMethod?: PaymentMethod;
+
+    /**
      * @type {PaymentStatus}
      * @memberof UpdatePaymentCommand
      */
     status?: PaymentStatus;
+
+    /**
+     * @type {PaymentCondition}
+     * @memberof UpdatePaymentCommand
+     */
+    paymentCondition?: PaymentCondition;
 }

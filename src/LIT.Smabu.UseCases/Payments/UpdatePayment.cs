@@ -2,18 +2,25 @@
 using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.Core;
 using LIT.Smabu.UseCases.Base;
+using LIT.Smabu.Domain.FinancialAggregate.Services;
 
 namespace LIT.Smabu.UseCases.Payments
 {
     public static class UpdatePayment
     {
         public record UpdatePaymentCommand(PaymentId PaymentId, string Details, string Payer, string Payee, string ReferenceNr, DateTime? ReferenceDate,
-                DateTime AccountingDate, decimal AmountDue, DateTime? DueDate, PaymentStatus Status) : ICommand;
+                DateTime AccountingDate, decimal AmountDue, DateTime? DueDate, PaymentMethod PaymentMethod, PaymentStatus Status, PaymentCondition PaymentCondition) : ICommand;
 
-        public class UpdatePaymentHandler(IAggregateStore store) : ICommandHandler<UpdatePaymentCommand>
+        public class UpdatePaymentHandler(IAggregateStore store, FinancialRelationsService financialRelationsService) : ICommandHandler<UpdatePaymentCommand>
         {
             public async Task<Result> Handle(UpdatePaymentCommand request, CancellationToken cancellationToken)
             {
+                Result financialResult = await financialRelationsService.CheckCanChangeRelatedItemAsync(request.PaymentId);
+                if (financialResult.IsFailure)
+                {
+                    return financialResult;
+                }
+
                 Payment payment = await store.GetByAsync(request.PaymentId);
                 if (payment == null)
                 {
@@ -21,7 +28,7 @@ namespace LIT.Smabu.UseCases.Payments
                 }
 
                 Result updateResult = payment.Update(request.Details, request.Payer, request.Payee,
-                    request.ReferenceNr, request.ReferenceDate, request.AmountDue, request.DueDate, request.Status);
+                    request.ReferenceNr, request.ReferenceDate, request.AmountDue, request.DueDate, request.PaymentMethod, request.Status, request.PaymentCondition);
 
                 if (updateResult.IsSuccess)
                 {

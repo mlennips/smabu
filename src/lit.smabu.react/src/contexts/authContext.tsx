@@ -31,6 +31,20 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const LOCAL_STORAGE_KEYS = {
+    ACCESS_TOKEN: 'auth_accesstoken',
+    ID_TOKEN: 'auth_idtoken',
+    USERNAME: 'auth_username',
+};
+
+const setLocalStorageItem = (key: string, value: string) => {
+    localStorage.setItem(key, value);
+};
+
+const removeLocalStorageItem = (key: string) => {
+    localStorage.removeItem(key);
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [account, setAccount] = useState<AccountInfo | null>(null);
@@ -46,9 +60,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 setAccount(response.account);
                 setAccessToken(response.accessToken);
                 setIsAuthenticated(true);
-                sessionStorage.setItem('authAccessToken', response.accessToken);
-                sessionStorage.setItem('authIdToken', response.idToken);
-                sessionStorage.setItem('authUserName', response.account.username);
+                setLocalStorageItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN, response.accessToken);
+                setLocalStorageItem(LOCAL_STORAGE_KEYS.ID_TOKEN, response.idToken);
+                setLocalStorageItem(LOCAL_STORAGE_KEYS.USERNAME, response.account.username);
             });
         }
     }, [instance]);
@@ -59,9 +73,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setAccount(response.account);
             setAccessToken(response.accessToken);
             setIsAuthenticated(true);
-            sessionStorage.setItem('authAccessToken', response.accessToken);
-            sessionStorage.setItem('authIdToken', response.idToken);
-            sessionStorage.setItem('authUserName', response.account.username);
+            setLocalStorageItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN, response.accessToken);
+            setLocalStorageItem(LOCAL_STORAGE_KEYS.ID_TOKEN, response.idToken);
+            setLocalStorageItem(LOCAL_STORAGE_KEYS.USERNAME, response.account.username);
         } catch (error) {
             console.error(error);
         }
@@ -73,9 +87,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setAccessToken(null);
         setIsAuthenticated(false);
         navigate('/');
-        sessionStorage.removeItem('authAccessToken');
-        sessionStorage.removeItem('authIdToken');
-        sessionStorage.removeItem('authUserName');
+        removeLocalStorageItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
+        removeLocalStorageItem(LOCAL_STORAGE_KEYS.ID_TOKEN);
+        removeLocalStorageItem(LOCAL_STORAGE_KEYS.USERNAME);
     };
 
     return (

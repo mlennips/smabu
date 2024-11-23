@@ -2,17 +2,11 @@
 
 namespace LIT.Smabu.Domain.Common
 {
-    public record Unit(string Value) : SimpleValueObject<string>(Value)
+    public record Unit(string Value) : EnumValueObject(Value)
     {
-        public static Unit None => new("");
-        public static Unit Hour => new("Hour");
-        public static Unit Day => new("Day");
-        public static Unit Item => new("Item");
-        public static Unit Project => new("Project");
-
-        public string Name => Value switch
+        public override string Name => Value switch
         {
-            "" => "",
+            "None" => "",
             "Hour" => "Stunde",
             "Day" => "Tag",
             "Item" => "Stück",
@@ -20,15 +14,21 @@ namespace LIT.Smabu.Domain.Common
             _ => "???"
         };
 
-        public string ShortName => Value switch
+        public override string ShortName => Value switch
         {
-            "" => "",
+            "None" => "",
             "Hour" => "Std",
             "Day" => "Tag",
             "Item" => "Stk",
             "Project" => "Prj",
             _ => "???"
         };
+
+        public static readonly Unit None = new("None");
+        public static readonly Unit Hour = new("Hour");
+        public static readonly Unit Day = new("Day");
+        public static readonly Unit Item = new("Item");
+        public static readonly Unit Project = new("Project");
 
         public static Unit[] GetAll()
         {

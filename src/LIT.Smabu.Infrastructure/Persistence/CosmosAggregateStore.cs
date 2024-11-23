@@ -68,7 +68,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
-        public async Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()
+        public async Task<TAggregate[]> GetAllAsync<TAggregate>()
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var container = await GetAggregatesContainerAsync();
@@ -86,7 +86,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 }
             }
             logger.LogInformation("Get all aggregates of type {type}: {count} items", typeof(TAggregate).Name, result.Count);
-            return result;
+            return [.. result];
         }
 
         public async Task<TAggregate> GetByAsync<TAggregate>(IEntityId<TAggregate> id)
@@ -112,10 +112,10 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result[0];
         }
 
-        public async Task<Dictionary<IEntityId<TAggregate>, TAggregate>> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
+        public async Task<TAggregate[]> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            Dictionary<IEntityId<TAggregate>, TAggregate> result = [];
+            List<TAggregate> result = [];
             if (ids.Any())
             {
                 var container = await GetAggregatesContainerAsync();
@@ -132,13 +132,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
                     var currentResultSet = await queryResultSetIterator.ReadNextAsync();
                     foreach (var item in currentResultSet)
                     {
-                        result.Add(item.Body.Id, item.Body);
+                        result.Add(item.Body);
                     }
                 }
             }
             logger.LogInformation("Get aggregates of type {type} by ids. Found {found}/{requested}", 
                 typeof(TAggregate).Name, result.Count, ids.Distinct().Count());
-            return result;
+            return [.. result];
         }
 
         public async Task<int> CountAsync<TAggregate>()
@@ -153,7 +153,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result;
         }
 
-        public async Task<IReadOnlyList<TAggregate>> ApplySpecificationTask<TAggregate>(Specification<TAggregate> specification)
+        public async Task<TAggregate[]> ApplySpecificationTask<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var container = await GetAggregatesContainerAsync();
@@ -170,7 +170,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             }
 
             logger.LogInformation("Get aggregates of type {type} by specification '{specification}': {items} items", typeof(TAggregate).Name, specification.GetType().Name, result.Count);
-            return result;
+            return [.. result];
         }
 
         private async Task<Container> GetAggregatesContainerAsync()

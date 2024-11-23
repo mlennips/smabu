@@ -2,6 +2,7 @@
 using LIT.Smabu.Infrastructure.Messaging;
 using LIT.Smabu.Core;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
@@ -45,7 +46,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
-        public async Task<IReadOnlyList<TAggregate>> GetAllAsync<TAggregate>()
+        public async Task<TAggregate[]> GetAllAsync<TAggregate>()
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             return await LoadAsync<TAggregate>();
@@ -58,11 +59,11 @@ namespace LIT.Smabu.Infrastructure.Persistence
             return result ?? throw new AggregateNotFoundException(id);
         }
 
-        public async Task<Dictionary<IEntityId<TAggregate>, TAggregate>> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
+        public async Task<TAggregate[]> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var allItems = await LoadAsync<TAggregate>(ids);
-            return allItems.Where(x => ids.Contains(x.Id)).ToDictionary(x => x.Id, x => x);
+            return allItems.Where(x => ids.Contains(x.Id)).ToArray();
         }
 
         public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
@@ -77,10 +78,10 @@ namespace LIT.Smabu.Infrastructure.Persistence
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var items = await this.GetAllAsync<TAggregate>();
-            return items.Count;
+            return items.Length;
         }
 
-        public async Task<IReadOnlyList<TAggregate>> ApplySpecificationTask<TAggregate>(Specification<TAggregate> specification)
+        public async Task<TAggregate[]> ApplySpecificationTask<TAggregate>(Specification<TAggregate> specification)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             IQueryable<TAggregate> queryable = (await this.GetAllAsync<TAggregate>()).AsQueryable();

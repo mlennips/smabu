@@ -16,7 +16,9 @@ namespace LIT.Smabu.Domain.Specifications
         }
 
         public LastBusinessNumberSpec(int year)
-            : base(x => x.Number.Value.ToString(CultureInfo.InvariantCulture).StartsWith(year.ToString(CultureInfo.InvariantCulture)))
+#pragma warning disable CA1305 // Specify IFormatProvider
+            : base(x => x.Number.Value.ToString().StartsWith(year.ToString()))
+#pragma warning restore CA1305 // Specify IFormatProvider
         {
             OrderByDescendingExpression = x => x.Number.DisplayName;
             Take = 1;

@@ -1,4 +1,7 @@
 ﻿using LIT.Smabu.Domain.Common;
+using LIT.Smabu.Domain.FinancialAggregate;
+using LIT.Smabu.Domain.PaymentAggregate;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow.Schemas;
 
 namespace LIT.Smabu.API.Endpoints
 {
@@ -9,14 +12,41 @@ namespace LIT.Smabu.API.Endpoints
             RouteGroupBuilder api = routes.MapGroup("/common")
                 .WithTags(["Common"]);
 
-            api.MapGet("/currencies", () => Currency.GetAll())
-                .Produces<Currency[]>();
+            RegisterEnums(api);
+        }
 
-            api.MapGet("/taxrates", () => TaxRate.GetAll())
-                .Produces<TaxRate[]>();
+        private static void RegisterEnums(RouteGroupBuilder api)
+        {
+            RouteGroupBuilder enumsApi = api.MapGroup("/enums")
+                .WithTags("Enums");
 
-            api.MapGet("/units", () => Unit.GetAll())
-                .Produces<string[]>();
+            enumsApi.MapGet("/", () => BuildEnums())
+                .Produces<EnumsResponse>();
+        }
+
+        private static EnumsResponse BuildEnums()
+        {
+            return new EnumsResponse
+            {
+                Currencies = Currency.GetAll(),
+                PaymentMethods = PaymentMethod.GetAll(),
+                PaymentConditions = PaymentCondition.GetAll(),
+                Units = Unit.GetAll(),
+                FinancialCategoryIncomes = FinancialCategory.GetAllIncomes(),
+                FinancialCategoryExpenditures = FinancialCategory.GetAllExpenditures(),
+                TaxRates = TaxRate.GetAll()
+            };
+        }
+
+        public record EnumsResponse
+        {
+            public required Currency[] Currencies { get; init; }
+            public required PaymentMethod[] PaymentMethods { get; init; }
+            public required PaymentCondition[] PaymentConditions { get; init; }
+            public required Unit[] Units { get; init; }
+            public required FinancialCategory[] FinancialCategoryIncomes { get; init; }
+            public required FinancialCategory[] FinancialCategoryExpenditures { get; init; }
+            public required TaxRate[] TaxRates { get; init; }
         }
     }
 }

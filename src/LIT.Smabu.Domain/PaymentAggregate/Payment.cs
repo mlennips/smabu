@@ -10,7 +10,6 @@ namespace LIT.Smabu.Domain.PaymentAggregate
         public override PaymentId Id { get; }
         public PaymentNumber Number { get; }
         public PaymentDirection Direction { get; }
-        public DateTime AccountingDate { get; private set; }
         public string Details { get; private set; }
         public string Payer { get; private set; }
         public string Payee { get; private set; }
@@ -22,13 +21,16 @@ namespace LIT.Smabu.Domain.PaymentAggregate
         public DateTime? DueDate { get; private set; }
         public decimal AmountPaid { get; private set; }
         public DateTime? PaidAt { get; private set; }
+        public DateTime? AccountingDate => PaidAt;
         public Currency Currency { get; private set; }
         public PaymentStatus Status { get; private set; }
+        public PaymentMethod PaymentMethod { get; private set; }
+        public PaymentCondition PaymentCondition { get; private set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Primären Konstruktor verwenden")]
-        public Payment(PaymentId id, PaymentNumber number, PaymentDirection direction, DateTime accountingDate, string details, string payer, string payee,
+        public Payment(PaymentId id, PaymentNumber number, PaymentDirection direction, string details, string payer, string payee,
             CustomerId? customerId, InvoiceId? invoiceId, string referenceNr, DateTime? referenceDate,
-            decimal amountDue, DateTime? dueDate, decimal amountPaid, DateTime? paidAt, Currency currency, PaymentStatus status)
+            decimal amountDue, DateTime? dueDate, decimal amountPaid, DateTime? paidAt, Currency currency, PaymentStatus status, PaymentMethod paymentMethod, PaymentCondition paymentCondition)
         {
             Id = id;
             Number = number;
@@ -40,32 +42,37 @@ namespace LIT.Smabu.Domain.PaymentAggregate
             InvoiceId = invoiceId;
             ReferenceNr = referenceNr;
             ReferenceDate = referenceDate;
-            AccountingDate = accountingDate;
             AmountDue = amountDue;
             DueDate = dueDate;
             AmountPaid = amountPaid;
             PaidAt = paidAt;
             Currency = currency;
             Status = status;
+            PaymentMethod = paymentMethod;
+            PaymentCondition = paymentCondition;
         }
 
         public static Payment CreateIncoming(PaymentId id, PaymentNumber number, string details, string payer, string payee,
-            CustomerId customerId, InvoiceId invoiceId, string referenceNr, DateTime? referenceDate, DateTime accountingDate,
-            decimal amountDue, DateTime? dueDate)
+            CustomerId customerId, InvoiceId invoiceId, string referenceNr, DateTime? referenceDate,
+            decimal amountDue, DateTime? dueDate, PaymentMethod paymentMethod, PaymentCondition paymentCondition)
         {
-            return new Payment(id, number, PaymentDirection.Incoming, accountingDate, details, payer, payee, customerId, invoiceId,
-                referenceNr, referenceDate, amountDue, dueDate, 0, null, Currency.EUR, PaymentStatus.Pending);
+            if (dueDate == null && referenceDate != null)
+            {
+                dueDate = paymentCondition.CalculateLatestDueDate(referenceDate.Value);
+            }
+            return new Payment(id, number, PaymentDirection.Incoming, details, payer, payee, customerId, invoiceId,
+                referenceNr, referenceDate, amountDue, dueDate, 0, null, Currency.EUR, PaymentStatus.Pending, paymentMethod, paymentCondition);
         }
 
         public static Payment CreateOutgoing(PaymentId id, PaymentNumber number, string details, string payer, string payee,
-            string referenceNr, DateTime? referenceDate, DateTime accountingDate, decimal amountDue, DateTime? dueDate)
+            string referenceNr, DateTime? referenceDate, decimal amountDue, DateTime? dueDate, PaymentMethod paymentMethod, PaymentCondition paymentCondition)
         {
-            return new Payment(id, number, PaymentDirection.Outgoing, accountingDate, details, payer, payee, null, null,
-                referenceNr, referenceDate, amountDue, dueDate, 0, null, Common.Currency.EUR, PaymentStatus.Pending);
+            return new Payment(id, number, PaymentDirection.Outgoing, details, payer, payee, null, null,
+                referenceNr, referenceDate, amountDue, dueDate, 0, null, Common.Currency.EUR, PaymentStatus.Pending, paymentMethod, paymentCondition);
         }
 
         public Result Update(string details, string payer, string payee, string referenceNr, DateTime? referenceDate,
-            decimal amountDue, DateTime? dueDate, PaymentStatus status)
+            decimal amountDue, DateTime? dueDate, PaymentMethod paymentMethod, PaymentStatus status, PaymentCondition paymentCondition)
         {
             if (status == PaymentStatus.Paid && Status == PaymentStatus.Paid)
             {
@@ -82,8 +89,10 @@ namespace LIT.Smabu.Domain.PaymentAggregate
             ReferenceNr = referenceNr;
             ReferenceDate = referenceDate;
             AmountDue = amountDue;
-            DueDate = dueDate;
+            DueDate = referenceDate != null ? paymentCondition.CalculateLatestDueDate(referenceDate.Value) : dueDate;
             Status = status;
+            PaymentMethod = paymentMethod;
+            PaymentCondition = paymentCondition;
 
             return Result.Success();
         }

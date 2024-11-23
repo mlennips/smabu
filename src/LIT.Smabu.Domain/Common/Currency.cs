@@ -1,10 +1,30 @@
 ﻿using LIT.Smabu.Core;
+using LIT.Smabu.Domain.Base;
 using System.Globalization;
 
 namespace LIT.Smabu.Domain.Common
 {
-    public record Currency(string IsoCode, string Name, string Sign) : IValueObject
+    public record Currency(string Value) : EnumValueObject(Value)
     {
+        public override string Name => Value switch
+        {
+            "EUR" => "Euro",
+            "USD" => "US-Dollar",
+            _ => "?"
+        };
+
+        public string IsoCode => Value;
+
+        public string Sign => Value switch
+        {
+            "EUR" => "€",
+            "USD" => "$",
+            _ => "?"
+        };
+
+        public static Currency EUR => new("EUR");
+        public static Currency USD => new("USD");
+
         public string Format(decimal amount)
         {
             var numberFormatInfo = (NumberFormatInfo)NumberFormatInfo.CurrentInfo.Clone();
@@ -12,17 +32,9 @@ namespace LIT.Smabu.Domain.Common
             return amount.ToString("C", numberFormatInfo);
         }
 
-        public static Currency EUR => new("EUR", "Euro", "€");
-        public static Currency USD => new("USD", "US-Dollar", "$");
-
         public static Currency[] GetAll()
         {
             return [EUR, USD];
-        }
-
-        public override string ToString()
-        {
-            return $"{Name} ({Sign})";
         }
 
         public override int GetHashCode()

@@ -3,7 +3,6 @@ namespace LIT.Smabu.Domain.Common
 {
     public record CorporateDesign
     {
-
         public string Brand { get; private set; }
         public string ShortName { get; private set; }
         public string? Slogan { get; private set; }

@@ -4,6 +4,7 @@ using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.Services;
 using LIT.Smabu.Core;
 using Moq;
+using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.DomainTests.Services
 {
@@ -136,8 +137,9 @@ namespace LIT.Smabu.DomainTests.Services
             var performancePeriod = new DatePeriod(new DateOnly(2022, 1, 1), new DateOnly(2022, 1, 31));
             var currency = Currency.EUR;
             var taxRate = TaxRate.Default;
+            PaymentCondition paymentCondition = PaymentCondition.Default;
 
-            var invoice = Invoice.Create(invoiceId, customerId, fiscalYear, customerAddress, performancePeriod, currency, taxRate);
+            var invoice = Invoice.Create(invoiceId, customerId, fiscalYear, customerAddress, performancePeriod, currency, taxRate, paymentCondition);
             invoice.AddItem(new InvoiceItemId(Guid.NewGuid()), "Details", new Quantity(1, Unit.Item), amount);
             invoice.Meta = new AggregateMeta(1, new DateTime(fiscalYear, 1, 1), "1", "A", null, null, null);
 

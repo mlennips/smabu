@@ -1,4 +1,5 @@
-﻿namespace LIT.Smabu.Domain.Base
+﻿
+namespace LIT.Smabu.Domain.Base
 {
     public sealed class Result<TValue> : Result
     {
@@ -63,6 +64,11 @@
         public static Result<TValue> Success<TValue>(TValue value)
         {
             return new(value);
+        }
+
+        public static ErrorDetail Success(object create)
+        {
+            throw new NotImplementedException();
         }
 
         public static implicit operator Result(ErrorDetail error)

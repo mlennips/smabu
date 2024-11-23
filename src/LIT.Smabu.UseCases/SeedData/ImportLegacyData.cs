@@ -35,7 +35,7 @@ namespace LIT.Smabu.UseCases.SeedData
                             customer.Update(customer.Name, customer.IndustryBranch,
                                 new Address(importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
                                 importKunde.Strasse, importKunde.Hausnummer, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land),
-                                null, null);
+                                null, null, "", PaymentMethod.Default, PaymentCondition.Default);
                             await store.CreateAsync(customer);
 
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
@@ -46,7 +46,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 var invoice = Invoice.Create(invoiceId, customerId, importRechnung.Jahr,
                                     customer.MainAddress,
                                     DatePeriod.Create(importRechnung.LeistungsdatumVon ?? importRechnung.LeistungsdatumBis.GetValueOrDefault(), importRechnung.LeistungsdatumBis.GetValueOrDefault()),
-                                    Currency.EUR, TaxRate.Default);
+                                    Currency.EUR, TaxRate.Default, PaymentCondition.Default);
                                 invoice.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
 
                                 foreach (BackupObject.Rechnung.Rechnungsposition importRechnungPosition in importRechnung.Positionen)
@@ -109,8 +109,7 @@ namespace LIT.Smabu.UseCases.SeedData
                     var paymentId = new PaymentId(Guid.NewGuid());
                     var payment = Payment.CreateIncoming(paymentId, new PaymentNumber(++paymentCounter), "", customer.Name, "",
                         customer.Id, invoice.Id, invoice.Number.DisplayName, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue),
-                        invoice.PerformancePeriod.To!.Value.ToDateTime(TimeOnly.MinValue), importRechnung.Summe,
-                        invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15));
+                        importRechnung.Summe, invoice.InvoiceDate!.Value.ToDateTime(TimeOnly.MinValue).AddDays(15), PaymentMethod.Default, PaymentCondition.Default);
 
                     if (importRechnung.IsBeglichen)
                     {

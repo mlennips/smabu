@@ -1,17 +1,64 @@
 import axiosConfig from "../configs/axiosConfig";
-import { Currency, TaxRate, Unit } from "../types/domain";
+import { Currency, EnumsResponse, FinancialCategory, PaymentCondition, PaymentMethod, TaxRate, Unit } from "../types/domain";
 
 export const getCurrencies = async (): Promise<Currency[]> => {
-    const response = await axiosConfig.get<Currency[]>(`common/currencies`);
-    return response?.data;
+    return getEnumValues().then((enums) => {
+        return enums.currencies!;
+    });
 };
 
 export const getUnits = async (): Promise<Unit[]> => {
-    const response = await axiosConfig.get<Unit[]>(`common/units`);
-    return response?.data;
+    return getEnumValues().then((enums) => {
+        return enums.units!;
+    });
 };
 
 export const getTaxRates = async (): Promise<TaxRate[]> => {
-    const response = await  axiosConfig.get<TaxRate[]>(`common/taxrates`);
-    return response?.data;
+    return getEnumValues().then((enums) => {
+        return enums.taxRates!;
+    });
+};
+
+export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
+    return getEnumValues().then((enums) => {
+        return enums.paymentMethods!;
+    });
+};
+
+export const getPaymentConditions = async (): Promise<PaymentCondition[]> => {
+    return getEnumValues().then((enums) => {
+        return enums.paymentConditions!;
+    });
+};
+
+export const getFinancialCategories = async (type: 'incomes' | 'expenditures'): Promise<FinancialCategory[]> => {
+    if (type === 'incomes') {
+        return getEnumValues().then((enums) => {
+            return enums.financialCategoryIncomes!;
+        });
+    } else {
+        return getEnumValues().then((enums) => {
+            return enums.financialCategoryExpenditures!;
+        });
+    }
+};
+
+const getEnumValues = async (): Promise<EnumsResponse> => {
+    const key = 'data_enums';
+    let data = getDataFromLocalStorage<EnumsResponse>(key);
+    if (!data) {
+        const response = await axiosConfig.get<EnumsResponse>(`common/enums`);
+        data = response?.data;
+        setDataToLocalStorage(key, data);
+    }
+    return data;
+};
+
+const getDataFromLocalStorage = <T>(key: string): T | null => {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+};
+
+const setDataToLocalStorage = <T>(key: string, data: T): void => {
+    localStorage.setItem(key, JSON.stringify(data));
 };

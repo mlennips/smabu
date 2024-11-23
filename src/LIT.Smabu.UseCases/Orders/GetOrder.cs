@@ -20,11 +20,11 @@ namespace LIT.Smabu.UseCases.Orders
                 Customer customer = await store.GetByAsync(order.CustomerId);
 
                 List<Invoice> invoices = order.References.InvoiceIds.Count != 0
-                    ? (await store.GetByAsync(order.References.InvoiceIds)).Select(x => x.Value).ToList()
+                    ? [.. (await store.GetByAsync(order.References.InvoiceIds))]
                     : [];
 
                 List<Offer> offers = order.References.OfferIds.Count != 0
-                    ? (await store.GetByAsync(order.References.OfferIds)).Select(x => x.Value).ToList()
+                    ? [.. (await store.GetByAsync(order.References.OfferIds))]
                     : [];
 
                 var orderReferences = OrderReferencesDTO.Create(order.References, offers, invoices);

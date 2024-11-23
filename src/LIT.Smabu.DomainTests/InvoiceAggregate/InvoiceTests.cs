@@ -1,6 +1,7 @@
 ﻿using LIT.Smabu.Domain.CustomerAggregate;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
+using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.DomainTests.InvoiceAggregate
 {
@@ -13,12 +14,13 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         private readonly DatePeriod _datePeriod = DatePeriod.Create(DateTime.Now, DateTime.Now.AddDays(1));
         private readonly Currency _currency = Currency.EUR;
         private readonly TaxRate _taxRate = new("Default", 19, "Tax");
+        private readonly PaymentCondition _paymentCondition = PaymentCondition.Default;
 
         [TestMethod]
         public void Create_ShouldReturnInvoice()
         {
             // Act
-            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate, _paymentCondition);
 
             // Assert
             Assert.IsNotNull(testee);
@@ -39,7 +41,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void CreateFromTemplate_ShouldReturnSameAmountAsTemplate()
         {
             // Arrange
-            var template = Invoice.Create(new(Guid.NewGuid()), new(Guid.NewGuid()), 2023, _address, _datePeriod, _currency, _taxRate);
+            var template = Invoice.Create(new(Guid.NewGuid()), new(Guid.NewGuid()), 2023, _address, _datePeriod, _currency, _taxRate, _paymentCondition);
             template.AddItem(new(Guid.NewGuid()), "Detail1", new(2, Unit.Item), 99.50m, null);
             template.AddItem(new(Guid.NewGuid()), "Detail2", new(8, Unit.Hour), 120m, null);
             template.AddItem(new(Guid.NewGuid()), "Detail3", new(2, Unit.Hour), 120m, null);
@@ -64,7 +66,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void AddItem_ShouldAddItemToInvoice()
         {
             // Arrange
-            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate, _paymentCondition);
             var itemId = new InvoiceItemId(Guid.NewGuid());
             var details = "Item Details";
             var quantity = new Quantity(1, Unit.Item);
@@ -83,26 +85,28 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void Update_ShouldUpdateInvoice()
         {
             // Arrange
-            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate, _paymentCondition);
             var newDatePeriod = DatePeriod.Create(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2));
             var newTax = new TaxRate("New", 1, "New tax");
             var newInvoiceDate = DateOnly.FromDateTime(DateTime.Now);
+            var newPaymentCondition = PaymentCondition.Template30DaysNet14Days2PercentDiscount;
 
             // Act
-            var result = testee.Update(newDatePeriod, newTax, newInvoiceDate);
+            var result = testee.Update(newDatePeriod, newTax, newInvoiceDate, newPaymentCondition);
 
             // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(newDatePeriod, testee.PerformancePeriod);
             Assert.AreEqual(newTax, testee.TaxRate);
             Assert.AreEqual(newInvoiceDate, testee.InvoiceDate);
+            Assert.AreEqual(newPaymentCondition, testee.PaymentCondition);
         }
 
         [TestMethod]
         public void Release_ShouldReleaseInvoice()
         {
             // Arrange
-            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate, _paymentCondition);
             var number = InvoiceNumber.CreateFirst(2023);
             var releasedAt = DateTime.Now;
             testee.AddItem(new(Guid.NewGuid()), "Details", new(1, Unit.Item), 1);
@@ -121,7 +125,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void WithdrawRelease_ShouldWithdrawRelease()
         {
             // Arrange
-            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate, _paymentCondition);
             var number = InvoiceNumber.CreateFirst(2023);
             testee.AddItem(new(Guid.NewGuid()), "Details", new(1, Unit.Item), 1);
             testee.Release(number, DateTime.Now);
@@ -138,7 +142,7 @@ namespace LIT.Smabu.DomainTests.InvoiceAggregate
         public void Delete_Invoice_Succeeds()
         {
             // Arrange
-            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate);
+            var testee = Invoice.Create(_invoiceId, _customerId, 2023, _address, _datePeriod, _currency, _taxRate, _paymentCondition);
 
             // Act
             var result = testee.Delete();

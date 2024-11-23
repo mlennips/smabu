@@ -6,6 +6,7 @@ using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.Domain.PaymentAggregate;
 using LIT.Smabu.Domain.Specifications;
 using LIT.Smabu.Core;
+using System.Globalization;
 
 namespace LIT.Smabu.Domain.Services
 {
@@ -61,7 +62,8 @@ namespace LIT.Smabu.Domain.Services
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>, IHasBusinessNumber<TBusinessNumber>
             where TBusinessNumber : BusinessNumber
         {
-            TAggregate? last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate, TBusinessNumber>(year))).SingleOrDefault();
+            TAggregate? last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate,
+                TBusinessNumber>(year))).SingleOrDefault();
             TBusinessNumber? lastNumber = last?.Number;
             return lastNumber;
         }
