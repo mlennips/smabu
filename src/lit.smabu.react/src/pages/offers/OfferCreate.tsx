@@ -12,6 +12,7 @@ import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const defaultCurrency: Currency = {
+    value: 'EUR',
     isoCode: 'EUR',
     name: 'Euro',
     sign: '€'

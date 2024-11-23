@@ -25,4 +25,16 @@ export interface FinancialCategory {
      * @memberof FinancialCategory
      */
     value?: string | null;
+
+    /**
+     * @type {string}
+     * @memberof FinancialCategory
+     */
+    shortName?: string | null;
+
+    /**
+     * @type {string}
+     * @memberof FinancialCategory
+     */
+    name?: string | null;
 }

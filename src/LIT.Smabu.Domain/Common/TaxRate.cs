@@ -1,6 +1,8 @@
-﻿namespace LIT.Smabu.Domain.Common
+﻿using LIT.Smabu.Core;
+
+namespace LIT.Smabu.Domain.Common
 {
-    public record TaxRate
+    public record TaxRate : IValueObject
     {
         public string Name { get; init; }
         public decimal Rate { get; init; }

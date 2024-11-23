@@ -52,7 +52,7 @@ export const PaymentConditionSelectField: React.FC<TypedSelectFieldProps> = ({ n
             required={required} onChange={onChange}
             disabled={disabled}
             onGetLabel={(item) => item.name}
-            onGetValue={(item) => item.name}
+            onGetValue={(item) => item.value}
             slotProps={slotProps} />;
     } else if (loading) {
         return <TextField label={label} name={name} value={"..."} disabled={true} />
@@ -82,7 +82,7 @@ export const PaymentMethodSelectField: React.FC<TypedSelectFieldProps> = ({ name
         return <SelectField items={units} label={label} name={name} value={value}
             required={required} onChange={onChange}
             disabled={disabled}
-            onGetLabel={(item) => item.value}
+            onGetLabel={(item) => item.name}
             onGetValue={(item) => item.value}
             slotProps={slotProps} />;
     } else if (loading) {
@@ -143,7 +143,7 @@ export const FinancialCategorySelectField: React.FC<FinancialCategorySelectField
         return <SelectField items={units} label={label} name={name} value={value}
             required={required} onChange={onChange}
             disabled={disabled}
-            onGetLabel={(item) => item.value}
+            onGetLabel={(item) => item.name}
             onGetValue={(item) => item.value}
             slotProps={slotProps}
         />;
@@ -153,7 +153,6 @@ export const FinancialCategorySelectField: React.FC<FinancialCategorySelectField
         return <TextField label={label} name={name} value={error} disabled={true} color='error' />
     }
 }
-
 
 const SelectField: React.FC<SelectFieldProps<any>> = ({ items, label, name, value, required, onChange, onGetLabel, onGetValue, slotProps, disabled }) => {
     const onPrepareChange = (e: any) => {

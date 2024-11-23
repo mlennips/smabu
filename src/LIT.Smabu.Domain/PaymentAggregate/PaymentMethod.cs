@@ -8,16 +8,26 @@ using System.Threading.Tasks;
 
 namespace LIT.Smabu.Domain.PaymentAggregate
 {
-    public record PaymentMethod : SimpleValueObject<string>
+    public record PaymentMethod : EnumValueObject
     {
         private static readonly List<string> _values =
         [
             "Unknown",
-            "Bank Transfer",
-            "Direct Debit",
-            "Credit Card",
+            "BankTransfer",
+            "DirectDebit",
+            "CreditCard",
             "Cash"
         ];
+
+        public override string Name => Value switch
+        {
+            "Unknown" => "Unbekannt",
+            "BankTransfer" => "Überweisung",
+            "DirectDebit" => "Lastschrift",
+            "CreditCard" => "Kreditkarte",
+            "Cash" => "Bar",
+            _ => "?"
+        };
 
         public PaymentMethod(string value) : base(value)
         {
@@ -29,9 +39,9 @@ namespace LIT.Smabu.Domain.PaymentAggregate
 
         public static PaymentMethod Default => BankTransfer;
         public static PaymentMethod Unknown => new("Unknown");
-        public static PaymentMethod BankTransfer => new("Bank Transfer");
-        public static PaymentMethod DirectDebit => new("Direct Debit");
-        public static PaymentMethod CreditCard => new("Credit Card");
+        public static PaymentMethod BankTransfer => new("BankTransfer");
+        public static PaymentMethod DirectDebit => new("DirectDebit");
+        public static PaymentMethod CreditCard => new("CreditCard");
         public static PaymentMethod Cash => new("Cash");
 
         public static PaymentMethod[] GetAll()

@@ -25,4 +25,16 @@ export interface PaymentMethod {
      * @memberof PaymentMethod
      */
     value?: string | null;
+
+    /**
+     * @type {string}
+     * @memberof PaymentMethod
+     */
+    shortName?: string | null;
+
+    /**
+     * @type {string}
+     * @memberof PaymentMethod
+     */
+    name?: string | null;
 }

@@ -6,11 +6,11 @@ const axiosConfig = axios.create({
     maxBodyLength: Infinity,
 });
 
-axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('authIdToken')}`;
+axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authIdToken')}`;
 
 axiosConfig.interceptors.request.use(
     config => {
-        const idToken = sessionStorage.getItem('authIdToken');
+        const idToken = localStorage.getItem('authIdToken');
         config.headers.Authorization = `Bearer ${idToken}`;
         return config;
     },

@@ -38,12 +38,6 @@ export interface AnnualFinancialStatementDTO {
     fiscalYear?: number;
 
     /**
-     * @type {string}
-     * @memberof AnnualFinancialStatementDTO
-     */
-    displayName?: string;
-
-    /**
      * @type {DatePeriod}
      * @memberof AnnualFinancialStatementDTO
      */
@@ -90,4 +84,10 @@ export interface AnnualFinancialStatementDTO {
      * @memberof AnnualFinancialStatementDTO
      */
     netIncome?: number;
+
+    /**
+     * @type {string}
+     * @memberof AnnualFinancialStatementDTO
+     */
+    displayName?: string | null;
 }
