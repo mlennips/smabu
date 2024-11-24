@@ -1,6 +1,7 @@
 ﻿using LIT.Smabu.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using static LIT.Smabu.Infrastructure.Messaging.InformativeNotification;
 
 namespace LIT.Smabu.Infrastructure.Messaging
 {
@@ -20,6 +21,21 @@ namespace LIT.Smabu.Infrastructure.Messaging
                 }
                 _logger.LogInformation("Handled events for aggregate {type}/{id}", typeof(TAggregate).Name, aggregate.Id);
             }
+        }
+
+        async Task IDomainEventDispatcher.PublishInformativeCreatedNotificationAsync<TAggregate>(TAggregate aggregate)
+        {
+            await _sender.Send(new AggregateCreatedEvent(aggregate));
+        }
+
+        async Task IDomainEventDispatcher.PublishInformativeUpdatedNotificationEventAsync<TAggregate>(TAggregate aggregate)
+        {
+            await _sender.Send(new AggregateUpdatedEvent(aggregate));
+        }
+
+        async Task IDomainEventDispatcher.PublishInformativeDeletedNotificationAsync<TAggregate>(TAggregate aggregate)
+        {
+            await _sender.Send(new AggregateDeletedEvent(aggregate));
         }
     }
 }

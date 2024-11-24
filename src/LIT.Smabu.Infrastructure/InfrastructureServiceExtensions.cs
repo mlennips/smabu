@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LIT.Smabu.UseCases;
 
 namespace LIT.Smabu.Infrastructure
 {
@@ -52,17 +53,14 @@ namespace LIT.Smabu.Infrastructure
 
         private static void RegisterMediatR(IServiceCollection services)
         {
-            var mediatrOpenTypes = new[]
-{
-              typeof(IRequestHandler<,>),
-              typeof(ICommandHandler<,>),
-              typeof(IQueryHandler<,>),
-              typeof(INotificationHandler<>),
-            };
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(x => x.ManifestModule.Name?.StartsWith("LIT.Smabu") ?? false).ToArray();
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
+            services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssemblies(assemblies);
+                cfg.RegisterGenericHandlers = true;
+                cfg.AutoRegisterRequestProcessors = true;
+            });
         }
 
     }

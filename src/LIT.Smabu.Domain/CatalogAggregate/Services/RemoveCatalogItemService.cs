@@ -3,6 +3,7 @@ using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.Domain.OfferAggregate;
 using LIT.Smabu.Core;
+using System.Reflection.Metadata.Ecma335;
 
 namespace LIT.Smabu.Domain.CatalogAggregate.Services
 {
