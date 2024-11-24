@@ -8,8 +8,8 @@ namespace LIT.Smabu.UseCases.Customers
 {
     public record CustomerDTO : IDTO
     {
-        public string DisplayName => $"{Number.DisplayName}/{CorporateDesign.ShortName}";
         public CustomerId Id { get; set; }
+        public string DisplayName { get; set; }
         public CustomerNumber Number { get; set; }
         public string Name { get; set; }
         public string IndustryBranch { get; set; }
@@ -21,12 +21,13 @@ namespace LIT.Smabu.UseCases.Customers
         public PaymentMethod PreferredPaymentMethod { get; }
         public PaymentCondition PaymentCondition { get; }
 
-        public CustomerDTO(CustomerId id, CustomerNumber number, string name, string industryBranch,
+        public CustomerDTO(CustomerId id, CustomerNumber number, string displayName, string name, string industryBranch,
             Currency currency, AddressDTO mainAddress, CommunicationDTO communication, CorporateDesign corporateDesign,
             string vatId, PaymentMethod preferredPaymentMethod, PaymentCondition paymentCondition)
         {
             Id = id;
             Number = number;
+            DisplayName = displayName;
             Name = name;
             IndustryBranch = industryBranch;
             Currency = currency;
@@ -40,7 +41,7 @@ namespace LIT.Smabu.UseCases.Customers
 
         public static CustomerDTO Create(Customer customer)
         {
-            return new CustomerDTO(customer.Id, customer.Number, customer.Name, customer.IndustryBranch, customer.Currency,
+            return new CustomerDTO(customer.Id, customer.Number, customer.DisplayName, customer.Name, customer.IndustryBranch, customer.Currency,
                 AddressDTO.Create(customer.MainAddress), CommunicationDTO.Create(customer.Communication), customer.CorporateDesign,
                 customer.VatId, customer.PreferredPaymentMethod, customer.PaymentCondition);
         }

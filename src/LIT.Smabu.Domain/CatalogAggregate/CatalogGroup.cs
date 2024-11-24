@@ -9,6 +9,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         private readonly List<CatalogItem> _items = items;
 
         public override CatalogGroupId Id { get; } = id;
+        public override string DisplayName => Name;
         public CatalogId CatalogId { get; } = catalogId;
         public string Name { get; private set; } = name;
         public string Description { get; private set; } = description;

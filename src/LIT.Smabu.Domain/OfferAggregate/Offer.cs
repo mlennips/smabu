@@ -2,6 +2,7 @@
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;
+using System.Xml.Linq;
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {
@@ -10,6 +11,7 @@ namespace LIT.Smabu.Domain.OfferAggregate
         : AggregateRoot<OfferId>, IHasBusinessNumber<OfferNumber>
     {
         public override OfferId Id { get; } = id;
+        public override string DisplayName => Number.DisplayName;
         public CustomerId CustomerId { get; } = customerId;
         public OfferNumber Number { get; } = number;
         public Address CustomerAddress { get; private set; } = customerAddress;

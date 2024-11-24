@@ -8,6 +8,7 @@ namespace LIT.Smabu.Domain.PaymentAggregate
     public class Payment : AggregateRoot<PaymentId>, IHasBusinessNumber<PaymentNumber>
     {
         public override PaymentId Id { get; }
+        public override string DisplayName => $"{Number.DisplayName} {Payer} {Payee}".Trim();
         public PaymentNumber Number { get; }
         public PaymentDirection Direction { get; }
         public string Details { get; private set; }

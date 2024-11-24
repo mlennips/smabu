@@ -8,6 +8,7 @@ namespace LIT.Smabu.Domain.OrderAggregate
         : AggregateRoot<OrderId>, IHasBusinessNumber<OrderNumber>
     {
         public override OrderId Id { get; } = id;
+        public override string DisplayName => $"{Number.DisplayName} {Name}";
         public OrderNumber Number { get; private set; } = number;
         public CustomerId CustomerId { get; } = customerId;
         public string Name { get; private set; } = name;

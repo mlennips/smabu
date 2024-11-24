@@ -1,12 +1,15 @@
 ﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
+using System.Globalization;
+using System.Xml.Linq;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
     public class InvoiceItem : Entity<InvoiceItemId>
     {
         public override InvoiceItemId Id { get; }
+        public override string DisplayName => Position.ToString("00", CultureInfo.InvariantCulture);
         public InvoiceId InvoiceId { get; }
         public int Position { get; private set; }
         public string Details { get; private set; }

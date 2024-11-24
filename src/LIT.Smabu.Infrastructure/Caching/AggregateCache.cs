@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LIT.Smabu.Infrastructure.Caching
 {
-    public class AggregateCache : IAggregateCache,
+    public class AggregateCache(IAggregateStore store) : IAggregateCache,
             IRequestHandler<InformativeNotification.AggregateCreatedEvent>,
             IRequestHandler<InformativeNotification.AggregateUpdatedEvent>,
             IRequestHandler<InformativeNotification.AggregateDeletedEvent>

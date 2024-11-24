@@ -1,7 +1,9 @@
-﻿namespace LIT.Smabu.UseCases.Base
+﻿using LIT.Smabu.Domain.Base;
+
+namespace LIT.Smabu.UseCases.Base
 {
-    public interface IDTO
+    public interface IDTO : IHasDisplayName
     {
-        string DisplayName { get; }
+
     }
 }

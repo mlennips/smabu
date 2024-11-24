@@ -58,8 +58,6 @@ namespace LIT.Smabu.Infrastructure
 
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssemblies(assemblies);
-                cfg.RegisterGenericHandlers = true;
-                cfg.AutoRegisterRequestProcessors = true;
             });
         }
 

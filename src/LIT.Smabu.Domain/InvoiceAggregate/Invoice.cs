@@ -4,12 +4,14 @@ using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.InvoiceAggregate.Events;
 using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.PaymentAggregate;
+using System.Xml.Linq;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {
     public class Invoice : AggregateRoot<InvoiceId>, IHasBusinessNumber<InvoiceNumber>
     {
         public override InvoiceId Id { get; }
+        public override string DisplayName => Number.DisplayName;
         public CustomerId CustomerId { get; }
         public int FiscalYear { get; }
         public InvoiceNumber Number { get; private set; }
