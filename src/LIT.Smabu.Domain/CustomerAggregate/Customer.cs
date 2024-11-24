@@ -10,6 +10,7 @@ namespace LIT.Smabu.Domain.CustomerAggregate
             : AggregateRoot<CustomerId>, IHasBusinessNumber<CustomerNumber>
     {
         public override CustomerId Id { get; } = id;
+        public override string DisplayName => $"{Number.DisplayName} {CorporateDesign.ShortName}";
         public CustomerNumber Number { get; private set; } = number;
         public string Name { get; private set; } = name;
         public string IndustryBranch { get; private set; } = industryBranch;

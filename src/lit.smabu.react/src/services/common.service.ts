@@ -45,20 +45,20 @@ export const getFinancialCategories = async (type: 'incomes' | 'expenditures'): 
 
 const getEnumValues = async (): Promise<EnumsResponse> => {
     const key = 'data_enums';
-    let data = getDataFromLocalStorage<EnumsResponse>(key);
+    let data = getDataFromSessionStorage<EnumsResponse>(key);
     if (!data) {
         const response = await axiosConfig.get<EnumsResponse>(`common/enums`);
         data = response?.data;
-        setDataToLocalStorage(key, data);
+        setDataToSessionStorage(key, data);
     }
     return data;
 };
 
-const getDataFromLocalStorage = <T>(key: string): T | null => {
-    const data = localStorage.getItem(key);
+const getDataFromSessionStorage = <T>(key: string): T | null => {
+    const data = sessionStorage.getItem(key);
     return data ? JSON.parse(data) : null;
 };
 
-const setDataToLocalStorage = <T>(key: string, data: T): void => {
-    localStorage.setItem(key, JSON.stringify(data));
+const setDataToSessionStorage = <T>(key: string, data: T): void => {
+    sessionStorage.setItem(key, JSON.stringify(data));
 };

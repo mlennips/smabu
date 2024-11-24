@@ -1,7 +1,6 @@
 ﻿using LIT.Smabu.Infrastructure.Exceptions;
 using LIT.Smabu.Infrastructure.Messaging;
 using LIT.Smabu.Core;
-using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Configuration;
@@ -11,8 +10,8 @@ using System.Net;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class CosmosAggregateStore(ICurrentUser currentUser, IConfiguration config, 
-        ILogger<CosmosAggregateStore> logger, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
+    public class CosmosAggregateStore(ICurrentUser currentUser, IConfiguration config,
+            ILogger<CosmosAggregateStore> logger, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
     {
         private const string AggregatesContainerId = "Aggregates";
         private static Container? container;
@@ -28,12 +27,10 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var container = await GetAggregatesContainerAsync();
             var cosmosEntity = CreateCosmosEntity(aggregate);
             var response = await container.CreateItemAsync(cosmosEntity, new PartitionKey(cosmosEntity.PartitionKey));
-            if (response.StatusCode != HttpStatusCode.Created)
-            {
-                logger.LogError("Creation of aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
-                throw new SmabuException($"Creation of aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
-            }
-            logger.LogInformation("Created aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+            ValidateResponse(response.StatusCode, HttpStatusCode.Created, "Creation", aggregate);
+            logger.LogDebug("Created aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+
+            await domainEventDispatcher.PublishInformativeCreatedNotificationAsync(aggregate);
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
@@ -44,12 +41,10 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var container = await GetAggregatesContainerAsync();
             var cosmosEntity = CreateCosmosEntity(aggregate);
             var response = await container.ReplaceItemAsync(cosmosEntity, cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                logger.LogError("Updating aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
-                throw new SmabuException($"Updating aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
-            }
-            logger.LogInformation("Updated aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+            ValidateResponse(response.StatusCode, HttpStatusCode.OK, "Updating", aggregate);
+            logger.LogDebug("Updated aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+
+            await domainEventDispatcher.PublishInformativeUpdatedNotificationEventAsync(aggregate);
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
@@ -59,12 +54,10 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var container = await GetAggregatesContainerAsync();
             var cosmosEntity = CreateCosmosEntity(aggregate);
             var response = await container.DeleteItemAsync<TAggregate>(cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
-            if (response.StatusCode != HttpStatusCode.NoContent)
-            {
-                logger.LogError("Deleting aggregate {type}/{id} failed: {code}", typeof(TAggregate).Name, aggregate.Id, response.StatusCode);
-                throw new SmabuException($"Deleting aggregate '{aggregate.Id}' failed with code: {response.StatusCode}");
-            }
-            logger.LogInformation("Deleted aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+            ValidateResponse(response.StatusCode, HttpStatusCode.NoContent, "Deleting", aggregate);
+            logger.LogDebug("Deleted aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
+
+            await domainEventDispatcher.PublishInformativeDeletedNotificationAsync(aggregate);
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
@@ -73,72 +66,33 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             var container = await GetAggregatesContainerAsync();
             var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{GetPartitionKey<TAggregate>()}'";
-            QueryDefinition queryDefinition = new(sqlQueryText);
-            var queryResultSetIterator = container.GetItemQueryIterator<CosmosEntity<TAggregate>>(queryDefinition);
-
-            List<TAggregate> result = [];
-            while (queryResultSetIterator.HasMoreResults)
-            {
-                var currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                foreach (var item in currentResultSet)
-                {
-                    result.Add(item.Body);
-                }
-            }
-            logger.LogInformation("Get all aggregates of type {type}: {count} items", typeof(TAggregate).Name, result.Count);
-            return [.. result];
+            var result = await ExecuteQueryAsync<TAggregate>(container, sqlQueryText);
+            logger.LogDebug("Get all aggregates of type {type}: {count} items", typeof(TAggregate).Name, result.Length);
+            return result;
         }
 
         public async Task<TAggregate> GetByAsync<TAggregate>(IEntityId<TAggregate> id)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var container = await GetAggregatesContainerAsync();
-            var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{GetPartitionKey<TAggregate>()}' AND c.id = '{id.Value}'";
-
-            QueryDefinition queryDefinition = new(sqlQueryText);
-            var queryResultSetIterator = container.GetItemQueryIterator<CosmosEntity<TAggregate>>(queryDefinition);
-
-            List<TAggregate> result = [];
-
-            while (queryResultSetIterator.HasMoreResults)
-            {
-                var currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                foreach (var item in currentResultSet)
-                {
-                    result.Add(item.Body);
-                }
-            }
-            logger.LogInformation("Get aggregate {type}/{id}", typeof(TAggregate).Name, id);
-            return result[0];
+            var sqlQueryText = $"SELECT TOP 1 * FROM c WHERE c.partitionKey = '{GetPartitionKey<TAggregate>()}' AND c.id = '{id.Value}'";
+            var result = await ExecuteQueryAsync<TAggregate>(container, sqlQueryText);
+            logger.LogDebug("Get aggregate {type}/{id}", typeof(TAggregate).Name, id);
+            return result != null ? result.Single() : throw new AggregateNotFoundException(id);
         }
 
         public async Task<TAggregate[]> GetByAsync<TAggregate>(IEnumerable<IEntityId<TAggregate>> ids)
              where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            List<TAggregate> result = [];
-            if (ids.Any())
-            {
-                var container = await GetAggregatesContainerAsync();
-                var formattedIds = ids.Distinct().Select(x => $"\"{x}\"").ToList();
-                var sqlQueryText = $"SELECT * FROM c"
-                    + $" WHERE c.partitionKey = '{GetPartitionKey<TAggregate>()}' AND c.id IN ({string.Join(',', formattedIds)})";
+            if (!ids.Any()) return [];
 
-                QueryDefinition queryDefinition = new(sqlQueryText);
-                var queryResultSetIterator = container.GetItemQueryIterator<CosmosEntity<TAggregate>>(queryDefinition);
-
-
-                while (queryResultSetIterator.HasMoreResults)
-                {
-                    var currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                    foreach (var item in currentResultSet)
-                    {
-                        result.Add(item.Body);
-                    }
-                }
-            }
-            logger.LogInformation("Get aggregates of type {type} by ids. Found {found}/{requested}", 
-                typeof(TAggregate).Name, result.Count, ids.Distinct().Count());
-            return [.. result];
+            var container = await GetAggregatesContainerAsync();
+            var formattedIds = ids.Distinct().Select(x => $"\"{x.Value}\"").ToList();
+            var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{GetPartitionKey<TAggregate>()}' AND c.id IN ({string.Join(',', formattedIds)})";
+            var result = await ExecuteQueryAsync<TAggregate>(container, sqlQueryText);
+            logger.LogDebug("Get aggregates of type {type} by ids. Found {found}/{requested}",
+                typeof(TAggregate).Name, result.Length, ids.Distinct().Count());
+            return result;
         }
 
         public async Task<int> CountAsync<TAggregate>()
@@ -149,7 +103,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 .Where(x => x.PartitionKey == GetPartitionKey<TAggregate>())
                 .Select(x => x.Body).CountAsync();
 
-            logger.LogInformation("Count aggregate {type}", typeof(TAggregate).Name);
+            logger.LogDebug("Count aggregate {type}", typeof(TAggregate).Name);
             return result;
         }
 
@@ -158,19 +112,12 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             var container = await GetAggregatesContainerAsync();
             var partitionKey = GetPartitionKey<TAggregate>();
-            IQueryable<CosmosEntity<TAggregate>> queryable = container.GetItemLinqQueryable<CosmosEntity<TAggregate>>();
-            queryable = queryable.Where(x => x.PartitionKey == partitionKey);
+            IQueryable<CosmosEntity<TAggregate>> queryable = container.GetItemLinqQueryable<CosmosEntity<TAggregate>>()
+                .Where(x => x.PartitionKey == partitionKey);
             var specificQueryable = Specifications.SpecificationEvaluator.GetQuery(queryable.Select(x => x.Body), specification);
-            using var setIterator = specificQueryable.ToFeedIterator();
-            
-            List<TAggregate> result = [];
-            while (setIterator.HasMoreResults)
-            {
-                result.AddRange(await setIterator.ReadNextAsync());
-            }
-
-            logger.LogInformation("Get aggregates of type {type} by specification '{specification}': {items} items", typeof(TAggregate).Name, specification.GetType().Name, result.Count);
-            return [.. result];
+            var result = await ExecuteQueryAsync(specificQueryable);
+            logger.LogDebug("Get aggregates of type {type} by specification '{specification}': {items} items", typeof(TAggregate).Name, specification.GetType().Name, result.Length);
+            return result;
         }
 
         private async Task<Container> GetAggregatesContainerAsync()
@@ -197,6 +144,44 @@ namespace LIT.Smabu.Infrastructure.Persistence
         private static CosmosEntity<T> CreateCosmosEntity<T>(T aggregate) where T : class, IAggregateRoot<IEntityId<T>>
         {
             return new CosmosEntity<T>(aggregate.Id.Value.ToString(), aggregate, GetPartitionKey<T>());
+        }
+
+        private static async Task<TAggregate[]> ExecuteQueryAsync<TAggregate>(Container container, string sqlQueryText)
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
+        {
+            QueryDefinition queryDefinition = new(sqlQueryText);
+            var queryResultSetIterator = container.GetItemQueryIterator<CosmosEntity<TAggregate>>(queryDefinition);
+
+            List<TAggregate> result = [];
+            while (queryResultSetIterator.HasMoreResults)
+            {
+                var currentResultSet = await queryResultSetIterator.ReadNextAsync();
+                result.AddRange(currentResultSet.Select(item => item.Body));
+            }
+            return [.. result];
+        }
+
+        private static async Task<TAggregate[]> ExecuteQueryAsync<TAggregate>(IQueryable<TAggregate> queryable)
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
+        {
+            var setIterator = queryable.ToFeedIterator();
+            List<TAggregate> result = [];
+            while (setIterator.HasMoreResults)
+            {
+                result.AddRange(await setIterator.ReadNextAsync());
+            }
+            return [.. result];
+        }
+
+        private void ValidateResponse<TAggregate>(HttpStatusCode responseStatusCode, HttpStatusCode expectedStatusCode, string process, TAggregate aggregate)
+            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
+        {
+            if (responseStatusCode != expectedStatusCode)
+            {
+                logger.LogError("Operation {process} on aggregate {AggregateType}/{AggregateId} failed with code: {StatusCode}", 
+                    process, typeof(TAggregate).Name, aggregate.Id, responseStatusCode);
+                throw new SmabuException($"Operation on aggregate '{aggregate.Id}' failed with code: {responseStatusCode}");
+            }
         }
 
         public record CosmosEntity<T>

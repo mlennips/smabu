@@ -15,7 +15,10 @@ namespace LIT.Smabu.UseCases.Financial
             public async Task<Result<AnnualFinancialStatementDTO[]>> Handle(ListAnnualFinancialStatementsQuery request, CancellationToken cancellationToken)
             {
                 AnnualFinancialStatement[] annualFinancialStatements = await store.GetAllAsync<AnnualFinancialStatement>();
-                return Result.Success(annualFinancialStatements.Select(AnnualFinancialStatementDTO.Create).ToArray());
+                return Result.Success(annualFinancialStatements
+                    .Select(AnnualFinancialStatementDTO.Create)
+                    .OrderByDescending(x => x.FiscalYear)
+                    .ToArray());
             }
         }
     }

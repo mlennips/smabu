@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Domain.Base
 {
-    public abstract record BusinessNumber : SimpleValueObject<long>
+    public abstract record BusinessNumber : SimpleValueObject<long>, IHasDisplayName
     {
         private const string TempText = "TEMP";
 

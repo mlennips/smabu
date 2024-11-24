@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Caching\**" />
     <Compile Remove="Migrations\**" />
-    <EmbeddedResource Remove="Caching\**" />
     <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Caching\**" />
     <None Remove="Migrations\**" />
   </ItemGroup>
 

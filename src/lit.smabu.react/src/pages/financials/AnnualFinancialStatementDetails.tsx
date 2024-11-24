@@ -95,14 +95,15 @@ const AnnualFinancialStatementDetails: React.FC = () => {
     return (
         <form id="form" onSubmit={handleSubmit} >
             <Stack spacing={2}>
+                {renderHeaderBlock(data, loading, error, toolbarItems)}
+
                 {data?.status?.value === 'Completed' && <SnackbarContent
                     sx={{ backgroundColor: 'warning.main' }}
                     message="Jahresabschluss abgeschlossen"
                     action={[]}
                 >
                 </SnackbarContent>}
-                {renderHeaderBlock(data, loading, error, toolbarItems)}
-
+                
                 <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItemsIncome} error={error} >
                     {data && renderTransactionsBlock(data.incomes!, handleChange, 'incomes', data.totalIncome!, data.currency!, data.period!)}
                 </DefaultContentContainer>

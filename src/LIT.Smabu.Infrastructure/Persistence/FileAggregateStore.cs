@@ -18,6 +18,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             await SaveToFileAsync(aggregate);
+
+            await domainEventDispatcher.PublishInformativeCreatedNotificationAsync(aggregate);
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
@@ -43,6 +45,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             }
             await SaveToFileAsync(aggregate);
+
+            await domainEventDispatcher.PublishInformativeUpdatedNotificationEventAsync(aggregate);
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
@@ -71,6 +75,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             var file = GetFilePath(aggregate);
             File.Delete(file);
+
+            await domainEventDispatcher.PublishInformativeDeletedNotificationAsync(aggregate);
             await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 

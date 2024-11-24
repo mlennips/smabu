@@ -28,7 +28,7 @@ export const getInvoiceReport = async (invoiceId: string) => {
         },
         responseType: 'blob',
       });
-    return response.data;
+    return response;
 };
 
 export const updateInvoice = async (invoiceId: string, payload: UpdateInvoiceCommand) => {

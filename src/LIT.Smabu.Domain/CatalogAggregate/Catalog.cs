@@ -8,6 +8,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         private readonly List<CatalogGroup> _groups = groups;
 
         public override CatalogId Id { get; } = id;
+        public override string DisplayName => Name;
         public string Name { get; private set; } = name;
         public IReadOnlyList<CatalogGroup> Groups => _groups;
 

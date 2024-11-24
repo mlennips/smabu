@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
 using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.PaymentAggregate;
@@ -16,6 +17,7 @@ namespace LIT.Smabu.Domain.FinancialAggregate
         private readonly List<FinancialTransaction> _expenditures = expenditures;
 
         public override AnnualFinancialStatementId Id { get; } = id;
+        public override string DisplayName => $"{FiscalYear} ({Status.Value})";
         public int FiscalYear { get; private set; } = fiscalYear;
         public DatePeriod Period { get; } = period;
         public Currency Currency { get; private set; } = Currency.EUR;

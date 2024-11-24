@@ -23,7 +23,7 @@ export const getOfferReport = async (offerId: string) => {
         },
         responseType: 'blob',
       });
-    return response.data;
+    return response;
 };
 
 export const updateOffer = async (offerId: string, payload: UpdateOfferCommand) => {

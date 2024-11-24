@@ -1,6 +1,7 @@
 ﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
+using System.Xml.Linq;
 
 namespace LIT.Smabu.Domain.OfferAggregate
 {
@@ -8,6 +9,7 @@ namespace LIT.Smabu.Domain.OfferAggregate
     {
         public override OfferItemId Id { get; }
         public OfferId OfferId { get; }
+        public override string DisplayName => $"#{Position}";
         public int Position { get; private set; }
         public string Details { get; private set; }
         public Quantity Quantity { get; private set; }

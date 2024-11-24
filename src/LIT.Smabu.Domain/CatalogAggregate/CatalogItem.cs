@@ -13,6 +13,7 @@ namespace LIT.Smabu.Domain.CatalogAggregate
         private readonly List<CustomerCatalogItemPrice> _customerPrices = customerPrices ?? [];
 
         public override CatalogItemId Id { get; } = id;
+        public override string DisplayName => $"{Number.DisplayName} {Name}";
         public CatalogItemNumber Number { get; private set; } = number;
         public CatalogId CatalogId { get; } = catalogId;
         public CatalogGroupId CatalogGroupId { get; private set; } = catalogGroupId;
