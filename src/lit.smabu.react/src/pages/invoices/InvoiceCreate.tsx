@@ -14,6 +14,7 @@ import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import SelectField from '../../components/controls/SelectField';
 
 const defaultCurrency: Currency = {
+    value: 'EUR',
     isoCode: 'EUR',
     name: 'Euro',
     sign: '€'
