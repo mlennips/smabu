@@ -20,7 +20,7 @@ namespace LIT.Smabu.Domain.Common
 
         public override string ToString()
         {
-            return $"{Value} {Unit.Value}";
+            return $"{Value} {Unit.Name}";
         }
     }
 }
