@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { InvoiceDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { CancelScheduleSend, ContentCopy, Print, Send } from '@mui/icons-material';

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CreatePaymentCommand, CustomerDTO, InvoiceDTO } from '../../types/domain';
-import { Box, Grid2 as Grid, Paper, Stack, Tab, TextField } from '@mui/material';
+import { Box, Grid, Paper, Stack, Tab, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';

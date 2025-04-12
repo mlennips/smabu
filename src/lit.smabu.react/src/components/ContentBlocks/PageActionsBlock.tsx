@@ -1,5 +1,5 @@
 import { ArrowBack, ArrowForward as ArrowForwardIcon, Cancel as CancelIcon, Delete as DeleteIcon, Refresh as RefreshIcon, Save as SaveIcon } from '@mui/icons-material';
-import { Button, ButtonGroup, Divider, Grid2 as Grid, IconButton } from '@mui/material';
+import { Button, ButtonGroup, Divider, Grid, IconButton } from '@mui/material';
 import React from 'react';
 
 interface DetailsActionsProps {

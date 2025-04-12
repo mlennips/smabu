@@ -1,5 +1,5 @@
 import {
-  Avatar, Box, Card, CardHeader, Container, Grid2 as Grid, Paper,
+  Avatar, Box, Card, CardHeader, Container, Grid, Paper,
   Stack,
   Typography,
 } from "@mui/material";

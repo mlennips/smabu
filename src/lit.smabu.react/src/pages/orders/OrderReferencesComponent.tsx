@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { GetOrderReferencesResponse, InvoiceId, InvoiceIdOrderReferenceDTO, OfferId, OfferIdOrderReferenceDTO } from '../../types/domain';
-import { Chip, Grid2 as Grid, Stack } from '@mui/material';
+import { Chip, Grid, Stack } from '@mui/material';
 import { Cancel, Edit, Save } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { OrderDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
@@ -86,7 +86,7 @@ function renderReferences(orderId: string) {
 
     return <Grid size={{ xs: 12 }}>
         <DefaultContentContainer title='Verknüpfungen' toolbarItems={toolbar} loading={loading} error={error}>
-            {OrderReferencesComponent({ orderId: orderId, setError: setError, setToolbar: setToolbar, setLoading: setLoading })}
+            <OrderReferencesComponent orderId={orderId} setError={setError} setToolbar={setToolbar} setLoading={setLoading} />
         </DefaultContentContainer>
     </Grid>
 }

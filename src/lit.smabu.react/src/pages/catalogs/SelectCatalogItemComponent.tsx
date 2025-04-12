@@ -1,5 +1,5 @@
 import { ContentPasteGo } from '@mui/icons-material';
-import { Grid2 as Grid, Autocomplete, TextField, ButtonGroup, Button } from '@mui/material';
+import { Grid, Autocomplete, TextField, ButtonGroup, Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getCatalogItems } from '../../services/catalogs.service';
 import { CatalogItemDTO, CatalogItemId, CustomerId, Unit } from '../../types/domain';

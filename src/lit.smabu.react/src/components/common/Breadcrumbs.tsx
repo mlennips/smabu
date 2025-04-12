@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
-import { Box, Button, Divider, Grid2 as Grid, SvgIcon } from '@mui/material';
+import { Box, Button, Divider, Grid, SvgIcon } from '@mui/material';
 import { ArrowBack, Home as HomeIcon, Refresh } from '@mui/icons-material';
 import { getItemByRoute } from '../../configs/navConfig';
 

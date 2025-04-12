@@ -13,7 +13,7 @@ import { CallMsGraph } from "../../utils/msGraphApiCall.ts";
 
 // Material-ui imports
 import Paper from "@mui/material/Paper";
-import { Grid2 as Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import DefaultContentContainer from "../../components/contentBlocks/DefaultContentBlock.tsx";
 
 const ProfileContent = () => {

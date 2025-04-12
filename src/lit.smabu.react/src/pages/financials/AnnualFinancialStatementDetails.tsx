@@ -7,7 +7,7 @@ import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { useNotification } from '../../contexts/notificationContext';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { Grid2 as Grid, IconButton, InputAdornment, Paper, SnackbarContent, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Grid, IconButton, InputAdornment, Paper, SnackbarContent, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
 import { AppError } from '../../utils/errorConverter';
 import { AddCircle, ImportExport, Lock, LockOpen, Remove } from '@mui/icons-material';
