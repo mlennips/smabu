@@ -22,6 +22,25 @@ namespace LIT.Smabu.Domain.FinancialAggregate
             _ => "???"
         };
 
+        public override string ShortName => Value switch
+        {
+            "Revenue" => "Umsatz",
+            "OtherIncome" => "Sonst. Einnahmen",
+            "AssetSaleIncome" => "Verkauf Anlageverm.",
+            "GoodsPurchase" => "Wareneinkauf",
+            "OperatingCosts" => "Betriebskosten",
+            "PersonnelExpenses" => "Personalaufwand",
+            "VehicleCosts" => "Fahrzeugkosten",
+            "OfficeSupplies" => "Büromaterial",
+            "Depreciation" => "Abschreibungen",
+            "TravelExpenses" => "Reisekosten",
+            "Insurance" => "Versicherungen",
+            "OtherOperatingExpenses" => "Sonst. betriebl. Aufw.",
+            _ => ""
+        };
+
+
+
         public FinancialCategory(string value) : base(value)
         {
 
