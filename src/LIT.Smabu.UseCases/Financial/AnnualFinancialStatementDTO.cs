@@ -27,8 +27,8 @@ namespace LIT.Smabu.UseCases.Financial
             FiscalYear = fiscalYear;
             Period = period;
             Currency = currency;
-            Incomes = incomes;
-            Expenditures = expenditures;
+            Incomes = [.. incomes.OrderBy(x => x.Date)];
+            Expenditures = [.. expenditures.OrderBy(x => x.Date)];
             Status = status;
             TotalIncome = totalIncome;
             TotalExpenditure = totalExpenditure;
