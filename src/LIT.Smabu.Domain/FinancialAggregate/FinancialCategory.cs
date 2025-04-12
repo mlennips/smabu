@@ -39,8 +39,6 @@ namespace LIT.Smabu.Domain.FinancialAggregate
             _ => ""
         };
 
-
-
         public FinancialCategory(string value) : base(value)
         {
 
