@@ -253,7 +253,7 @@ const renderTransactionsBlock = (transactions: FinancialTransaction[], handleCha
                                     slotProps={{
                                         input: { disableUnderline: true },
                                         htmlInput: {
-                                            max: new Date().toISOString().split("T")[0],
+                                            max: period?.to,
                                             min: period?.from
                                         }
                                     }}
@@ -286,7 +286,7 @@ const renderTransactionsBlock = (transactions: FinancialTransaction[], handleCha
                                 <TextField
                                     type='number'
                                     size='small'
-                                    value={transaction.amount}
+                                    value={transaction.amount?.toFixed(2)}
                                     name={`amount`}
                                     onChange={(e) => prepareHandleChange(e, transaction)}
                                     disabled={transaction.isImported}
