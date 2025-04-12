@@ -7,18 +7,18 @@ namespace LIT.Smabu.Domain.FinancialAggregate
     {
         public override string Name => Value switch
         {
-            "Revenue" => "Revenue",
-            "OtherIncome" => "Other Income",
-            "AssetSaleIncome" => "Asset Sale Income",
-            "GoodsPurchase" => "Goods Purchase",
-            "OperatingCosts" => "Operating Costs",
-            "PersonnelExpenses" => "Personnel Expenses",
-            "VehicleCosts" => "Vehicle Costs",
-            "OfficeSupplies" => "Office Supplies",
-            "Depreciation" => "Depreciation",
-            "TravelExpenses" => "Travel Expenses",
-            "Insurance" => "Insurance",
-            "OtherOperatingExpenses" => "Other Operating Expenses",
+            "Revenue" => "Umsatzeinnahmen",
+            "OtherIncome" => "Sonstige Einnahmen",
+            "AssetSaleIncome" => "Einnahmen aus dem Verkauf von Anlagevermögen",
+            "GoodsPurchase" => "Wareneinkauf",
+            "OperatingCosts" => "Betriebskosten",
+            "PersonnelExpenses" => "Personalaufwand",
+            "VehicleCosts" => "Fahrzeugkosten",
+            "OfficeSupplies" => "Büromaterial",
+            "Depreciation" => "Abschreibungen",
+            "TravelExpenses" => "Reisekosten",
+            "Insurance" => "Versicherungen",
+            "OtherOperatingExpenses" => "Sonstige betriebliche Aufwendungen",
             _ => "???"
         };
 
