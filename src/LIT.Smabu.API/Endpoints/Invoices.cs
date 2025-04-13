@@ -62,35 +62,35 @@ namespace LIT.Smabu.API.Endpoints
                     },
                     onFailure: Results.BadRequest))
             .Produces<IResult>()
-            .Produces<ErrorDetail>(400);
+            .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapPut("/{invoiceId}", async (IMediator mediator, Guid invoiceId, UpdateInvoiceCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: Results.Ok,
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceId>()
-                .Produces<ErrorDetail>(400);
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapPut("/{invoiceId}/release", async (IMediator mediator, Guid invoiceId, ReleaseInvoiceCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapPut("/{invoiceId}/withdrawrelease", async (IMediator mediator, Guid invoiceId, WithdrawReleaseInvoiceCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/{invoiceId}", async (IMediator mediator, Guid invoiceId) =>
                 await mediator.SendAndMatchAsync(new DeleteInvoiceCommand(new(invoiceId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
         }
 
         private static void RegisterInvoiceItem(RouteGroupBuilder api)
@@ -104,30 +104,30 @@ namespace LIT.Smabu.API.Endpoints
             api.MapPut("/{invoiceId}/items/{invoiceItemId}", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId,
                 UpdateInvoiceItemCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: Results.Ok,
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
                 .Produces<InvoiceItemId>();
 
             api.MapPut("/{invoiceId}/items/{invoiceItemId}/movedown", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId) =>
                 await mediator.SendAndMatchAsync(new MoveInvoiceItemDownCommand(new(invoiceItemId), new(invoiceId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapPut("/{invoiceId}/items/{invoiceItemId}/moveup", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId) =>
                 await mediator.SendAndMatchAsync(new MoveInvoiceItemUpCommand(new(invoiceItemId), new(invoiceId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/{invoiceId}/items/{invoiceItemId}", async (IMediator mediator, Guid invoiceId, Guid invoiceItemId) =>
                 await mediator.SendAndMatchAsync(new RemoveInvoiceItemCommand(new(invoiceItemId), new(invoiceId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
         }
     }
 }

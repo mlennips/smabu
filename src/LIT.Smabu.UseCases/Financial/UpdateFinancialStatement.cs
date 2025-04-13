@@ -23,13 +23,13 @@ namespace LIT.Smabu.UseCases.Financial
                 }
 
                 Result incomeResult = financialStatement.UpdateIncomes([.. request.Incomes]);
-                if (!incomeResult.IsSuccess)
+                if (incomeResult.IsFailure)
                 {
                     return incomeResult;
                 }
 
                 Result expenditureResult = financialStatement.UpdateExpenditures([.. request.Expenditures]);
-                if (!expenditureResult.IsSuccess)
+                if (expenditureResult.IsFailure)
                 {
                     return expenditureResult;
                 }

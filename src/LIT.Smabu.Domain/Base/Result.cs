@@ -80,5 +80,24 @@ namespace LIT.Smabu.Domain.Base
     public sealed record ErrorDetail(string Code, string Description)
     {
         public static readonly ErrorDetail None = new(string.Empty, string.Empty);
+        public Dictionary<string, string> Details { get; private set; } = [];
+
+        public ErrorDetail WithDetails(Dictionary<string, string> details)
+        {
+            foreach (var item in details)
+            {
+                WithDetail(item.Key, item.Value);
+            }
+            return this;
+        }
+
+        public ErrorDetail WithDetail(string key, string value)
+        {
+            if (!Details.TryAdd(key, value))
+            {
+                Details[key] = value;
+            }
+            return this;
+        }
     }
 }

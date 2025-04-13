@@ -105,15 +105,15 @@ const AnnualFinancialStatementDetails: React.FC = () => {
                 >
                 </SnackbarContent>}
 
-                <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItemsIncome} error={error} >
+                <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItemsIncome} >
                     {data && renderTransactionsBlock(data.incomes!, handleChange, 'incomes', data.totalIncome!, data.currency!, data.period!)}
                 </DefaultContentContainer>
 
-                <DefaultContentContainer title={"Ausgaben"} loading={loading} error={error}>
+                <DefaultContentContainer title={"Ausgaben"} loading={loading}>
                     {data && renderTransactionsBlock(data.expenditures!, handleChange, 'expenditures', data.totalExpenditure!, data.currency!, data.period!)}
                 </DefaultContentContainer>
 
-                <DetailsActions formId="form" deleteUrl={`/financials/annualstatements/${data?.id?.value}/delete`} disabled={loading} />
+                <DetailsActions formId="form" deleteUrl={`/financials/annualstatements/${data?.id?.value}/delete`} disabled={loading} error={error} />
             </Stack>
         </form>
     );

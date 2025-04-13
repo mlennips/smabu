@@ -43,37 +43,37 @@ namespace LIT.Smabu.API.Endpoints
                 UpdateAnnualFinancialStatementCommand command) =>
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.NoContent,
-                    onFailure: Results.NotFound))
+                    onFailure: Results.BadRequest))
                 .Produces(StatusCodes.Status204NoContent)
-                .Produces(StatusCodes.Status404NotFound);
+                .Produces(StatusCodes.Status400BadRequest);
 
             api.MapPut("/annualstatements/{annualFinancialStatementId}/importtransactions", async (IMediator mediator, Guid annualFinancialStatementId) =>
                 await mediator.SendAndMatchAsync(new ImportAnnualFinancialStatementTransactionsCommand(new(annualFinancialStatementId)),
-                    onSuccess: () => Results.Ok(),
-                    onFailure: Results.NotFound))
-                .Produces(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status404NotFound);
+                    onSuccess: Results.NoContent,
+                    onFailure: Results.BadRequest))
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest);
 
             api.MapPut("/annualstatements/{annualFinancialStatementId}/complete", async (IMediator mediator, Guid annualFinancialStatementId) =>
                 await mediator.SendAndMatchAsync(new CompleteAnnualFinancialStatementCommand(new(annualFinancialStatementId)),
                     onSuccess: Results.NoContent,
-                    onFailure: Results.NotFound))
+                    onFailure: Results.BadRequest))
                 .Produces(StatusCodes.Status204NoContent)
-                .Produces(StatusCodes.Status404NotFound);
+                .Produces(StatusCodes.Status400BadRequest);
 
             api.MapPut("/annualstatements/{annualFinancialStatementId}/reopen", async (IMediator mediator, Guid annualFinancialStatementId) =>
                 await mediator.SendAndMatchAsync(new ReopenFinancialStatementCommand(new(annualFinancialStatementId)),
                     onSuccess: Results.NoContent,
-                    onFailure: Results.NotFound))
+                    onFailure: Results.BadRequest))
                 .Produces(StatusCodes.Status204NoContent)
-                .Produces(StatusCodes.Status404NotFound);
+                .Produces(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/annualstatements/{annualFinancialStatementId}", async (IMediator mediator, Guid annualFinancialStatementId) =>
                 await mediator.SendAndMatchAsync(new DeleteAnnualFinancialStatementCommand(new(annualFinancialStatementId)),
                     onSuccess: () => Results.NoContent(),
-                    onFailure: Results.NotFound))
+                    onFailure: Results.BadRequest))
                 .Produces(StatusCodes.Status204NoContent)
-                .Produces(StatusCodes.Status404NotFound);
+                .Produces(StatusCodes.Status400BadRequest);
         }
     }
 }

@@ -40,16 +40,17 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapPut("/{catalogId}", async (IMediator mediator, Guid catalogId, UpdateCatalogCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces(200);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/{catalogId}", async (IMediator mediator, Guid catalogId) =>
                 await mediator.SendAndMatchAsync(new DeleteCatalogCommand(new(catalogId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest);
         }
 
         private static void MapCatalogGroups(RouteGroupBuilder api)
@@ -69,16 +70,17 @@ namespace LIT.Smabu.API.Endpoints
             api.MapPut("/{catalogId}/groups/{catalogGroupId}", async (IMediator mediator, Guid catalogId, Guid catalogGroupId,
                 UpdateCatalogGroupCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces<CustomerId>();
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/{catalogId}/groups/{catalogGroupId}", async (IMediator mediator, Guid catalogId, Guid catalogGroupId) =>
                 await mediator.SendAndMatchAsync(new RemoveCatalogGroupCommand(new(catalogGroupId), new(catalogId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest);
         }
 
         private static void MapCatalogItems(RouteGroupBuilder api)
@@ -98,16 +100,17 @@ namespace LIT.Smabu.API.Endpoints
             api.MapPut("/{catalogId}/items/{catalogItemId}", async (IMediator mediator, Guid catalogId, Guid catalogItemId,
                 UpdateCatalogItemCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces<CustomerId>();
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/{catalogId}/items/{catalogItemId}", async (IMediator mediator, Guid catalogId, Guid catalogItemId) =>
                 await mediator.SendAndMatchAsync(new RemoveCatalogItemCommand(new(catalogId), new(catalogItemId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest);
         }
     }
 }

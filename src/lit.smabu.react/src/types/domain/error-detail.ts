@@ -31,4 +31,10 @@ export interface ErrorDetail {
      * @memberof ErrorDetail
      */
     description?: string | null;
+
+    /**
+     * @type {{ [key: string]: string }}
+     * @memberof ErrorDetail
+     */
+    details?: { [key: string]: string } | null;
 }

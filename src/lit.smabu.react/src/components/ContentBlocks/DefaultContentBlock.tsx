@@ -4,6 +4,7 @@ import { getItemByCurrentLocation } from '../../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
 import { Close } from '@mui/icons-material';
 import { AppError } from '../../utils/errorConverter';
+import ErrorComponent from './ErrorComponent';
 
 interface DefaultContentContainerProps {
     title?: string | undefined | null;
@@ -65,7 +66,7 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
                     })}
                 </ButtonGroup>
             </Toolbar>
-            {error && errorComponent(error)}
+            {error && ErrorComponent(error)}
             {!loading && children}
             {loading && !error && <Box sx={{ opacity: 0.2 }}>
                 {children}
@@ -74,27 +75,5 @@ const DefaultContentContainer: React.FC<DefaultContentContainerProps> = ({ title
         </Box>
     );
 };
-
-const errorComponent = (error: AppError) => {
-    const [isOpen, setIsOpen] = useState<boolean>(true);
-
-    return <Collapse in={isOpen}>
-        <Alert
-            severity={error.severity}
-            variant='standard'
-            action={
-                <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => setIsOpen(false)}
-                >
-                    <Close fontSize="inherit" />
-                </IconButton>
-            }>
-            <AlertTitle>{error.message}</AlertTitle>
-            {error.details}
-        </Alert></Collapse>
-}
 
 export default DefaultContentContainer;

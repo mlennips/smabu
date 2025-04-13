@@ -4,7 +4,12 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 {
     public static class FinancialErrors
     {
-        public static ErrorDetail FinancialStatementAlreadyCompleted => new("FinancialStatement.AlreadyCompledted", "The financial statement is already completed.");
+        internal static readonly string InvalidPeriodText = "Invalid period.";
+        internal static readonly string InvalidAmountText = "Amount must be greater than 0.";
+        internal static readonly string InvalidDescriptionText = "Description is empty.";
+        internal static readonly string InvalidCategoriesText = "Invalid categories.";
+
+        public static ErrorDetail FinancialStatementAlreadyCompleted => new("FinancialStatement.AlreadyCompleted", "The financial statement is already completed.");
         public static ErrorDetail FinancialStatementAlreadyOpen => new("FinancialStatement.AlreadyOpen", "The financial statement is already open.");
         public static ErrorDetail InvalidTransaction => new("FinancialStatement.InvalidTransaction", "Transaction is invalid.");
         public static ErrorDetail ManipulatedImportedValues => new("FinancialStatement.ManipulatedImportedValues", "The imported values are manipulated.");

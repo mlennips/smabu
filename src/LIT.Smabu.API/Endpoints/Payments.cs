@@ -38,30 +38,33 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapPost("", async (IMediator mediator, CreatePaymentCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<PaymentId>();
+                .Produces<PaymentId>()
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapPut("/{paymentId}", async (IMediator mediator, Guid paymentId,
                 UpdatePaymentCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces(200);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapPut("/{paymentId}/complete", async (IMediator mediator, Guid paymentId,
                 CompletePaymentCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces(200);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/{paymentId}", async (IMediator mediator, Guid paymentId) =>
                 await mediator.SendAndMatchAsync(new DeletePaymentCommand(new(paymentId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
         }
     }
 }
