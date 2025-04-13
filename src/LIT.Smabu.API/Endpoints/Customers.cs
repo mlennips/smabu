@@ -22,32 +22,32 @@ namespace LIT.Smabu.API.Endpoints
                 await mediator.SendAndMatchAsync(command,
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<CustomerId>();
+                .Produces<CustomerId>(StatusCodes.Status200OK);
 
             api.MapGet("/", async (IMediator mediator) =>
                 await mediator.SendAndMatchAsync(new ListCustomersQuery(),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<CustomerDTO[]>();
+                .Produces<CustomerDTO[]>(StatusCodes.Status200OK);
 
             api.MapGet("/{customerId}", async (IMediator mediator, Guid customerId) =>
                 await mediator.SendAndMatchAsync(new GetCustomerQuery(new(customerId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<CustomerDTO>();
+                .Produces<CustomerDTO>(StatusCodes.Status200OK);
 
             api.MapPut("/{customerId}", async (IMediator mediator, Guid customerId, UpdateCustomerCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: Results.Ok,
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces<CustomerId>();
+                .Produces(StatusCodes.Status204NoContent);
 
             api.MapDelete("/{customerId}", async (IMediator mediator, Guid customerId) =>
                 await mediator.SendAndMatchAsync(new DeleteCustomerCommand(new(customerId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
         }
     }
 }

@@ -57,11 +57,12 @@ namespace LIT.Smabu.Domain.FinancialAggregate
                 return checkCanEdit;
             }
 
-            if (incomes.Any(income => !FinancialCategory.CheckIsIncome(income.Category))
-                || ValidateTransaction(incomes).IsFailure)
+            var validationResult = ValidateTransaction(incomes);
+            if (validationResult.IsFailure)
             {
-                return FinancialErrors.InvalidTransaction;
+                return validationResult;
             }
+
             var checkImportetValuesManipulated =
                 _incomes.Any(existingIncome => incomes.Any(newIncome =>
                     existingIncome.PaymentId != null && existingIncome.PaymentId == newIncome.PaymentId && existingIncome.Amount != newIncome.Amount));
@@ -83,11 +84,18 @@ namespace LIT.Smabu.Domain.FinancialAggregate
                 return checkCanEdit;
             }
 
-            if (expenditures.Any(expenditure => !FinancialCategory.CheckIsExpenditure(expenditure.Category))
-                || ValidateTransaction(expenditures).IsFailure)
+            if (expenditures.Any(expenditure => !FinancialCategory.CheckIsExpenditure(expenditure.Category)))
             {
-                return FinancialErrors.InvalidTransaction;
+                return FinancialErrors.InvalidTransaction
+                    .WithDetail("Expenditures", FinancialErrors.InvalidCategoriesText);
             }
+
+            var validationResult = ValidateTransaction(expenditures);
+            if (validationResult.IsFailure)
+            {
+                return validationResult;
+            }
+
             var checkImportetValuesManipulated =
                 _expenditures.Any(existingExpenditures => expenditures.Any(newExpenditures =>
                     existingExpenditures.PaymentId != null && existingExpenditures.PaymentId == newExpenditures.PaymentId && existingExpenditures.Amount != newExpenditures.Amount));
@@ -132,13 +140,22 @@ namespace LIT.Smabu.Domain.FinancialAggregate
 
         private Result ValidateTransaction(FinancialTransaction[] transactions)
         {
-            return transactions.Any(income => income.Date.Year != FiscalYear)
-                ? (Result)FinancialErrors.InvalidTransaction
-                : transactions.Any(income => string.IsNullOrWhiteSpace(income.Description))
-                    ? (Result)FinancialErrors.InvalidTransaction
-                    : transactions.Any(income => income.Amount <= 0)
-                        ? (Result)FinancialErrors.InvalidTransaction
-                        : Result.Success();
+            var invalidDetails = new Dictionary<string, string>();
+            var withInvalidPeriod = transactions.Where(x => x.Date.Year != FiscalYear).ToList();
+            var withEmptyDescription = transactions.Where(x => string.IsNullOrWhiteSpace(x.Description)).ToList();
+            var withAmountIsZeroOrNegative = transactions.Where(x => x.Amount <= 0).ToList();
+
+            withInvalidPeriod.ForEach(x => invalidDetails.Add($"{x.Date.ToShortDateString()}/{x.Description}", FinancialErrors.InvalidPeriodText));
+            withEmptyDescription.ForEach(x => invalidDetails.Add($"{x.Date.ToShortDateString()}/{x.Description}", FinancialErrors.InvalidDescriptionText));
+            withAmountIsZeroOrNegative.ForEach(x => invalidDetails.Add($"{x.Date.ToShortDateString()}/{x.Description}", FinancialErrors.InvalidAmountText));
+
+            if (invalidDetails.Count != 0)
+            {
+                return FinancialErrors.InvalidTransaction
+                    .WithDetails(invalidDetails);
+            }
+
+            return Result.Success();
         }
     }
 }

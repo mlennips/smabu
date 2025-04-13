@@ -45,30 +45,31 @@ namespace LIT.Smabu.API.Endpoints
 
             api.MapPut("/{orderId}", async (IMediator mediator, Guid orderId, UpdateOrderCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: Results.Ok,
+                    onSuccess: Results.NoContent,
                     onFailure: Results.BadRequest))
-                .Produces<OrderId>()
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapDelete("/{orderId}", async (IMediator mediator, Guid orderId) =>
                 await mediator.SendAndMatchAsync(new DeleteOrderCommand(new(orderId)),
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapGet("/{orderId}/references", async (IMediator mediator, Guid orderId) =>
                 await mediator.SendAndMatchAsync(new GetOrderReferencesQuery(new(orderId)),
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<GetOrderReferencesResponse>();
+                .Produces<GetOrderReferencesResponse>()
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
 
             api.MapPut("/{orderId}/references", async (IMediator mediator, Guid orderId, UpdateReferencesToOrderCommand command) =>
                 await mediator.SendAndMatchAsync(command,
-                    onSuccess: () => Results.Ok(),
+                    onSuccess: () => Results.NoContent(),
                     onFailure: Results.BadRequest))
-                .Produces(200)
-                .Produces<ErrorDetail>(400);
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces<ErrorDetail>(StatusCodes.Status400BadRequest);
         }
     }
 }

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AnnualFinancialStatementDTO } from '../../types/domain/annual-financial-statement-dto';
@@ -15,6 +14,7 @@ import { AddCircle, ImportExport, Lock, LockOpen, Remove } from '@mui/icons-mate
 import { formatForTextField } from '../../utils/formatDate';
 import { FinancialCategorySelectField } from '../../components/controls/SelectField';
 import { Currency, DatePeriod, FinancialTransaction } from '../../types/domain';
+import { saveAs } from 'file-saver';
 
 const AnnualFinancialStatementDetails: React.FC = () => {
     const { annualStatementId: annualFinancialStatementId } = useParams<{ annualStatementId: string }>();
@@ -25,7 +25,27 @@ const AnnualFinancialStatementDetails: React.FC = () => {
 
     const isCompleted = data?.status?.value === 'Completed';
 
-    const toolbarItems: ToolbarItem[] = [
+    const exportToCSV = () => {
+        if (!data) return;
+
+        const rows = [
+            ['Type', 'Date', 'Description', 'Category', 'Amount'],
+            ...data!.incomes!.map(income => ['Income', new Date(income.date!).toLocaleDateString(), income.description, income.category?.value, income.amount?.toFixed(2).replace('.', ',')]),
+            ...data!.expenditures!.map(expense => ['Expenditure', new Date(expense.date!).toLocaleDateString(), expense.description, expense.category?.value, expense.amount?.toFixed(2).replace('.', ',')])
+        ];
+
+        const csvContent = rows.map(row => row.map(value => `"${value}"`).join(';')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        saveAs(blob, `AnnualFinancialStatement_${data.fiscalYear}_${data!.period?.from}_${data!.period?.to}.csv`);
+    };
+
+    const toolbarItems: ToolbarItem[] = [        
+        {
+            text: "CSV",
+            title: "Als CSV exportieren",
+            icon: <ImportExport />,
+            action: exportToCSV
+        },
         {
             text: isCompleted ? "Aufheben" : "Abschließen",
             icon: isCompleted ? <Lock /> : <LockOpen />,
@@ -105,15 +125,15 @@ const AnnualFinancialStatementDetails: React.FC = () => {
                 >
                 </SnackbarContent>}
 
-                <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItemsIncome} error={error} >
+                <DefaultContentContainer title={"Einnahmen"} loading={loading} toolbarItems={toolbarItemsIncome} >
                     {data && renderTransactionsBlock(data.incomes!, handleChange, 'incomes', data.totalIncome!, data.currency!, data.period!)}
                 </DefaultContentContainer>
 
-                <DefaultContentContainer title={"Ausgaben"} loading={loading} error={error}>
+                <DefaultContentContainer title={"Ausgaben"} loading={loading}>
                     {data && renderTransactionsBlock(data.expenditures!, handleChange, 'expenditures', data.totalExpenditure!, data.currency!, data.period!)}
                 </DefaultContentContainer>
 
-                <DetailsActions formId="form" deleteUrl={`/financials/annualstatements/${data?.id?.value}/delete`} disabled={loading} />
+                <DetailsActions formId="form" deleteUrl={`/financials/annualstatements/${data?.id?.value}/delete`} disabled={loading} error={error} />
             </Stack>
         </form>
     );
