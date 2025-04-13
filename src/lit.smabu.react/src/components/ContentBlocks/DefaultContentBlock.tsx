@@ -1,8 +1,7 @@
-import { Alert, AlertTitle, Box, Button, ButtonGroup, Collapse, IconButton, LinearProgress, Toolbar, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Button, ButtonGroup, LinearProgress, Toolbar, Typography } from '@mui/material';
+import React from 'react';
 import { getItemByCurrentLocation } from '../../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
-import { Close } from '@mui/icons-material';
 import { AppError } from '../../utils/errorConverter';
 import ErrorComponent from './ErrorComponent';
 
