@@ -45,13 +45,13 @@ namespace LIT.Smabu.API.Endpoints
                 },
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<InvoiceDTO[]>();
+                .Produces<ListInvoicesDTO[]>();
 
             api.MapGet("/{invoiceId}", async (IMediator mediator, Guid invoiceId, bool withItems = false) =>
                 await mediator.SendAndMatchAsync(new GetInvoiceQuery(new(invoiceId)) { WithItems = withItems },
                     onSuccess: Results.Ok,
                     onFailure: Results.BadRequest))
-                .Produces<InvoiceDTO[]>();
+                .Produces<GetInvoiceDTO>();
 
             api.MapGet("/{invoiceId}/report", async (IMediator mediator, Guid invoiceId) =>
                await mediator.SendAndMatchAsync(new GetInvoiceReportQuery(new(invoiceId)),
