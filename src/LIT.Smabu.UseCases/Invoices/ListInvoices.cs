@@ -13,7 +13,7 @@ namespace LIT.Smabu.UseCases.Invoices
     {
         public record ListInvoicesQuery(CustomerId? CustomerId = null) : IQuery<ListInvoicesDTO[]>;
 
-        public class ListInvoicesHandler(IAggregateStore store) : IQueryHandler<ListInvoicesQuery, ListInvoicesDTO[]>
+        public class ListInvoicesHandler(IAggregateStore store, IAggregateCache cache) : IQueryHandler<ListInvoicesQuery, ListInvoicesDTO[]>
         {
             public async Task<Result<ListInvoicesDTO[]>> Handle(ListInvoicesQuery request, CancellationToken cancellationToken)
             {
@@ -28,7 +28,7 @@ namespace LIT.Smabu.UseCases.Invoices
                     ToHashSet();
 
                 var customerIds = invoices.Select(x => x.CustomerId).ToList();
-                Customer[] customers = await store.GetByAsync(customerIds);
+                Customer[] customers = await cache.GetByAsync(customerIds);
                 ListInvoicesDTO[] result = [.. invoices.Select(x => ListInvoicesDTO.Create(x, 
                     customers.Single(y => y.Id == x.CustomerId),
                     paidInvoices.Contains(x.Id)))

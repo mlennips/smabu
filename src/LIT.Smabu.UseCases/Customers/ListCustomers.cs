@@ -9,11 +9,11 @@ namespace LIT.Smabu.UseCases.Customers
     {
         public record ListCustomersQuery : IQuery<CustomerDTO[]>;
 
-        public class ListCustomersHandler(IAggregateStore store) : IQueryHandler<ListCustomersQuery, CustomerDTO[]>
+        public class ListCustomersHandler(IAggregateCache cache) : IQueryHandler<ListCustomersQuery, CustomerDTO[]>
         {
             public async Task<Result<CustomerDTO[]>> Handle(ListCustomersQuery request, CancellationToken cancellationToken)
             {
-                IReadOnlyList<Customer> customers = await store.GetAllAsync<Customer>();
+                IReadOnlyList<Customer> customers = await cache.GetAllAsync<Customer>();
                 CustomerDTO[] result = [.. customers.Select(CustomerDTO.Create).OrderBy(x => x.Name)];
                 return result;
             }
