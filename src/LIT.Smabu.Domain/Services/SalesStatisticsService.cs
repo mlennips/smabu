@@ -4,7 +4,7 @@ using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.Services
 {
-    public class SalesStatisticsService(IAggregateStore store)
+    public class SalesStatisticsService(IAggregateCache cache)
     {
         private IReadOnlyList<Invoice>? invoices;
 
@@ -81,7 +81,7 @@ namespace LIT.Smabu.Domain.Services
 
         private async Task<IReadOnlyList<Invoice>> GetInvoicesAsync()
         {
-            return invoices ??= await store.GetAllAsync<Invoice>();
+            return invoices ??= await cache.GetAllAsync<Invoice>();
         }
     }
 
