@@ -9,12 +9,12 @@ namespace LIT.Smabu.UseCases.Customers
     {
         public record GetCustomerQuery(CustomerId CustomerId) : IQuery<CustomerDTO>;
 
-        public class GetCustomerHandler(IAggregateStore store) : IQueryHandler<GetCustomerQuery, CustomerDTO>
+        public class GetCustomerHandler(IAggregateCache cache) : IQueryHandler<GetCustomerQuery, CustomerDTO>
         {
 
             public async Task<Result<CustomerDTO>> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
             {
-                Customer customer = await store.GetByAsync(request.CustomerId);
+                Customer customer = await cache.GetByAsync(request.CustomerId);
                 var result = CustomerDTO.Create(customer);
                 return result;
             }

@@ -67,7 +67,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var allItems = await LoadAsync<TAggregate>(ids);
-            return allItems.Where(x => ids.Contains(x.Id)).ToArray();
+            return [.. allItems.Where(x => ids.Contains(x.Id))];
         }
 
         public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
@@ -110,7 +110,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var fileNames = Directory.GetFiles(directory, "*.json", SearchOption.TopDirectoryOnly);
             if (ids != null)
             {
-                fileNames = fileNames.Where(x => ids.Any(y => x.Contains(y.Value.ToString()))).ToArray();
+                fileNames = [.. fileNames.Where(x => ids.Any(y => x.Contains(y.Value.ToString())))];
             }
             logger.LogInformation("Read {files} files for type {aggregate} ", fileNames.Length, aggregateType.Name);
             foreach (var fileName in fileNames)

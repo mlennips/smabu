@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LIT.Smabu.UseCases;
+using LIT.Smabu.Infrastructure.Caching;
 
 namespace LIT.Smabu.Infrastructure
 {
@@ -20,6 +21,7 @@ namespace LIT.Smabu.Infrastructure
             services.AddScoped<ICurrentUser, CurrentUserService>();
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             RegisterAggregateStore(services);
+            RegisterAggregateCache(services);
             RegisterMediatR(services);
             RegisterReportService(services, configuration);
 
@@ -48,7 +50,13 @@ namespace LIT.Smabu.Infrastructure
 
         private static void RegisterAggregateStore(IServiceCollection services)
         {
+            services.AddSingleton<IAggregateStoreFactory, AggregateStoreFactory>();
             services.AddScoped<IAggregateStore, CosmosAggregateStore>();
+        }
+
+        private static void RegisterAggregateCache(IServiceCollection services)
+        {
+            services.AddSingleton<IAggregateCache, AggregateCache>();
         }
 
         private static void RegisterMediatR(IServiceCollection services)
