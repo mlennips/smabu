@@ -7,7 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace LIT.Smabu.Domain.CatalogAggregate.Services
 {
-    public class RemoveCatalogItemService(IAggregateStore store)
+    public class RemoveCatalogItemService(IAggregateRepository repository)
     {
         public async Task<Result> RemoveAsync(CatalogId catalogId, CatalogItemId catalogItemId)
         {
@@ -17,22 +17,22 @@ namespace LIT.Smabu.Domain.CatalogAggregate.Services
                 return CommonErrors.HasReferences;
             }
 
-            Catalog catalog = await store.GetByAsync(catalogId);
+            Catalog catalog = await repository.GetByAsync(catalogId);
             Result result = catalog.RemoveItem(catalogItemId);
-            await store.UpdateAsync(catalog);
+            await repository.UpdateAsync(catalog);
             return result;
         }
 
         private async Task<bool> CheckHasOffers(CatalogItemId id)
         {
-            IReadOnlyList<Offer> offers = await store.GetAllAsync<Offer>();
+            IReadOnlyList<Offer> offers = await repository.GetAllAsync<Offer>();
             var isUsedInOffer = offers.Any(offer => offer.Items.Any(item => item.CatalogItemId == id));
             return isUsedInOffer;
         }
 
         private async Task<bool> CheckHasInvoices(CatalogItemId id)
         {
-            IReadOnlyList<Invoice> invoices = await store.GetAllAsync<Invoice>();
+            IReadOnlyList<Invoice> invoices = await repository.GetAllAsync<Invoice>();
             var isUsedInInvoice = invoices.Any(offer => offer.Items.Any(item => item.CatalogItemId == id));
             return isUsedInInvoice;
         }

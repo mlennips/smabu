@@ -5,7 +5,7 @@ using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate.Services
 {
-    public class DeleteInvoiceService(IAggregateStore store)
+    public class DeleteInvoiceService(IAggregateRepository repository)
     {
         public async Task<Result> DeleteAsync(InvoiceId id)
         {
@@ -15,15 +15,15 @@ namespace LIT.Smabu.Domain.InvoiceAggregate.Services
                 return CommonErrors.HasReferences;
             }
 
-            Invoice invoice = await store.GetByAsync(id);
+            Invoice invoice = await repository.GetByAsync(id);
             invoice.Delete();
-            await store.DeleteAsync(invoice);
+            await repository.DeleteAsync(invoice);
             return Result.Success();
         }
 
         private async Task<bool> CheckIsInOrdersAsync(InvoiceId id)
         {
-            IReadOnlyList<OrderAggregate.Order> orders = await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
+            IReadOnlyList<OrderAggregate.Order> orders = await repository.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
             return orders.Any();
         }
     }

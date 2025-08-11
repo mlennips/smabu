@@ -6,10 +6,10 @@ using System.Linq;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
+    public class FileAggregateRepository(ILogger<FileAggregateRepository> logger, ICurrentUser currentUser, IDomainEventDispatcher domainEventDispatcher) : IAggregateRepository
     {
         private readonly string rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
-        private readonly ILogger<FileAggregateStore> logger = logger;
+        private readonly ILogger<FileAggregateRepository> logger = logger;
         private readonly ICurrentUser currentUser = currentUser;
         private readonly IDomainEventDispatcher domainEventDispatcher = domainEventDispatcher;
 

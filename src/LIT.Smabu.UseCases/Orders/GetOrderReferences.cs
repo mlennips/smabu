@@ -19,19 +19,19 @@ namespace LIT.Smabu.UseCases.Orders
             public decimal InvoiceAmount => Invoices.Where(x => x.IsSelected ?? false).Sum(x => x.Amount ?? 0);
         }
 
-        public class GetOrderReferencesHandler(IAggregateStore store) : IQueryHandler<GetOrderReferencesQuery, GetOrderReferencesResponse>
+        public class GetOrderReferencesHandler(IAggregateRepository repository) : IQueryHandler<GetOrderReferencesQuery, GetOrderReferencesResponse>
         {
             public async Task<Result<GetOrderReferencesResponse>> Handle(GetOrderReferencesQuery request, CancellationToken cancellationToken)
             {
-                Order order = await store.GetByAsync(request.OrderId);
+                Order order = await repository.GetByAsync(request.OrderId);
 
                 IReadOnlyList<Offer> offers = request.OnlyForCustomer
-                    ? await store.ApplySpecificationTask(new OffersByCustomerIdSpec(order.CustomerId))
-                    : await store.GetAllAsync<Offer>();
+                    ? await repository.ApplySpecificationTask(new OffersByCustomerIdSpec(order.CustomerId))
+                    : await repository.GetAllAsync<Offer>();
 
                 IReadOnlyList<Invoice> invoices = request.OnlyForCustomer
-                    ? await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(order.CustomerId))
-                    : await store.GetAllAsync<Invoice>();
+                    ? await repository.ApplySpecificationTask(new InvoicesByCustomerIdSpec(order.CustomerId))
+                    : await repository.GetAllAsync<Invoice>();
 
                 OrderReferenceDTO<OfferId>[] offerReferences = [.. offers.Select(x => new OrderReferenceDTO<OfferId>(
                     x.Id, x.Number.DisplayName, order.References.OfferIds.Contains(x.Id), x.OfferDate, x.Amount))

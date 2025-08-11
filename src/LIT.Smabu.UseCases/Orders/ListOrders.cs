@@ -12,21 +12,21 @@ namespace LIT.Smabu.UseCases.Orders
     {
         public record ListOrdersQuery(bool WithReferences = false) : IQuery<OrderDTO[]>;
 
-        public class ListOrdersHandler(IAggregateStore store) : IQueryHandler<ListOrdersQuery, OrderDTO[]>
+        public class ListOrdersHandler(IAggregateRepository repository) : IQueryHandler<ListOrdersQuery, OrderDTO[]>
         {
             public async Task<Result<OrderDTO[]>> Handle(ListOrdersQuery request, CancellationToken cancellationToken)
             {
-                IReadOnlyList<Order> orders = await store.GetAllAsync<Order>();
-                Customer[] customers = await store.GetByAsync(orders.Select(x => x.CustomerId));
+                IReadOnlyList<Order> orders = await repository.GetAllAsync<Order>();
+                Customer[] customers = await repository.GetByAsync(orders.Select(x => x.CustomerId));
                 IEnumerable<InvoiceId> invoiceIds = orders.SelectMany(x => x.References.InvoiceIds).Distinct();
                 IEnumerable<OfferId> offerIds = orders.SelectMany(x => x.References.OfferIds).Distinct();
 
                 List<Offer> offers = offerIds.Any()
-                    ? [.. (await store.GetByAsync(offerIds))]
+                    ? [.. (await repository.GetByAsync(offerIds))]
                     : [];
 
                 List<Invoice> invoices = invoiceIds.Any()
-                    ? [.. (await store.GetByAsync(invoiceIds))]
+                    ? [.. (await repository.GetByAsync(invoiceIds))]
                     : [];
 
                 return orders.Select

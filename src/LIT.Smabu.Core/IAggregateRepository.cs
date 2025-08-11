@@ -1,6 +1,6 @@
 ﻿namespace LIT.Smabu.Core
 {
-    public interface IAggregateStore
+    public interface IAggregateRepository
     {
         Task CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;

@@ -9,12 +9,12 @@ namespace LIT.Smabu.UseCases.Financial
     {
         public record ListAnnualFinancialStatementsQuery() : IQuery<AnnualFinancialStatementDTO[]>;
 
-        public class ListAnnualFinancialStatementsHandler(IAggregateStore store)
+        public class ListAnnualFinancialStatementsHandler(IAggregateRepository repository)
             : IQueryHandler<ListAnnualFinancialStatementsQuery, AnnualFinancialStatementDTO[]>
         {
             public async Task<Result<AnnualFinancialStatementDTO[]>> Handle(ListAnnualFinancialStatementsQuery request, CancellationToken cancellationToken)
             {
-                AnnualFinancialStatement[] annualFinancialStatements = await store.GetAllAsync<AnnualFinancialStatement>();
+                AnnualFinancialStatement[] annualFinancialStatements = await repository.GetAllAsync<AnnualFinancialStatement>();
                 return Result.Success(annualFinancialStatements
                     .Select(AnnualFinancialStatementDTO.Create)
                     .OrderByDescending(x => x.FiscalYear)

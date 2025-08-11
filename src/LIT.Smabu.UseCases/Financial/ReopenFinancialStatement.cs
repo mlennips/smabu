@@ -9,11 +9,11 @@ namespace LIT.Smabu.UseCases.Financial
     {
         public record ReopenFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId) : ICommand;
 
-        public class ReopenFinancialStatementHandler(IAggregateStore store) : ICommandHandler<ReopenFinancialStatementCommand>
+        public class ReopenFinancialStatementHandler(IAggregateRepository repository) : ICommandHandler<ReopenFinancialStatementCommand>
         {
             public async Task<Result> Handle(ReopenFinancialStatementCommand request, CancellationToken cancellationToken)
             {
-                AnnualFinancialStatement financialStatement = await store.GetByAsync(request.AnnualFinancialStatementId);
+                AnnualFinancialStatement financialStatement = await repository.GetByAsync(request.AnnualFinancialStatementId);
                 if (financialStatement == null)
                 {
                     return FinancialErrors.FinancialStatementNotFound;
@@ -21,7 +21,7 @@ namespace LIT.Smabu.UseCases.Financial
                 Result reopenResult = financialStatement.Reopen();
                 if (reopenResult.IsSuccess)
                 {
-                    await store.UpdateAsync(financialStatement);
+                    await repository.UpdateAsync(financialStatement);
                 }
                 return reopenResult;
             }

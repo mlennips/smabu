@@ -11,15 +11,15 @@ namespace LIT.Smabu.UseCases.Invoices
     {
         public record UpdateInvoiceCommand(InvoiceId InvoiceId, DatePeriod PerformancePeriod, TaxRate TaxRate, DateOnly? InvoiceDate, PaymentCondition PaymentCondition) : ICommand<InvoiceId>;
 
-        public class UpdateInvoiceHandler(IAggregateStore store) : ICommandHandler<UpdateInvoiceCommand, InvoiceId>
+        public class UpdateInvoiceHandler(IAggregateRepository repository) : ICommandHandler<UpdateInvoiceCommand, InvoiceId>
         {
             public async Task<Result<InvoiceId>> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
             {
-                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
                 Result result = invoice.Update(request.PerformancePeriod, request.TaxRate, request.InvoiceDate, request.PaymentCondition);
                 if (result.IsSuccess)
                 {
-                    await store.UpdateAsync(invoice);
+                    await repository.UpdateAsync(invoice);
                     return invoice.Id;
                 }
                 else

@@ -9,18 +9,18 @@ namespace LIT.Smabu.UseCases.Invoices
     {
         public record WithdrawReleaseInvoiceCommand(InvoiceId InvoiceId) : ICommand;
 
-        public class WithdrawReleaseInvoiceHandler(IAggregateStore store) : ICommandHandler<WithdrawReleaseInvoiceCommand>
+        public class WithdrawReleaseInvoiceHandler(IAggregateRepository repository) : ICommandHandler<WithdrawReleaseInvoiceCommand>
         {
             public async Task<Result> Handle(WithdrawReleaseInvoiceCommand request, CancellationToken cancellationToken)
             {
-                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
                 Result result = invoice.WithdrawRelease();
                 if (result.IsFailure)
                 {
                     return result.Error;
                 }
 
-                await store.UpdateAsync(invoice);
+                await repository.UpdateAsync(invoice);
                 return Result.Success();
             }
         }

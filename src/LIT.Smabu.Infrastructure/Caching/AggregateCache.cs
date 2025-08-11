@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace LIT.Smabu.Infrastructure.Caching
 {
     public class AggregateCache(ILogger<AggregateCache> logger, 
-        Persistence.IAggregateStoreFactory aggregateStoreFactory) : IAggregateCache,
+        Persistence.IAggregateRepositoryFactory aggregateStoreFactory) : IAggregateCache,
             IRequestHandler<InformativeNotification.AggregateCreatedEvent>,
             IRequestHandler<InformativeNotification.AggregateUpdatedEvent>,
             IRequestHandler<InformativeNotification.AggregateDeletedEvent>
@@ -140,8 +140,8 @@ namespace LIT.Smabu.Infrastructure.Caching
 
         private async Task<TAggregate[]> LoadFromStoreAsync<TAggregate>() where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            var store = aggregateStoreFactory.Create();
-            var result = await store.GetAllAsync<TAggregate>();
+            var repository = aggregateStoreFactory.Create();
+            var result = await repository.GetAllAsync<TAggregate>();
             return result;
         }
 

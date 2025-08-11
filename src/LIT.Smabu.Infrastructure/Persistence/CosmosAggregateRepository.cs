@@ -10,8 +10,8 @@ using System.Net;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class CosmosAggregateStore(ICurrentUser currentUser, IConfiguration config,
-            ILogger<CosmosAggregateStore> logger, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
+    public class CosmosAggregateRepository(ICurrentUser currentUser, IConfiguration config,
+            ILogger<CosmosAggregateRepository> logger, IDomainEventDispatcher domainEventDispatcher) : IAggregateRepository
     {
         private const string AggregatesContainerId = "Aggregates";
         private static Container? container;

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public interface IAggregateStoreFactory
+    public interface IAggregateRepositoryFactory
     {
-        IAggregateStore Create();
+        IAggregateRepository Create();
     }
 }

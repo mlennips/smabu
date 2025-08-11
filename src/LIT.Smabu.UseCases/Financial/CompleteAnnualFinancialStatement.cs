@@ -11,11 +11,11 @@ namespace LIT.Smabu.UseCases.Financial
     {
         public record CompleteAnnualFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId) : ICommand;
 
-        public class CompleteAnnualFinancialStatementHandler(IAggregateStore store) : ICommandHandler<CompleteAnnualFinancialStatementCommand>
+        public class CompleteAnnualFinancialStatementHandler(IAggregateRepository repository) : ICommandHandler<CompleteAnnualFinancialStatementCommand>
         {
             public async Task<Result> Handle(CompleteAnnualFinancialStatementCommand request, CancellationToken cancellationToken)
             {
-                AnnualFinancialStatement financialStatement = await store.GetByAsync(request.AnnualFinancialStatementId);
+                AnnualFinancialStatement financialStatement = await repository.GetByAsync(request.AnnualFinancialStatementId);
                 if (financialStatement == null)
                 {
                     return FinancialErrors.FinancialStatementNotFound;
@@ -28,13 +28,13 @@ namespace LIT.Smabu.UseCases.Financial
                 }
 
                 Result result = financialStatement.Complete();
-                await store.UpdateAsync(financialStatement);
+                await repository.UpdateAsync(financialStatement);
                 return result;
             }
 
             private async Task<Result> CheckMandatoryRelationsAsync(AnnualFinancialStatement financialStatement)
             {
-                Payment[] paymentsForFiscalYear = await store.ApplySpecificationTask(new PaymentsForFiscalYearSpec(financialStatement.FiscalYear));
+                Payment[] paymentsForFiscalYear = await repository.ApplySpecificationTask(new PaymentsForFiscalYearSpec(financialStatement.FiscalYear));
                 var importedPayments = financialStatement.Incomes.Where(x => x.PaymentId != null).ToList();
                 var hasSameAmount = paymentsForFiscalYear.Sum(x => x.AmountPaid) == importedPayments.Sum(x => x.Amount);
                 var hasSameCount = paymentsForFiscalYear.Length == importedPayments.Count;

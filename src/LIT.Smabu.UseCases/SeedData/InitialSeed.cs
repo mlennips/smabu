@@ -4,7 +4,7 @@ using LIT.Smabu.Core;
 
 namespace LIT.Smabu.UseCases.SeedData
 {
-    public class InitialSeed(IAggregateStore store)
+    public class InitialSeed(IAggregateRepository repository)
     {
         public async Task StartAsync()
         {
@@ -14,7 +14,7 @@ namespace LIT.Smabu.UseCases.SeedData
 
         private async Task SeedDefaultCatalogAsync()
         {
-            IReadOnlyList<Catalog> items = await store.GetAllAsync<Catalog>();
+            IReadOnlyList<Catalog> items = await repository.GetAllAsync<Catalog>();
             if (!items.Any())
             {
                 var catalog = Catalog.Create(CatalogId.DefaultId, "Default Catalog");
@@ -64,20 +64,20 @@ namespace LIT.Smabu.UseCases.SeedData
                 group.AddItem(new CatalogItemId(Guid.NewGuid()), new CatalogItemNumber(++itemNrIdx), "Hinweis", "", Unit.Hour);
                 group.AddItem(new CatalogItemId(Guid.NewGuid()), new CatalogItemNumber(++itemNrIdx), "Rabatt", "", Unit.Hour);
 
-                await store.CreateAsync(catalog);
+                await repository.CreateAsync(catalog);
             }
         }
 
         //private async Task SeedTermsOfPaymentsAsync()
         //{
-        //    var items = await store.GetAllAsync<TermsOfPayment>();
+        //    var items = await repository.GetAllAsync<TermsOfPayment>();
         //    if (!items.Any())
         //    {
         //        var item1 = TermsOfPayment.Create(new(Guid.Parse("89E12676-A882-4B7C-B18F-F8C3D9A484E8")), "15 Tage Netto", "Zahlbar innerhalb von 15 Tagen ohne Abzüge.", 15);
-        //        await store.CreateAsync(item1);
+        //        await repository.CreateAsync(item1);
 
         //        var item2 = TermsOfPayment.Create(new(Guid.Parse("DB9DA680-98E5-4AD0-A25A-20FBD6395449")), "Vorkasse", "Zahlbar sofort.", null);
-        //        await store.CreateAsync(item2);
+        //        await repository.CreateAsync(item2);
         //    }
         //}
     }

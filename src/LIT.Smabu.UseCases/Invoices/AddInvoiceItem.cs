@@ -12,18 +12,18 @@ namespace LIT.Smabu.UseCases.Invoices
         public record AddInvoiceItemCommand(InvoiceItemId InvoiceItemId, InvoiceId InvoiceId, string Details,
             Quantity Quantity, decimal UnitPrice, CatalogItemId? CatalogItemId) : ICommand<InvoiceItemId>;
 
-        public class AddInvoiceItemHandler(IAggregateStore store) : ICommandHandler<AddInvoiceItemCommand, InvoiceItemId>
+        public class AddInvoiceItemHandler(IAggregateRepository repository) : ICommandHandler<AddInvoiceItemCommand, InvoiceItemId>
         {
             public async Task<Result<InvoiceItemId>> Handle(AddInvoiceItemCommand request, CancellationToken cancellationToken)
             {
-                Invoice invoice = await store.GetByAsync(request.InvoiceId);
+                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
                 Result<InvoiceItem> invoiceLineResult = invoice.AddItem(request.InvoiceItemId, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
                 if (invoiceLineResult.IsFailure)
                 {
                     return invoiceLineResult.Error;
                 }
 
-                await store.UpdateAsync(invoice);
+                await repository.UpdateAsync(invoice);
                 return invoiceLineResult.Value!.Id;
             }
         }

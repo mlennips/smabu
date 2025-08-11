@@ -10,15 +10,15 @@ namespace LIT.Smabu.UseCases.Orders
         public record UpdateOrderCommand(OrderId OrderId, string Name, string Description, DateOnly OrderDate, string BunchKey,
             DateTime? Deadline) : ICommand;
 
-        public class UpdateOrderHandler(IAggregateStore store) : ICommandHandler<UpdateOrderCommand>
+        public class UpdateOrderHandler(IAggregateRepository repository) : ICommandHandler<UpdateOrderCommand>
         {
             public async Task<Result> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
             {
-                Order order = await store.GetByAsync(request.OrderId);
+                Order order = await repository.GetByAsync(request.OrderId);
                 var result = order.Update(request.Name, request.Description, request.OrderDate, request.BunchKey, request.Deadline);
                 if (result.IsSuccess)
                 {
-                    await store.UpdateAsync(order);
+                    await repository.UpdateAsync(order);
                 }
                 return result;
             }

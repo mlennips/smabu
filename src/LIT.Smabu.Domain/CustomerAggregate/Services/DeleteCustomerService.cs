@@ -8,7 +8,7 @@ using LIT.Smabu.Domain.OfferAggregate;
 
 namespace LIT.Smabu.Domain.CustomerAggregate.Services
 {
-    public class DeleteCustomerService(IAggregateStore store)
+    public class DeleteCustomerService(IAggregateRepository repository)
     {
         public async Task<Result> DeleteAsync(CustomerId id)
         {
@@ -18,21 +18,21 @@ namespace LIT.Smabu.Domain.CustomerAggregate.Services
                 return CommonErrors.HasReferences;
             }
 
-            Customer customer = await store.GetByAsync(id);
+            Customer customer = await repository.GetByAsync(id);
             customer.Delete();
-            await store.DeleteAsync(customer);
+            await repository.DeleteAsync(customer);
             return Result.Success();
         }
 
         private async Task<bool> CheckHasOffers(CustomerId id)
         {
-            IReadOnlyList<Offer> offers = await store.ApplySpecificationTask(new OffersByCustomerIdSpec(id));
+            IReadOnlyList<Offer> offers = await repository.ApplySpecificationTask(new OffersByCustomerIdSpec(id));
             return offers.Any();
         }
 
         private async Task<bool> CheckHasInvoices(CustomerId id)
         {
-            IReadOnlyList<Invoice> invoices = await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(id));
+            IReadOnlyList<Invoice> invoices = await repository.ApplySpecificationTask(new InvoicesByCustomerIdSpec(id));
             return invoices.Any();
         }
     }

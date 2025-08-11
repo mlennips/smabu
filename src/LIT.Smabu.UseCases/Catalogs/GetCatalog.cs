@@ -9,11 +9,11 @@ namespace LIT.Smabu.UseCases.Catalogs
     {
         public record GetCatalogQuery() : IQuery<CatalogDTO>;
 
-        public class GetCatalogHandler(IAggregateStore store) : IQueryHandler<GetCatalogQuery, CatalogDTO>
+        public class GetCatalogHandler(IAggregateRepository repository) : IQueryHandler<GetCatalogQuery, CatalogDTO>
         {
             public async Task<Result<CatalogDTO>> Handle(GetCatalogQuery request, CancellationToken cancellationToken)
             {
-                Catalog catalog = await store.GetByAsync(CatalogId.DefaultId);
+                Catalog catalog = await repository.GetByAsync(CatalogId.DefaultId);
                 return CatalogDTO.Create(catalog);
             }
         }

@@ -20,7 +20,7 @@ namespace LIT.Smabu.Infrastructure
         {
             services.AddScoped<ICurrentUser, CurrentUserService>();
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-            RegisterAggregateStore(services);
+            RegisterAggregateRepository(services);
             RegisterAggregateCache(services);
             RegisterMediatR(services);
             RegisterReportService(services, configuration);
@@ -39,19 +39,19 @@ namespace LIT.Smabu.Infrastructure
         public static async Task SeedDatabaseAsync(this IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
-            var aggregateStore = scope.ServiceProvider.GetRequiredService<IAggregateStore>();
+            var aggregateRepository = scope.ServiceProvider.GetRequiredService<IAggregateRepository>();
 
-            var initialSeed = new InitialSeed(aggregateStore);
+            var initialSeed = new InitialSeed(aggregateRepository);
             await initialSeed.StartAsync();
 
-            var legacyImporter = new ImportLegacyData(aggregateStore);
+            var legacyImporter = new ImportLegacyData(aggregateRepository);
             await legacyImporter.StartAsync();
         }
 
-        private static void RegisterAggregateStore(IServiceCollection services)
+        private static void RegisterAggregateRepository(IServiceCollection services)
         {
-            services.AddSingleton<IAggregateStoreFactory, AggregateStoreFactory>();
-            services.AddScoped<IAggregateStore, CosmosAggregateStore>();
+            services.AddSingleton<IAggregateRepositoryFactory, AggregateRepositoryFactory>();
+            services.AddScoped<IAggregateRepository, CosmosAggregateRepository>();
         }
 
         private static void RegisterAggregateCache(IServiceCollection services)

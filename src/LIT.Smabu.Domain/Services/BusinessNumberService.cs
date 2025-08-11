@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace LIT.Smabu.Domain.Services
 {
-    public class BusinessNumberService(IAggregateStore store)
+    public class BusinessNumberService(IAggregateRepository repository)
     {
         public async Task<CustomerNumber> CreateCustomerNumberAsync()
         {
@@ -53,7 +53,7 @@ namespace LIT.Smabu.Domain.Services
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>, IHasBusinessNumber<TBusinessNumber>
             where TBusinessNumber : BusinessNumber
         {
-            TAggregate? last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate, TBusinessNumber>())).SingleOrDefault();
+            TAggregate? last = (await repository.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate, TBusinessNumber>())).SingleOrDefault();
             TBusinessNumber? lastNumber = last?.Number;
             return lastNumber;
         }
@@ -62,7 +62,7 @@ namespace LIT.Smabu.Domain.Services
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>, IHasBusinessNumber<TBusinessNumber>
             where TBusinessNumber : BusinessNumber
         {
-            TAggregate? last = (await store.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate,
+            TAggregate? last = (await repository.ApplySpecificationTask(new LastBusinessNumberSpec<TAggregate,
                 TBusinessNumber>(year))).SingleOrDefault();
             TBusinessNumber? lastNumber = last?.Number;
             return lastNumber;

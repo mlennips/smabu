@@ -12,17 +12,17 @@ namespace LIT.Smabu.UseCases.Invoices
         public record CreateInvoiceCommand(InvoiceId InvoiceId, CustomerId CustomerId, int FiscalYear,
             Currency Currency, DatePeriod? PerformancePeriod, TaxRate? TaxRate, InvoiceId? TemplateId) : ICommand<InvoiceId>;
 
-        public class CreateInvoiceHandler(IAggregateStore store) : ICommandHandler<CreateInvoiceCommand, InvoiceId>
+        public class CreateInvoiceHandler(IAggregateRepository repository) : ICommandHandler<CreateInvoiceCommand, InvoiceId>
         {
             public async Task<Result<InvoiceId>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
             {
                 Invoice invoice;
-                Customer customer = await store.GetByAsync(request.CustomerId);
+                Customer customer = await repository.GetByAsync(request.CustomerId);
                 DatePeriod performancePeriod = request.PerformancePeriod ?? new DatePeriod(DateOnly.FromDateTime(DateTime.Now), null);
 
                 if (request.TemplateId != null)
                 {
-                    Invoice template = await store.GetByAsync(request.TemplateId);
+                    Invoice template = await repository.GetByAsync(request.TemplateId);
                     invoice = Invoice.CreateFromTemplate(request.InvoiceId, request.CustomerId, request.FiscalYear, customer.MainAddress, performancePeriod, template);
                 }
                 else
@@ -31,7 +31,7 @@ namespace LIT.Smabu.UseCases.Invoices
                         request.Currency, request.TaxRate ?? TaxRate.Default, customer.PaymentCondition);
                 }
 
-                await store.CreateAsync(invoice);
+                await repository.CreateAsync(invoice);
                 return invoice.Id;
             }
         }
