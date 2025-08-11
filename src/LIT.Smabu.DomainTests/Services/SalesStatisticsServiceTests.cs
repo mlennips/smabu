@@ -11,7 +11,7 @@ namespace LIT.Smabu.DomainTests.Services
     [TestClass()]
     public class SalesStatisticsServiceTests
     {
-        private Mock<IAggregateStore> mockAggregateStore = default!;
+        private Mock<IAggregateCache> mockAggregateCache = default!;
         private SalesStatisticsService testee = default!;
 
         private readonly CustomerId customerId1 = new(Guid.NewGuid());
@@ -21,15 +21,15 @@ namespace LIT.Smabu.DomainTests.Services
         [TestInitialize]
         public void Initialize()
         {
-            mockAggregateStore = new Mock<IAggregateStore>();
-            mockAggregateStore.Setup(x => x.GetAllAsync<Invoice>()).ReturnsAsync(
+            mockAggregateCache = new Mock<IAggregateCache>();
+            mockAggregateCache.Setup(x => x.GetAllAsync<Invoice>()).ReturnsAsync(
             [
                 CreateInvoiceStub(customerId1, 2023, 1000),
                 CreateInvoiceStub(customerId2, 2023, 1100),
                 CreateInvoiceStub(customerId1, 2024, 2000),
                 CreateInvoiceStub(customerId3, 2024, 2200),
             ]);
-            testee = new SalesStatisticsService(mockAggregateStore.Object);
+            testee = new SalesStatisticsService(mockAggregateCache.Object);
         }
 
         [TestMethod()]
@@ -94,7 +94,7 @@ namespace LIT.Smabu.DomainTests.Services
             var result = await testee.GetHighestInvoicesAsync(2);
 
             // Assert
-            Assert.AreEqual(2, result.Length);
+            Assert.HasCount(2, result);
             Assert.AreEqual(customerId3, result[0].CustomerId);
             Assert.AreEqual(customerId1, result[1].CustomerId);
         }
@@ -108,9 +108,9 @@ namespace LIT.Smabu.DomainTests.Services
             var result = await testee.GetSalesByYearAsync();
 
             // Assert
-            Assert.AreEqual(2, result.Items.Length);
-            Assert.AreEqual(2, result.Items[0].Customers.Length);
-            Assert.AreEqual(2, result.Items[1].Customers.Length);
+            Assert.HasCount(2, result.Items);
+            Assert.HasCount(2, result.Items[0].Customers);
+            Assert.HasCount(2, result.Items[1].Customers);
             Assert.AreEqual(2100, result.Items[0].Amount);
             Assert.AreEqual(4200, result.Items[1].Amount);
         }
@@ -124,7 +124,7 @@ namespace LIT.Smabu.DomainTests.Services
             var result = await testee.GetSalesByCustomerAsync();
 
             // Assert
-            Assert.AreEqual(3, result.Count);
+            Assert.HasCount(3, result);
             Assert.AreEqual(3000, result[customerId1]);
             Assert.AreEqual(1100, result[customerId2]);
             Assert.AreEqual(2200, result[customerId3]);

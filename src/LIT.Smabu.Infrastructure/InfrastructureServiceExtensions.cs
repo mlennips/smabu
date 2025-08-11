@@ -50,6 +50,7 @@ namespace LIT.Smabu.Infrastructure
 
         private static void RegisterAggregateStore(IServiceCollection services)
         {
+            services.AddSingleton<IAggregateStoreFactory, AggregateStoreFactory>();
             services.AddScoped<IAggregateStore, CosmosAggregateStore>();
         }
 
