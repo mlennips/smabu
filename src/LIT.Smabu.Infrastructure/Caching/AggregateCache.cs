@@ -19,7 +19,7 @@ namespace LIT.Smabu.Infrastructure.Caching
             IRequestHandler<InformativeNotification.AggregateUpdatedEvent, VoidResult>,
             IRequestHandler<InformativeNotification.AggregateDeletedEvent, VoidResult>
     {
-        readonly static Dictionary<Type, MemoryCache> _cache = [];
+        readonly static Dictionary<Type, Dictionary<Guid, IAggregateRoot>> _cache = [];
 
         public async Task<TAggregate[]> GetAllAsync<TAggregate>()
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
@@ -32,7 +32,9 @@ namespace LIT.Smabu.Infrastructure.Caching
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var cache = await EnsureCacheAsync<TAggregate>();
-            var result = cache.Get<TAggregate>(id);
+            var result = cache.TryGetValue(id.Value, out IAggregateRoot? value)
+                ? value as TAggregate 
+                : null;
             return result ?? throw new InvalidOperationException($"Aggregate with Id {id.Value} not found");
         }
 
@@ -40,15 +42,8 @@ namespace LIT.Smabu.Infrastructure.Caching
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var cache = await EnsureCacheAsync<TAggregate>();
-            var result = new List<TAggregate>();
-            foreach (var id in ids.Distinct())
-            {
-                var entry = cache.Get<TAggregate>(id);
-                if (entry != null)
-                {
-                    result.Add(entry);
-                }
-            }
+            var result = cache.Values.OfType<TAggregate>()
+                .Where(x => ids.Contains(x.Id));
             return [.. result];
         }
 
@@ -76,7 +71,7 @@ namespace LIT.Smabu.Infrastructure.Caching
                 throw new InvalidOperationException("Aggregate must implement IAggregateRoot<IEntityId>");
             }
             var cache = await EnsureCacheAsync(request.Aggregate.GetType());
-            cache.Set(aggregate.Id, request.Aggregate);
+            cache.Add(aggregate.Id.Value, request.Aggregate);
             return Result.Void();
         }
 
@@ -88,7 +83,7 @@ namespace LIT.Smabu.Infrastructure.Caching
                 throw new InvalidOperationException("Aggregate must implement IAggregateRoot<IEntityId>");
             }
             var cache = await EnsureCacheAsync(request.Aggregate.GetType());
-            cache.Set(aggregate.Id, request.Aggregate);
+            cache[aggregate.Id.Value] = request.Aggregate;
             return Result.Void();
         }
 
@@ -100,7 +95,7 @@ namespace LIT.Smabu.Infrastructure.Caching
                 throw new InvalidOperationException("Aggregate must implement IAggregateRoot<IEntityId>");
             }
             var cache = await EnsureCacheAsync(request.Aggregate.GetType());
-            cache.Remove(aggregate.Id);
+            cache.Remove(aggregate.Id.Value);
             return Result.Void();
         }
 
@@ -108,27 +103,27 @@ namespace LIT.Smabu.Infrastructure.Caching
 
         #region CacheHandling
 
-        private async Task<MemoryCache> EnsureCacheAsync(Type aggregateType)
+        private async Task<Dictionary<Guid, IAggregateRoot>> EnsureCacheAsync(Type aggregateType)
         {
             var method = typeof(AggregateCache).GetMethod(nameof(EnsureCacheAsync), BindingFlags.NonPublic | BindingFlags.Instance, []);
             var methodGeneric = method!.MakeGenericMethod(aggregateType);
-            var result = await (Task<MemoryCache>)methodGeneric!.Invoke(this, null)!;
+            var result = await (Task<Dictionary<Guid, IAggregateRoot>>)methodGeneric!.Invoke(this, null)!;
             return result;
         }
 
-        private async Task<MemoryCache> EnsureCacheAsync<TAggregate>()
+        private async Task<Dictionary<Guid, IAggregateRoot>> EnsureCacheAsync<TAggregate>()
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            MemoryCache? cache;
+            Dictionary<Guid, IAggregateRoot>? cache;
             if (!_cache.ContainsKey(typeof(TAggregate)))
             {
                 logger.LogInformation("Creating cache for type {type}", typeof(TAggregate).Name);
-                cache = new MemoryCache(new MemoryCacheOptions());
+                cache = [];
                 _cache[typeof(TAggregate)] = cache;
                 var allItems = await LoadFromStoreAsync<TAggregate>();
                 foreach (var item in allItems)
                 {
-                    cache.Set(item.Id, item);
+                    cache.Add(item.Id.Value, item);
                 }
             }
             else
@@ -157,25 +152,17 @@ namespace LIT.Smabu.Infrastructure.Caching
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var cache = await EnsureCacheAsync<TAggregate>();
-            var values = new List<TAggregate>();
-
-            foreach (var entryKey in cache.Keys)
-            {
-                var entry = cache.Get<TAggregate>(entryKey);
-                if (entry != null)
-                {
-                    values.Add(entry);
-                }
-                else
-                {
-                    //
-                }
-            }
+            var values = cache.Values.OfType<TAggregate>().AsQueryable();
+            TAggregate[]? result;
             if (specification != null)
             {
-                values = [.. Specifications.SpecificationEvaluator.GetQuery(values.AsQueryable(), specification)];
+                result = [.. Specifications.SpecificationEvaluator.GetQuery(values, specification)];
             }
-            return values;
+            else
+            {
+                result = [.. values];
+            }
+            return result;
         }
         #endregion
     }
