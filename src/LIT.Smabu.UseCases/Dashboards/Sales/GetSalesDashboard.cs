@@ -49,10 +49,8 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                 result.SalesLast24Month = await salesStatisticsService.CalculateSalesForLastMonthsAsync(24);
                 result.SalesLast36Month = await salesStatisticsService.CalculateSalesForLastMonthsAsync(36);
                 result.TotalSales = await salesStatisticsService.CalculateTotalSalesAsync();
-                result.Top3InvoicesEver = (await salesStatisticsService.GetHighestInvoicesAsync(3))
-                    .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
-                result.Top3InvoicesLast12Month = (await salesStatisticsService.GetHighestInvoicesAsync(3, 12))
-                    .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
+                result.Top3InvoicesEver = [.. (await salesStatisticsService.GetHighestInvoicesAsync(3)).Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount))];
+                result.Top3InvoicesLast12Month = [.. (await salesStatisticsService.GetHighestInvoicesAsync(3, 12)).Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount))];
                 result.InvoiceCount = await cache.CountAsync<Invoice>();
                 result.CustomerCount = await cache.CountAsync<Customer>();
                 result.OrderCount = 0;
@@ -97,12 +95,11 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
             private async Task SetSalesByCustomerAsync(GetSalesDashboardReadModel result, IReadOnlyList<Customer> customers)
             {
                 Dictionary<CustomerId, decimal> salesByCustomer = await salesStatisticsService.GetSalesByCustomerAsync();
-                result.SalesByCustomer = salesByCustomer
+                result.SalesByCustomer = [.. salesByCustomer
                     .Select(x => new SalesAmountItem(
                         customers.Single(c => c.Id == x.Key).CorporateDesign.ShortName,
                         customers.Single(c => c.Id == x.Key).Id.ToString(),
-                        x.Value))
-                    .ToList();
+                        x.Value))];
             }
         }
     }

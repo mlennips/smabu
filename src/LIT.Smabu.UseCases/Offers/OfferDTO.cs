@@ -41,7 +41,7 @@ namespace LIT.Smabu.UseCases.Offers
 
             if (withItems)
             {
-                result.Items = offer.Items.Select(OfferItemDTO.Create).ToList();
+                result.Items = [.. offer.Items.Select(OfferItemDTO.Create)];
             }
 
             return result;
