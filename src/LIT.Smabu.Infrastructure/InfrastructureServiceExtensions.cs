@@ -63,8 +63,6 @@ namespace LIT.Smabu.Infrastructure
         private static void RegisterUnitOfWork(IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(VoidRequestValidationBehavior<,>));
         }
 
         private static void RegisterMediatR(IServiceCollection services)
@@ -74,7 +72,6 @@ namespace LIT.Smabu.Infrastructure
 
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssemblies(assemblies);
-                cfg.AddOpenBehavior(typeof(VoidRequestValidationBehavior<IRequest, Unit>));
                 cfg.AddOpenBehavior(typeof(UnitOfWorkBehavior<,>));
             });
         }

@@ -19,11 +19,8 @@ namespace LIT.Smabu.Infrastructure.Persistence
         {
             var response = await next(cancellationToken);
 
-            var t1 = typeof(TRequest);  
-            var t2 = typeof(TResponse);
-            var t3 = t1.Name + " " + t2.Name;
-
-            if (unitOfWork.HasChanges)
+            var isCommandRequest = typeof(TRequest).GetInterfaces().Any(x => x.Name.StartsWith("ICommand"));
+            if (isCommandRequest && unitOfWork.HasChanges)
             {
                 if (response is Result result && result.IsSuccess)
                 {
@@ -43,28 +40,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
                     await unitOfWork.CommitAsync(cancellationToken);
                 }
             }
-
             return response;
-        }
-    }
-
-    public class VoidRequestValidationBehavior<TRequest, TResponse>() : IPipelineBehavior<TRequest, MediatR.Unit>
-    where TRequest : notnull
-    {
-        public async Task<Unit> Handle(TRequest request, RequestHandlerDelegate<Unit> next, CancellationToken cancellationToken)
-        {
-            // Validate request
-            //var context = new ValidationContext<TRequest>(request);
-            //var failures = (await Task.WhenAll(validators
-            //        .Select(v => v.ValidateAsync(context, cancellationToken))))
-            //    .SelectMany(result => result.Errors)
-            //    .Where(error => error != null)
-            //    .ToList();
-
-            //if (failures.Any())
-            //    throw new AppValidationException(failures);
-
-            return await next();
         }
     }
 }
