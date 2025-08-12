@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
+using LIT.Smabu.Core;
 using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.PaymentAggregate;

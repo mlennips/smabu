@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Base;
+﻿using LIT.Smabu.Core;
+using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.InvoiceAggregate;
 using LIT.Smabu.UseCases.Invoices;
 using MediatR;

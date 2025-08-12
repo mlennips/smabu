@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Base;
+﻿using LIT.Smabu.Core;
+using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.Domain.Common;
 using LIT.Smabu.Domain.CustomerAggregate;

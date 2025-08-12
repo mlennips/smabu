@@ -1,5 +1,4 @@
-﻿
-namespace LIT.Smabu.Domain.Base
+﻿namespace LIT.Smabu.Core
 {
     public sealed class Result<TValue> : Result
     {
@@ -66,6 +65,11 @@ namespace LIT.Smabu.Domain.Base
             return new(value);
         }
 
+        public static VoidResult Void()
+        {
+            return new();
+        }
+
         public static ErrorDetail Success(object create)
         {
             throw new NotImplementedException();
@@ -74,6 +78,14 @@ namespace LIT.Smabu.Domain.Base
         public static implicit operator Result(ErrorDetail error)
         {
             return new(error);
+        }
+    }
+
+    public sealed class VoidResult : Result
+    {
+        public VoidResult() 
+        {
+            // "MediatR workaround for void results. MediatR.Unit is not fully compatible with behavior pipelines."
         }
     }
 

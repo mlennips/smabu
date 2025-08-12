@@ -12,7 +12,7 @@ namespace LIT.Smabu.UseCases.Payments
 {
     public static class CreatePaymentIfInvoiceReleased
     {
-        public class CreatePaymentIfInvoiceReleasedHandler(IAggregateStore store, ISender sender)
+        public class CreatePaymentIfInvoiceReleasedHandler(IAggregateRepository repository, ISender sender)
             : IRequestHandler<InvoiceReleasedEvent>
         {
 
@@ -23,15 +23,15 @@ namespace LIT.Smabu.UseCases.Payments
                 {
                     return;
                 }
-                Invoice invoice = await store.GetByAsync(request.InvoiceId);
-                Customer customer = await store.GetByAsync(invoice.CustomerId);
+                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
+                Customer customer = await repository.GetByAsync(invoice.CustomerId);
                 var command = CreatePaymentCommand.Create(invoice, customer);
                 await sender.Send(command, cancellationToken);
             }
 
             private async Task<bool> CheckPaymentForInvoiceAlreadyExistsAsync(InvoiceId invoiceId)
             {
-                IReadOnlyList<Payment> detectedPayments = await store.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([invoiceId]));
+                IReadOnlyList<Payment> detectedPayments = await repository.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([invoiceId]));
                 return detectedPayments.Any();
             }
         }

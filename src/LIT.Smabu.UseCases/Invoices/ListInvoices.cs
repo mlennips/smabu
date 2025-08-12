@@ -13,15 +13,15 @@ namespace LIT.Smabu.UseCases.Invoices
     {
         public record ListInvoicesQuery(CustomerId? CustomerId = null) : IQuery<ListInvoicesDTO[]>;
 
-        public class ListInvoicesHandler(IAggregateStore store, IAggregateCache cache) : IQueryHandler<ListInvoicesQuery, ListInvoicesDTO[]>
+        public class ListInvoicesHandler(IAggregateRepository repository, IAggregateCache cache) : IQueryHandler<ListInvoicesQuery, ListInvoicesDTO[]>
         {
             public async Task<Result<ListInvoicesDTO[]>> Handle(ListInvoicesQuery request, CancellationToken cancellationToken)
             {
                 IReadOnlyList<Invoice> invoices = request.CustomerId != null
-                    ? await store.ApplySpecificationTask(new InvoicesByCustomerIdSpec(request.CustomerId))
-                    : await store.GetAllAsync<Invoice>();
+                    ? await repository.ApplySpecificationTask(new InvoicesByCustomerIdSpec(request.CustomerId))
+                    : await repository.GetAllAsync<Invoice>();
 
-                IReadOnlyList<Payment> payments = await store.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([.. invoices.Select(x => x.Id)]));
+                IReadOnlyList<Payment> payments = await repository.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([.. invoices.Select(x => x.Id)]));
                 var paidInvoices = payments.Where(x => x.InvoiceId != null).GroupBy(x => x.InvoiceId!)
                     .Where(x => x.All(y => y.Status == PaymentStatus.Paid))
                     .Select(x => x.Key).

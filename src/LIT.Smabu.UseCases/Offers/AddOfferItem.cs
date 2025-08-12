@@ -12,13 +12,13 @@ namespace LIT.Smabu.UseCases.Offers
         public record AddOfferItemCommand(OfferItemId OfferItemId, OfferId OfferId, string Details,
             Quantity Quantity, decimal UnitPrice, CatalogItemId? CatalogItemId) : ICommand<OfferItemId>;
 
-        public class AddOfferItemHandler(IAggregateStore store) : ICommandHandler<AddOfferItemCommand, OfferItemId>
+        public class AddOfferItemHandler(IUnitOfWork uow) : ICommandHandler<AddOfferItemCommand, OfferItemId>
         {
             public async Task<Result<OfferItemId>> Handle(AddOfferItemCommand request, CancellationToken cancellationToken)
             {
-                Offer offer = await store.GetByAsync(request.OfferId);
+                Offer offer = await uow.Repository.GetByAsync(request.OfferId);
                 offer.AddItem(request.OfferItemId, request.Details, request.Quantity, request.UnitPrice, request.CatalogItemId);
-                await store.UpdateAsync(offer);
+                await uow.Repository.UpdateAsync(offer);
                 return request.OfferItemId;
             }
         }

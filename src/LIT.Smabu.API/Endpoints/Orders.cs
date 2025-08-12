@@ -9,6 +9,7 @@ using static LIT.Smabu.UseCases.Orders.UpdateOrder;
 using static LIT.Smabu.UseCases.Orders.DeleteOrder;
 using static LIT.Smabu.UseCases.Orders.GetOrderReferences;
 using static LIT.Smabu.UseCases.Orders.UpdateReferencesToOrder;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.API.Endpoints
 {

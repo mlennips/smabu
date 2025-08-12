@@ -22,21 +22,21 @@ namespace LIT.Smabu.InfrastructureTests.Caching
     [TestClass()]
     public class AggregateCacheTests
     {
-        private Mock<IAggregateStore> mockAggregateStore = default!;
-        private Mock<IAggregateStoreFactory> mockAggregateStoreFactory = default!;
+        private Mock<IAggregateRepository> mockAggregateRepository = default!;
+        private Mock<IAggregateRepositoryFactory> mockAggregateRepositoryFactory = default!;
         private Mock<ILogger<AggregateCache>> mockLogger = default!;
         private AggregateCache testee = default!;
 
         [TestInitialize]
         public void Initialize()
         {
-            mockAggregateStore = new Mock<IAggregateStore>();
-            mockAggregateStoreFactory = new Mock<IAggregateStoreFactory>();
-            mockAggregateStoreFactory.Setup(x => x.Create())
-                .Returns(mockAggregateStore.Object);
+            mockAggregateRepository = new Mock<IAggregateRepository>();
+            mockAggregateRepositoryFactory = new Mock<IAggregateRepositoryFactory>();
+            mockAggregateRepositoryFactory.Setup(x => x.Create())
+                .Returns(mockAggregateRepository.Object);
             mockLogger = new Mock<ILogger<AggregateCache>>();
 
-            testee = new AggregateCache(mockLogger.Object, mockAggregateStoreFactory.Object);
+            testee = new AggregateCache(mockLogger.Object, mockAggregateRepositoryFactory.Object);
         }
 
         [TestMethod()]
@@ -62,7 +62,7 @@ namespace LIT.Smabu.InfrastructureTests.Caching
             var customer = CreateCustomer();
             customer.Update("updatedName", customer.IndustryBranch, customer.MainAddress, customer.Communication,
                 customer.CorporateDesign, customer.VatId, customer.PreferredPaymentMethod, customer.PaymentCondition);
-            mockAggregateStore.Setup(x => x.GetAllAsync<Customer>())
+            mockAggregateRepository.Setup(x => x.GetAllAsync<Customer>())
                 .ReturnsAsync([CreateCustomer()]);
 
             // Act
@@ -80,7 +80,7 @@ namespace LIT.Smabu.InfrastructureTests.Caching
         {
             // Arrange
             var customer = CreateCustomer();
-            mockAggregateStore.Setup(x => x.GetAllAsync<Customer>())
+            mockAggregateRepository.Setup(x => x.GetAllAsync<Customer>())
                 .ReturnsAsync([customer, CreateCustomer()]);
 
             // Act

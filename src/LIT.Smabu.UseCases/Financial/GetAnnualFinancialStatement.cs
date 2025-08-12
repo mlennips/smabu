@@ -10,11 +10,11 @@ namespace LIT.Smabu.UseCases.Financial
     {
         public record GetAnnualFinancialStatementQuery(AnnualFinancialStatementId AnnualFinancialStatementId) : IQuery<AnnualFinancialStatementDTO>;
 
-        public class GetAnnualFinancialStatementHandler(IAggregateStore store) : IQueryHandler<GetAnnualFinancialStatementQuery, AnnualFinancialStatementDTO>
+        public class GetAnnualFinancialStatementHandler(IAggregateRepository repository) : IQueryHandler<GetAnnualFinancialStatementQuery, AnnualFinancialStatementDTO>
         {
             public async Task<Result<AnnualFinancialStatementDTO>> Handle(GetAnnualFinancialStatementQuery request, CancellationToken cancellationToken)
             {
-                AnnualFinancialStatement annualFinancialStatement = await store.GetByAsync(request.AnnualFinancialStatementId);
+                AnnualFinancialStatement annualFinancialStatement = await repository.GetByAsync(request.AnnualFinancialStatementId);
                 return annualFinancialStatement == null
                     ? FinancialErrors.FinancialStatementNotFound
                     : Result.Success(AnnualFinancialStatementDTO.Create(annualFinancialStatement));

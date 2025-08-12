@@ -12,19 +12,19 @@ namespace LIT.Smabu.UseCases.Orders
     {
         public record GetOrderQuery(OrderId OrderId) : IQuery<OrderDTO>;
 
-        public class GetOrderHandler(IAggregateStore store) : IQueryHandler<GetOrderQuery, OrderDTO>
+        public class GetOrderHandler(IAggregateRepository repository) : IQueryHandler<GetOrderQuery, OrderDTO>
         {
             public async Task<Result<OrderDTO>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
             {
-                Order order = await store.GetByAsync(request.OrderId);
-                Customer customer = await store.GetByAsync(order.CustomerId);
+                Order order = await repository.GetByAsync(request.OrderId);
+                Customer customer = await repository.GetByAsync(order.CustomerId);
 
                 List<Invoice> invoices = order.References.InvoiceIds.Count != 0
-                    ? [.. (await store.GetByAsync(order.References.InvoiceIds))]
+                    ? [.. (await repository.GetByAsync(order.References.InvoiceIds))]
                     : [];
 
                 List<Offer> offers = order.References.OfferIds.Count != 0
-                    ? [.. (await store.GetByAsync(order.References.OfferIds))]
+                    ? [.. (await repository.GetByAsync(order.References.OfferIds))]
                     : [];
 
                 var orderReferences = OrderReferencesDTO.Create(order.References, offers, invoices);

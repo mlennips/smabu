@@ -12,6 +12,7 @@ using static LIT.Smabu.UseCases.Offers.DeleteOffer;
 using static LIT.Smabu.UseCases.Offers.AddOfferItem;
 using static LIT.Smabu.UseCases.Offers.UpdateOfferItem;
 using static LIT.Smabu.UseCases.Offers.RemoveOfferItem;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.API.Endpoints
 {

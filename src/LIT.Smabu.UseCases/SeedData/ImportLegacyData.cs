@@ -10,7 +10,7 @@ using Customer = LIT.Smabu.Domain.CustomerAggregate.Customer;
 
 namespace LIT.Smabu.UseCases.SeedData
 {
-    public class ImportLegacyData(IAggregateStore store)
+    public class ImportLegacyData(IAggregateRepository repository)
     {
         public async Task StartAsync()
         {
@@ -36,7 +36,7 @@ namespace LIT.Smabu.UseCases.SeedData
                                 new Address(importKunde.Name1, (importKunde.Vorname + " " + importKunde.Nachname).Trim(),
                                 importKunde.Strasse, importKunde.Hausnummer, importKunde.Postleitzahl, importKunde.Ort, importKunde.Land),
                                 null, null, "", PaymentMethod.Default, PaymentCondition.Default);
-                            await store.CreateAsync(customer);
+                            await repository.CreateAsync(customer);
 
                             var importRechnungen = importObject.Rechnungen.Where(x => x.KundeId == importKunde.Id).ToList();
                             foreach (BackupObject.Rechnung? importRechnung in importRechnungen)
@@ -59,7 +59,7 @@ namespace LIT.Smabu.UseCases.SeedData
 
                                 invoice.Release(invoiceNumber, importRechnung.Rechnungsdatum);
                                 invoice.GetUncommittedEvents(true);
-                                await store.CreateAsync(invoice);
+                                await repository.CreateAsync(invoice);
                             }
 
                             var importAngebote = importObject.Angebote.Where(x => x.KundeId == importKunde.Id).ToList();
@@ -78,11 +78,11 @@ namespace LIT.Smabu.UseCases.SeedData
                                         new Quantity(importAngebotPosition.Menge, ParseUnit(importAngebotPosition.ProduktEinheit)), importAngebotPosition.Preis);
                                 }
 
-                                await store.CreateAsync(offer);
+                                await repository.CreateAsync(offer);
                             }
                         }
 
-                        paymentCounter = await ImportPaymentsAsync(store, currentUser, importObject, paymentCounter);
+                        paymentCounter = await ImportPaymentsAsync(repository, currentUser, importObject, paymentCounter);
 
                         File.Move(jsonFile, Path.Combine(importDir, "Backup.json.done"));
                     }
@@ -95,10 +95,10 @@ namespace LIT.Smabu.UseCases.SeedData
             }
         }
 
-        private static async Task<int> ImportPaymentsAsync(IAggregateStore store, ImportUser currentUser, BackupObject importObject, int paymentCounter)
+        private static async Task<int> ImportPaymentsAsync(IAggregateRepository repository, ImportUser currentUser, BackupObject importObject, int paymentCounter)
         {
-            IReadOnlyList<Invoice> invoices = await store.GetAllAsync<Invoice>();
-            IReadOnlyList<Customer> customers = await store.GetAllAsync<Customer>();
+            IReadOnlyList<Invoice> invoices = await repository.GetAllAsync<Invoice>();
+            IReadOnlyList<Customer> customers = await repository.GetAllAsync<Customer>();
             foreach (Invoice? invoice in invoices.OrderBy(x => x.InvoiceDate))
             {
                 BackupObject.Rechnung importRechnung = importObject.Rechnungen.Single(x => x.Rechnungsnummer == invoice.Number.Value);
@@ -116,7 +116,7 @@ namespace LIT.Smabu.UseCases.SeedData
                         payment.Complete(importRechnung.Summe, importRechnung.CreationDate);
                     }
                     payment.UpdateMeta(AggregateMeta.CreateLegacy(currentUser, importRechnung.CreationDate));
-                    await store.CreateAsync(payment);
+                    await repository.CreateAsync(payment);
                 }
             }
             return paymentCounter;

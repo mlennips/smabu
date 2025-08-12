@@ -10,8 +10,8 @@ using System.Net;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class CosmosAggregateStore(ICurrentUser currentUser, IConfiguration config,
-            ILogger<CosmosAggregateStore> logger, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
+    public class CosmosAggregateRepository(ICurrentUser currentUser, IConfiguration config,
+            ILogger<CosmosAggregateRepository> logger) : IAggregateRepository
     {
         private const string AggregatesContainerId = "Aggregates";
         private static Container? container;
@@ -29,9 +29,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var response = await container.CreateItemAsync(cosmosEntity, new PartitionKey(cosmosEntity.PartitionKey));
             ValidateResponse(response.StatusCode, HttpStatusCode.Created, "Creation", aggregate);
             logger.LogDebug("Created aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
-
-            await domainEventDispatcher.PublishInformativeCreatedNotificationAsync(aggregate);
-            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task UpdateAsync<TAggregate>(TAggregate aggregate)
@@ -43,9 +40,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var response = await container.ReplaceItemAsync(cosmosEntity, cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
             ValidateResponse(response.StatusCode, HttpStatusCode.OK, "Updating", aggregate);
             logger.LogDebug("Updated aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
-
-            await domainEventDispatcher.PublishInformativeUpdatedNotificationEventAsync(aggregate);
-            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
@@ -56,9 +50,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var response = await container.DeleteItemAsync<TAggregate>(cosmosEntity.Id, new PartitionKey(cosmosEntity.PartitionKey));
             ValidateResponse(response.StatusCode, HttpStatusCode.NoContent, "Deleting", aggregate);
             logger.LogDebug("Deleted aggregate {type}/{id} successfully", typeof(TAggregate).Name, aggregate.Id);
-
-            await domainEventDispatcher.PublishInformativeDeletedNotificationAsync(aggregate);
-            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task<TAggregate[]> GetAllAsync<TAggregate>()

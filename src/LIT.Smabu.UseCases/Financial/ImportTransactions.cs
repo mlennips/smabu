@@ -12,14 +12,14 @@ namespace LIT.Smabu.UseCases.Financial
     {
         public record ImportAnnualFinancialStatementTransactionsCommand(AnnualFinancialStatementId AnnualFinancialStatementId) : ICommand;
 
-        public class ImportTransactionsHandler(IAggregateStore store) : ICommandHandler<ImportAnnualFinancialStatementTransactionsCommand>
+        public class ImportTransactionsHandler(IUnitOfWork uow) : ICommandHandler<ImportAnnualFinancialStatementTransactionsCommand>
         {
             public async Task<Result> Handle(ImportAnnualFinancialStatementTransactionsCommand request, CancellationToken cancellationToken)
             {
                 AnnualFinancialStatement annualFinancialStatement
-                    = await store.GetByAsync(request.AnnualFinancialStatementId);
+                    = await uow.Repository.GetByAsync(request.AnnualFinancialStatementId);
                 Payment[] detectedPayments
-                    = await store.ApplySpecificationTask(new PaymentsForFiscalYearSpec(annualFinancialStatement.FiscalYear));
+                    = await uow.Repository.ApplySpecificationTask(new PaymentsForFiscalYearSpec(annualFinancialStatement.FiscalYear));
 
                 Result result = annualFinancialStatement.ImportIncomes(detectedPayments);
                 if (result.IsFailure)
@@ -27,7 +27,7 @@ namespace LIT.Smabu.UseCases.Financial
                     return FinancialErrors.ImportTransactionsFailed;
                 }
 
-                await store.UpdateAsync(annualFinancialStatement);
+                await uow.Repository.UpdateAsync(annualFinancialStatement);
                 return Result.Success();
             }
         }

@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Base;
+﻿using LIT.Smabu.Core;
+using LIT.Smabu.Domain.Base;
 
 namespace LIT.Smabu.Domain.Common
 {

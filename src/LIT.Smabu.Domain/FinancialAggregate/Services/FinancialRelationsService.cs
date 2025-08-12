@@ -6,7 +6,7 @@ using LIT.Smabu.Domain.PaymentAggregate;
 
 namespace LIT.Smabu.Domain.FinancialAggregate.Services
 {
-    public class FinancialRelationsService(IAggregateStore store)
+    public class FinancialRelationsService(IAggregateRepository repository)
     {
         public async Task<Result> CheckCanChangeRelatedItemAsync(PaymentId paymentId)
         {
@@ -25,7 +25,7 @@ namespace LIT.Smabu.Domain.FinancialAggregate.Services
 
         private async Task<Result> CheckFiscalYearExistsAsync(int fiscalYear)
         {
-            AnnualFinancialStatement[] detectedFinancialStatements = await store.ApplySpecificationTask(new DectecFinancialStatementByFiscalYearSpec(fiscalYear));
+            AnnualFinancialStatement[] detectedFinancialStatements = await repository.ApplySpecificationTask(new DectecFinancialStatementByFiscalYearSpec(fiscalYear));
             AnnualFinancialStatement? detectedFinancialStatement = detectedFinancialStatements.SingleOrDefault();
             return detectedFinancialStatement == null
                 ? Result.Success()
@@ -36,7 +36,7 @@ namespace LIT.Smabu.Domain.FinancialAggregate.Services
 
         private async Task<AnnualFinancialStatement?> DetectFinancialStatementAsync(PaymentId paymentId)
         {
-            AnnualFinancialStatement[] detectedFinancialStatements = await store.ApplySpecificationTask(new DectecFinancialStatementByPaymentIdSpec(paymentId));
+            AnnualFinancialStatement[] detectedFinancialStatements = await repository.ApplySpecificationTask(new DectecFinancialStatementByPaymentIdSpec(paymentId));
             AnnualFinancialStatement? detectedFinancialStatement = detectedFinancialStatements.SingleOrDefault();
             return detectedFinancialStatement;
         }

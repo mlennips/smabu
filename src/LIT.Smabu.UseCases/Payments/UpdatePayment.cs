@@ -11,7 +11,7 @@ namespace LIT.Smabu.UseCases.Payments
         public record UpdatePaymentCommand(PaymentId PaymentId, string Details, string Payer, string Payee, string ReferenceNr, DateTime? ReferenceDate,
                 DateTime AccountingDate, decimal AmountDue, DateTime? DueDate, PaymentMethod PaymentMethod, PaymentStatus Status, PaymentCondition PaymentCondition) : ICommand;
 
-        public class UpdatePaymentHandler(IAggregateStore store, FinancialRelationsService financialRelationsService) : ICommandHandler<UpdatePaymentCommand>
+        public class UpdatePaymentHandler(IAggregateRepository repository, FinancialRelationsService financialRelationsService) : ICommandHandler<UpdatePaymentCommand>
         {
             public async Task<Result> Handle(UpdatePaymentCommand request, CancellationToken cancellationToken)
             {
@@ -21,7 +21,7 @@ namespace LIT.Smabu.UseCases.Payments
                     return financialResult;
                 }
 
-                Payment payment = await store.GetByAsync(request.PaymentId);
+                Payment payment = await repository.GetByAsync(request.PaymentId);
                 if (payment == null)
                 {
                     return PaymentErrors.NotFound;
@@ -32,7 +32,7 @@ namespace LIT.Smabu.UseCases.Payments
 
                 if (updateResult.IsSuccess)
                 {
-                    await store.UpdateAsync(payment);
+                    await repository.UpdateAsync(payment);
                 }
 
                 return updateResult;

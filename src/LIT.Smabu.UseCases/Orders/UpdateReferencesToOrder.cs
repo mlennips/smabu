@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Base;
+﻿using LIT.Smabu.Core;
+using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.OrderAggregate;
 using LIT.Smabu.Domain.OrderAggregate.Services;
 using LIT.Smabu.UseCases.Base;

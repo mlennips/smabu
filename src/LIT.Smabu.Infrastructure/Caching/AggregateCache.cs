@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace LIT.Smabu.Infrastructure.Caching
 {
-    public class AggregateCache(ILogger<AggregateCache> logger, 
-        Persistence.IAggregateStoreFactory aggregateStoreFactory) : IAggregateCache,
-            IRequestHandler<InformativeNotification.AggregateCreatedEvent>,
-            IRequestHandler<InformativeNotification.AggregateUpdatedEvent>,
-            IRequestHandler<InformativeNotification.AggregateDeletedEvent>
+    public class AggregateCache(ILogger<AggregateCache> logger,
+        Persistence.IAggregateRepositoryFactory aggregateStoreFactory) : IAggregateCache,
+            IRequestHandler<InformativeNotification.AggregateCreatedEvent, VoidResult>,
+            IRequestHandler<InformativeNotification.AggregateUpdatedEvent, VoidResult>,
+            IRequestHandler<InformativeNotification.AggregateDeletedEvent, VoidResult>
     {
         readonly static Dictionary<Type, MemoryCache> _cache = [];
 
@@ -68,7 +68,7 @@ namespace LIT.Smabu.Infrastructure.Caching
 
         #region RequestHandlers
 
-        public async Task Handle(InformativeNotification.AggregateCreatedEvent request, CancellationToken cancellationToken)
+        public async Task<VoidResult> Handle(InformativeNotification.AggregateCreatedEvent request, CancellationToken cancellationToken)
         {
             logger.LogInformation("Aggregate created: {aggregate}", request.Aggregate);
             if (request.Aggregate is not IAggregateRoot<IEntityId> aggregate)
@@ -77,9 +77,10 @@ namespace LIT.Smabu.Infrastructure.Caching
             }
             var cache = await EnsureCacheAsync(request.Aggregate.GetType());
             cache.Set(aggregate.Id, request.Aggregate);
+            return Result.Void();
         }
 
-        public async Task Handle(InformativeNotification.AggregateUpdatedEvent request, CancellationToken cancellationToken)
+        public async Task<VoidResult> Handle(InformativeNotification.AggregateUpdatedEvent request, CancellationToken cancellationToken)
         {
             logger.LogInformation("Aggregate updated: {aggregate}", request.Aggregate);
             if (request.Aggregate is not IAggregateRoot<IEntityId> aggregate)
@@ -88,9 +89,10 @@ namespace LIT.Smabu.Infrastructure.Caching
             }
             var cache = await EnsureCacheAsync(request.Aggregate.GetType());
             cache.Set(aggregate.Id, request.Aggregate);
+            return Result.Void();
         }
 
-        public async Task Handle(InformativeNotification.AggregateDeletedEvent request, CancellationToken cancellationToken)
+        public async Task<VoidResult> Handle(InformativeNotification.AggregateDeletedEvent request, CancellationToken cancellationToken)
         {
             logger.LogInformation("Aggregate deleted: {aggregate}", request.Aggregate);
             if (request.Aggregate is not IAggregateRoot<IEntityId> aggregate)
@@ -99,6 +101,7 @@ namespace LIT.Smabu.Infrastructure.Caching
             }
             var cache = await EnsureCacheAsync(request.Aggregate.GetType());
             cache.Remove(aggregate.Id);
+            return Result.Void();
         }
 
         #endregion
@@ -140,8 +143,8 @@ namespace LIT.Smabu.Infrastructure.Caching
 
         private async Task<TAggregate[]> LoadFromStoreAsync<TAggregate>() where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
-            var store = aggregateStoreFactory.Create();
-            var result = await store.GetAllAsync<TAggregate>();
+            var repository = aggregateStoreFactory.Create();
+            var result = await repository.GetAllAsync<TAggregate>();
             return result;
         }
 

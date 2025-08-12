@@ -47,7 +47,7 @@ namespace LIT.Smabu.UseCases.Payments
             }
         }
 
-        public class CreatePaymentHandler(IAggregateStore store, BusinessNumberService businessNumberService, FinancialRelationsService financialRelationsService)
+        public class CreatePaymentHandler(IAggregateRepository repository, BusinessNumberService businessNumberService, FinancialRelationsService financialRelationsService)
             : ICommandHandler<CreatePaymentCommand, PaymentId>
         {
             public async Task<Result<PaymentId>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
@@ -79,7 +79,7 @@ namespace LIT.Smabu.UseCases.Payments
                     }
                 }
 
-                await store.CreateAsync(payment);
+                await repository.CreateAsync(payment);
                 return payment.Id;
             }
 
@@ -88,7 +88,7 @@ namespace LIT.Smabu.UseCases.Payments
                 PaymentCondition result = PaymentCondition.Default;
                 if (request.CustomerId != null)
                 {
-                    Customer customer = await store.GetByAsync(request.CustomerId);
+                    Customer customer = await repository.GetByAsync(request.CustomerId);
                     if (customer != null)
                     {
                         result = customer.PaymentCondition;

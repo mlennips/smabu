@@ -4,11 +4,11 @@ using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.OrderAggregate.Services
 {
-    public class UpdateReferencesService(IAggregateStore store)
+    public class UpdateReferencesService(IAggregateRepository repository)
     {
         public async Task<Result> StartAsync(OrderId orderId, OrderReferences references)
         {
-            Order order = await store.GetByAsync(orderId);
+            Order order = await repository.GetByAsync(orderId);
 
             if (order == null)
             {
@@ -19,7 +19,7 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
             if (checkResult.IsSuccess)
             {
                 order.UpdateReferences(references);
-                await store.UpdateAsync(order);
+                await repository.UpdateAsync(order);
             }
             return checkResult;
         }
@@ -29,7 +29,7 @@ namespace LIT.Smabu.Domain.OrderAggregate.Services
             var errors = new List<ErrorDetail>();
             foreach (IEntityId entityId in references.GetAllReferenceIds())
             {
-                Order? detectedOrder = (await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();
+                Order? detectedOrder = (await repository.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(entityId))).SingleOrDefault();
                 if (detectedOrder != null && detectedOrder.Id != orderId)
                 {
                     errors.Add(OrderErrors.ReferenceAlreadyAdded(entityId, detectedOrder.Number));
