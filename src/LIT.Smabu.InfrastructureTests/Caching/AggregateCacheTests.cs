@@ -88,11 +88,9 @@ namespace LIT.Smabu.InfrastructureTests.Caching
             await testee.Handle(new InformativeNotification.AggregateDeletedEvent(customer1), new CancellationToken());
 
             // Assert
-            var customerCount = await testee.CountAsync<Customer>();
             var cachedCustomers = await testee.GetAllAsync<Customer>();
 
             Assert.IsFalse(cachedCustomers.Any(x => x.Id == customer1.Id));
-            //Assert.AreEqual(2, customerCount);
         }
 
         private static Customer CreateCustomer()
