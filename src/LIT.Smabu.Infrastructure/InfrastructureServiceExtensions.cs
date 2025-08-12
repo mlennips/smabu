@@ -18,11 +18,12 @@ namespace LIT.Smabu.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfigurationManager configuration)
         {
+            RegisterMediatR(services);
             services.AddScoped<ICurrentUser, CurrentUserService>();
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             RegisterAggregateRepository(services);
             RegisterAggregateCache(services);
-            RegisterMediatR(services);
+            RegisterUnitOfWork(services);
             RegisterReportService(services, configuration);
 
             return services;
@@ -59,6 +60,13 @@ namespace LIT.Smabu.Infrastructure
             services.AddSingleton<IAggregateCache, AggregateCache>();
         }
 
+        private static void RegisterUnitOfWork(IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
+            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(VoidRequestValidationBehavior<,>));
+        }
+
         private static void RegisterMediatR(IServiceCollection services)
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
@@ -66,8 +74,9 @@ namespace LIT.Smabu.Infrastructure
 
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssemblies(assemblies);
+                cfg.AddOpenBehavior(typeof(VoidRequestValidationBehavior<IRequest, Unit>));
+                cfg.AddOpenBehavior(typeof(UnitOfWorkBehavior<,>));
             });
         }
-
     }
 }

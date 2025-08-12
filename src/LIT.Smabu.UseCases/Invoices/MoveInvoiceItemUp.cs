@@ -9,18 +9,18 @@ namespace LIT.Smabu.UseCases.Invoices
     {
         public record MoveInvoiceItemUpCommand(InvoiceItemId InvoiceItemId, InvoiceId InvoiceId) : ICommand;
 
-        public class MoveInvoiceItemUpHandler(IAggregateRepository repository) : ICommandHandler<MoveInvoiceItemUpCommand>
+        public class MoveInvoiceItemUpHandler(IUnitOfWork uow) : ICommandHandler<MoveInvoiceItemUpCommand>
         {
             public async Task<Result> Handle(MoveInvoiceItemUpCommand request, CancellationToken cancellationToken)
             {
-                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
+                Invoice invoice = await uow.Repository.GetByAsync(request.InvoiceId);
                 Result result = invoice.MoveItemUp(request.InvoiceItemId);
                 if (result.IsFailure)
                 {
                     return result.Error;
                 }
 
-                await repository.UpdateAsync(invoice);
+                await uow.Repository.UpdateAsync(invoice);
                 return Result.Success();
             }
         }

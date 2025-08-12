@@ -9,13 +9,13 @@ namespace LIT.Smabu.UseCases.Catalogs
     {
         public record UpdateCatalogCommand(CatalogId CatalogId, string Name) : ICommand;
 
-        public class UpdateCatalogHandler(IAggregateRepository repository) : ICommandHandler<UpdateCatalogCommand>
+        public class UpdateCatalogHandler(IUnitOfWork uow) : ICommandHandler<UpdateCatalogCommand>
         {
             public async Task<Result> Handle(UpdateCatalogCommand request, CancellationToken cancellationToken)
             {
-                Catalog catalog = await repository.GetByAsync(request.CatalogId);
+                Catalog catalog = await uow.Repository.GetByAsync(request.CatalogId);
                 Result updateResult = catalog.Update(request.Name);
-                await repository.UpdateAsync(catalog);
+                await uow.Repository.UpdateAsync(catalog);
                 return updateResult;
             }
         }

@@ -5,6 +5,7 @@ using LIT.Smabu.Domain.InvoiceAggregate.Events;
 using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.PaymentAggregate;
 using System.Xml.Linq;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.InvoiceAggregate
 {

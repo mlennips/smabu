@@ -10,16 +10,21 @@ namespace LIT.Smabu.Infrastructure.Messaging
         private readonly ISender _sender = sender;
         private readonly ILogger<DomainEventDispatcher> _logger = logger;
 
-        public async Task HandleDomainEventsAsync<TAggregate>(TAggregate aggregate) where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
+        public async Task HandleDomainEventsAsync<TAggregate>(TAggregate aggregate) where TAggregate : class, IAggregateRoot
         {
             var domainEvents = aggregate.GetUncommittedEvents();
-            if (domainEvents.Any())
+            await HandleDomainEventsAsync([.. domainEvents]);
+            _logger.LogInformation("Handled events for aggregate {type}/{id}", typeof(TAggregate).Name, aggregate.DisplayId);
+        }
+
+        public async Task HandleDomainEventsAsync(DomainEventBase[] domainEvents)
+        {
+            if (domainEvents.Length != 0)
             {
-                foreach (var domainEvent in domainEvents)
+                foreach (var domainEvent in domainEvents.OrderBy(x => x.TriggeredAt))
                 {
                     await _sender.Send(domainEvent);
                 }
-                _logger.LogInformation("Handled events for aggregate {type}/{id}", typeof(TAggregate).Name, aggregate.Id);
             }
         }
 

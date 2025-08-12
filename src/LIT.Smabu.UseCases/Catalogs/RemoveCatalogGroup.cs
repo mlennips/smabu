@@ -8,14 +8,14 @@ namespace LIT.Smabu.UseCases.Catalogs
     public static class RemoveCatalogGroup
     {
         public record RemoveCatalogGroupCommand(CatalogGroupId CatalogGroupId, CatalogId CatalogId) : ICommand;
-        public class RemoveCatalogGroupHandler(IAggregateRepository repository) : ICommandHandler<RemoveCatalogGroupCommand>
+        public class RemoveCatalogGroupHandler(IUnitOfWork uow) : ICommandHandler<RemoveCatalogGroupCommand>
         {
 
             public async Task<Result> Handle(RemoveCatalogGroupCommand request, CancellationToken cancellationToken)
             {
-                Catalog catalog = await repository.GetByAsync(request.CatalogId);
+                Catalog catalog = await uow.Repository.GetByAsync(request.CatalogId);
                 Result result = catalog.RemoveGroup(request.CatalogGroupId);
-                await repository.UpdateAsync(catalog);
+                await uow.Repository.UpdateAsync(catalog);
                 return result;
             }
         }

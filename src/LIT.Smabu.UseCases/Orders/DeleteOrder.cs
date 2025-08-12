@@ -9,13 +9,13 @@ namespace LIT.Smabu.UseCases.Orders
     {
         public record DeleteOrderCommand(OrderId OrderId) : ICommand;
 
-        public class DeleteOrderHandler(IAggregateRepository repository) : ICommandHandler<DeleteOrderCommand>
+        public class DeleteOrderHandler(IUnitOfWork uow) : ICommandHandler<DeleteOrderCommand>
         {
             public async Task<Result> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
             {
-                Order order = await repository.GetByAsync(request.OrderId);
+                Order order = await uow.Repository.GetByAsync(request.OrderId);
                 order.Delete();
-                await repository.DeleteAsync(order);
+                await uow.Repository.DeleteAsync(order);
                 return Result.Success();
             }
         }

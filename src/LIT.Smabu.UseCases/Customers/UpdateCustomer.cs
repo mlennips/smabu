@@ -13,14 +13,14 @@ namespace LIT.Smabu.UseCases.Customers
             Address? MainAddress, Communication? Communication, CorporateDesign? CorporateDesign, string VatId,
             PaymentMethod PreferredPaymentMethod, PaymentCondition PaymentCondition) : ICommand<CustomerId>;
 
-        public class UpdateCustomerHandler(IAggregateRepository repository) : ICommandHandler<UpdateCustomerCommand, CustomerId>
+        public class UpdateCustomerHandler(IUnitOfWork uow) : ICommandHandler<UpdateCustomerCommand, CustomerId>
         {
             public async Task<Result<CustomerId>> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
             {
-                Customer customer = await repository.GetByAsync(request.CustomerId);
+                Customer customer = await uow.Repository.GetByAsync(request.CustomerId);
                 customer.Update(request.Name, request.IndustryBranch ?? "", request.MainAddress, request.Communication, request.CorporateDesign,
                     request.VatId, request.PreferredPaymentMethod, request.PaymentCondition);
-                await repository.UpdateAsync(customer);
+                await uow.Repository.UpdateAsync(customer);
                 return customer.Id;
             }
         }

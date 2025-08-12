@@ -11,15 +11,15 @@ namespace LIT.Smabu.UseCases.Catalogs
         public record UpdateCatalogItemCommand(CatalogItemId CatalogItemId, CatalogId CatalogId, string Name, string Description,
             bool IsActive, Unit Unit, CatalogItemPrice[] Prices, CustomerCatalogItemPrice[] CustomerPrices) : ICommand;
 
-        public class UpdateCatalogItemHandler(IAggregateRepository repository) : ICommandHandler<UpdateCatalogItemCommand>
+        public class UpdateCatalogItemHandler(IUnitOfWork uow) : ICommandHandler<UpdateCatalogItemCommand>
         {
 
             public async Task<Result> Handle(UpdateCatalogItemCommand request, CancellationToken cancellationToken)
             {
-                Catalog catalog = await repository.GetByAsync(request.CatalogId);
+                Catalog catalog = await uow.Repository.GetByAsync(request.CatalogId);
                 Result updateResult = catalog.UpdateItem(request.CatalogItemId, request.Name, request.Description, request.IsActive,
                     request.Unit, request.Prices, request.CustomerPrices);
-                await repository.UpdateAsync(catalog);
+                await uow.Repository.UpdateAsync(catalog);
                 return updateResult;
             }
         }

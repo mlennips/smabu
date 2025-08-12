@@ -9,13 +9,13 @@ namespace LIT.Smabu.UseCases.Catalogs
     {
         public record DeleteCatalogCommand(CatalogId CatalogId) : ICommand;
 
-        public class DeleteCatalogHandler(IAggregateRepository repository) : ICommandHandler<DeleteCatalogCommand>
+        public class DeleteCatalogHandler(IUnitOfWork uow) : ICommandHandler<DeleteCatalogCommand>
         {
             public async Task<Result> Handle(DeleteCatalogCommand request, CancellationToken cancellationToken)
             {
-                Catalog catalog = await repository.GetByAsync(request.CatalogId);
+                Catalog catalog = await uow.Repository.GetByAsync(request.CatalogId);
                 Result result = catalog.Delete();
-                await repository.DeleteAsync(catalog);
+                await uow.Repository.DeleteAsync(catalog);
                 return result;
             }
         }

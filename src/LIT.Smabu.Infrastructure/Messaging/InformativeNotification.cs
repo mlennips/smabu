@@ -10,7 +10,7 @@ namespace LIT.Smabu.Infrastructure.Messaging
 {
     public static class InformativeNotification
     {
-        public interface IInformativeNotification : IRequest 
+        public interface IInformativeNotification : IRequest
         {
             IAggregateRoot Aggregate { get; }
         }

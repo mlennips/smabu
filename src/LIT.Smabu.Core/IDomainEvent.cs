@@ -4,5 +4,6 @@ namespace LIT.Smabu.Core
 {
     public interface IDomainEvent : IRequest
     {
+
     }
 }

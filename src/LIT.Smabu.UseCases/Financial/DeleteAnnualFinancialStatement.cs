@@ -9,17 +9,17 @@ namespace LIT.Smabu.UseCases.Financial
     {
         public record DeleteAnnualFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId) : ICommand;
 
-        public class DeleteAnnualFinancialStatementHandler(IAggregateRepository repository) : ICommandHandler<DeleteAnnualFinancialStatementCommand>
+        public class DeleteAnnualFinancialStatementHandler(IUnitOfWork uow) : ICommandHandler<DeleteAnnualFinancialStatementCommand>
         {
             public async Task<Result> Handle(DeleteAnnualFinancialStatementCommand request, CancellationToken cancellationToken)
             {
-                AnnualFinancialStatement financialStatement = await repository.GetByAsync(request.AnnualFinancialStatementId);
+                AnnualFinancialStatement financialStatement = await uow.Repository.GetByAsync(request.AnnualFinancialStatementId);
                 if (financialStatement == null)
                 {
                     return FinancialErrors.FinancialStatementNotFound;
                 }
 
-                await repository.DeleteAsync(financialStatement);
+                await uow.Repository.DeleteAsync(financialStatement);
                 return Result.Success();
             }
         }

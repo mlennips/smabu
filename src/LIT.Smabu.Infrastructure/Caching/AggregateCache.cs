@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace LIT.Smabu.Infrastructure.Caching
 {
-    public class AggregateCache(ILogger<AggregateCache> logger, 
+    public class AggregateCache(ILogger<AggregateCache> logger,
         Persistence.IAggregateRepositoryFactory aggregateStoreFactory) : IAggregateCache,
             IRequestHandler<InformativeNotification.AggregateCreatedEvent>,
             IRequestHandler<InformativeNotification.AggregateUpdatedEvent>,

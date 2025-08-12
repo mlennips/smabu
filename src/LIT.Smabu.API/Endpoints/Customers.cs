@@ -7,6 +7,7 @@ using static LIT.Smabu.UseCases.Customers.ListCustomer;
 using static LIT.Smabu.UseCases.Customers.GetCustomer;
 using static LIT.Smabu.UseCases.Customers.UpdateCustomer;
 using static LIT.Smabu.UseCases.Customers.DeleteCustomer;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.API.Endpoints
 {

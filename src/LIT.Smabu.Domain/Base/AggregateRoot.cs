@@ -5,8 +5,9 @@ namespace LIT.Smabu.Domain.Base
     public abstract class AggregateRoot<TEntityId> : Entity<TEntityId>, IAggregateRoot<TEntityId>
         where TEntityId : class, IEntityId
     {
-        private readonly List<IDomainEvent> _unhandledEvents = [];
+        private readonly List<DomainEventBase> _unhandledEvents = [];
 
+        public Guid DisplayId => Id.Value;
         public AggregateMeta? Meta { get; set; }
 
         public void UpdateMeta(AggregateMeta aggregateMeta)
@@ -21,9 +22,9 @@ namespace LIT.Smabu.Domain.Base
             return Result.Success();
         }
 
-        public IEnumerable<IDomainEvent> GetUncommittedEvents(bool cleanup = true)
+        public IEnumerable<DomainEventBase> GetUncommittedEvents(bool cleanup = true)
         {
-            List<IDomainEvent> events = [.. _unhandledEvents];
+            List<DomainEventBase> events = [.. _unhandledEvents];
             if (cleanup)
             {
                 _unhandledEvents.Clear();
@@ -31,9 +32,14 @@ namespace LIT.Smabu.Domain.Base
             return events;
         }
 
-        protected void AddDomainEvent(IDomainEvent domainEvent)
+        protected void AddDomainEvent(DomainEventBase domainEvent)
         {
             _unhandledEvents.Add(domainEvent);
+        }
+
+        public virtual Result Validate()
+        {
+            return Result.Success();
         }
     }
 }

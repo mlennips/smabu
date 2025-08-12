@@ -1,5 +1,4 @@
-﻿
-namespace LIT.Smabu.Domain.Base
+﻿namespace LIT.Smabu.Core
 {
     public sealed class Result<TValue> : Result
     {

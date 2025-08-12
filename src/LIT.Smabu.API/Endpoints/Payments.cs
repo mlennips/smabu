@@ -8,6 +8,7 @@ using static LIT.Smabu.UseCases.Payments.CreatePayment;
 using static LIT.Smabu.UseCases.Payments.DeletePayment;
 using static LIT.Smabu.UseCases.Payments.UpdatePayment;
 using static LIT.Smabu.UseCases.Payments.CompletePayment;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.API.Endpoints
 {
