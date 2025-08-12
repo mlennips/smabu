@@ -147,7 +147,6 @@ namespace LIT.Smabu.Infrastructure.Caching
         #endregion
 
         #region Private
-
         private async Task<IEnumerable<TAggregate>> BrowseAsync<TAggregate>(Specification<TAggregate>? specification = null)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {

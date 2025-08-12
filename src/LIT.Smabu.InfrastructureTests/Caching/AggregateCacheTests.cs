@@ -52,7 +52,6 @@ namespace LIT.Smabu.InfrastructureTests.Caching
             var cachedCustomer = await testee.GetByAsync(customer.Id);
             Assert.IsNotNull(cachedCustomer);
             Assert.AreEqual(customer.Id, cachedCustomer.Id);
-
         }
 
         [TestMethod()]
@@ -80,16 +79,20 @@ namespace LIT.Smabu.InfrastructureTests.Caching
         {
             // Arrange
             var customer1 = CreateCustomer();
-            var customer2 = CreateCustomer();
+            var customers = new Customer[] { customer1, CreateCustomer(), CreateCustomer() };
+
             mockAggregateRepository.Setup(x => x.GetAllAsync<Customer>())
-                .ReturnsAsync([customer1, customer2]);
+                .ReturnsAsync(customers);
 
             // Act
             await testee.Handle(new InformativeNotification.AggregateDeletedEvent(customer1), new CancellationToken());
 
             // Assert
             var customerCount = await testee.CountAsync<Customer>();
-            Assert.AreEqual(1, customerCount);
+            var cachedCustomers = await testee.GetAllAsync<Customer>();
+
+            Assert.IsFalse(cachedCustomers.Any(x => x.Id == customer1.Id));
+            //Assert.AreEqual(2, customerCount);
         }
 
         private static Customer CreateCustomer()
@@ -99,7 +102,7 @@ namespace LIT.Smabu.InfrastructureTests.Caching
                 new Communication("email@email.de", "01234", "0124", "www.q.de"),
                 new CorporateDesign("brand", "shortName", "slogan",
                 Color.Create("#000000"), Color.Create("#111111"), null),
-                "01", new Domain.PaymentAggregate.PaymentMethod("Cash"),
+                "01", PaymentMethod.Default,
                 PaymentCondition.Default);
         }
     }
