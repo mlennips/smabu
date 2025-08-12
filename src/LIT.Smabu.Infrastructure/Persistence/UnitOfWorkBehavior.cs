@@ -13,14 +13,13 @@ namespace LIT.Smabu.Infrastructure.Persistence
 {
     public class UnitOfWorkBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork) 
         : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : notnull
+        where TRequest : ICommandBase
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var response = await next(cancellationToken);
 
-            var isCommandRequest = typeof(TRequest).GetInterfaces().Any(x => x.Name.StartsWith("ICommand"));
-            if (isCommandRequest && unitOfWork.HasChanges)
+            if (unitOfWork.HasChanges)
             {
                 if (response is Result result && result.IsSuccess)
                 {
