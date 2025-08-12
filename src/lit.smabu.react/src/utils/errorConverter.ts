@@ -22,7 +22,9 @@ export const convertToAppError = (error: any): AppError => {
                 code: axiosError.code ?? 'UNKNOWN',
                 status: status,
                 message: `Vorgang nicht möglich`,
-                details: `${modelError.description}`,
+                details: modelError.details 
+                    ? `${modelError.description} ${Object.keys(modelError.details).map(x => x + ': ' + modelError.details?.[x]).join(', ')}` 
+                    : modelError.description,
                 severity: 'warning',
                 name: 'AppError',
             };

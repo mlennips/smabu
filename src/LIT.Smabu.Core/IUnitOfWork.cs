@@ -1,6 +1,11 @@
-﻿namespace LIT.Smabu.Core
+﻿
+namespace LIT.Smabu.Core
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork
     {
+        IAggregateRepository Repository { get; }
+        bool HasChanges { get; }
+
+        Task CommitAsync(CancellationToken? cancellationToken = null);
     }
 }

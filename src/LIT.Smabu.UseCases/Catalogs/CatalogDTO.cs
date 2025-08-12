@@ -1,4 +1,5 @@
-﻿using LIT.Smabu.Domain.Base;
+﻿using LIT.Smabu.Core;
+using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Domain.CatalogAggregate;
 using LIT.Smabu.UseCases.Base;
 
@@ -8,7 +9,7 @@ namespace LIT.Smabu.UseCases.Catalogs
     {
         internal static Result<CatalogDTO> Create(Catalog catalog)
         {
-            CatalogGroupDTO[] groups = catalog.Groups.Select(CatalogGroupDTO.Create).ToArray();
+            CatalogGroupDTO[] groups = [.. catalog.Groups.Select(CatalogGroupDTO.Create)];
             return new CatalogDTO(catalog.Id, catalog.DisplayName, catalog.Name, groups);
         }
     }

@@ -50,7 +50,7 @@ namespace LIT.Smabu.UseCases.Invoices
 
             if (withItems)
             {
-                result.Items = invoice.Items.Select(InvoiceItemDTO.Create).ToList();
+                result.Items = [.. invoice.Items.Select(InvoiceItemDTO.Create)];
             }
 
             return result;

@@ -15,19 +15,12 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
     {
         public record GetSalesDashboardQuery : IQuery<GetSalesDashboardReadModel>;
 
-        public class GetSalesDashboardHandler(SalesStatisticsService salesStatisticsService, IAggregateStore store,
-            IMemoryCache cache) : IQueryHandler<GetSalesDashboardQuery, GetSalesDashboardReadModel>
+        public class GetSalesDashboardHandler(SalesStatisticsService salesStatisticsService,
+            IAggregateCache cache) : IQueryHandler<GetSalesDashboardQuery, GetSalesDashboardReadModel>
         {
-            private const string CACHE_KEY = "SalesDashboardResult";
-
             public async Task<Result<GetSalesDashboardReadModel>> Handle(GetSalesDashboardQuery request, CancellationToken cancellationToken)
             {
-                if (cache.TryGetValue(CACHE_KEY, out GetSalesDashboardReadModel? readModel))
-                {
-                    return Result<GetSalesDashboardReadModel>.Success(readModel!);
-                }
-
-                readModel = new GetSalesDashboardReadModel
+                var readModel = new GetSalesDashboardReadModel
                 {
                     Version = DateTime.Now,
                     ThisYear = DateTime.Now.Year,
@@ -35,18 +28,17 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                     Currency = Currency.EUR
                 };
 
-                IReadOnlyList<Customer> customers = await store.GetAllAsync<Customer>();
+                IReadOnlyList<Customer> customers = await cache.GetAllAsync<Customer>();
 
                 var salesTasks = new Task[]
                 {
-                SetSalesInformationsAsync(readModel),
-                SetSalesByYearDatasetAsync(readModel, customers),
-                SetSalesByCustomerAsync(readModel, customers)
+                    SetSalesInformationsAsync(readModel),
+                    SetSalesByYearDatasetAsync(readModel, customers),
+                    SetSalesByCustomerAsync(readModel, customers)
                 };
                 await Task.WhenAll(salesTasks);
 
-                cache.Set(CACHE_KEY, readModel, TimeSpan.FromMinutes(5));
-                return Result<GetSalesDashboardReadModel>.Success(readModel);
+                return Result.Success(readModel);
             }
 
             private async Task SetSalesInformationsAsync(GetSalesDashboardReadModel result)
@@ -57,12 +49,10 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
                 result.SalesLast24Month = await salesStatisticsService.CalculateSalesForLastMonthsAsync(24);
                 result.SalesLast36Month = await salesStatisticsService.CalculateSalesForLastMonthsAsync(36);
                 result.TotalSales = await salesStatisticsService.CalculateTotalSalesAsync();
-                result.Top3InvoicesEver = (await salesStatisticsService.GetHighestInvoicesAsync(3))
-                    .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
-                result.Top3InvoicesLast12Month = (await salesStatisticsService.GetHighestInvoicesAsync(3, 12))
-                    .Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount)).ToList();
-                result.InvoiceCount = await store.CountAsync<Invoice>();
-                result.CustomerCount = await store.CountAsync<Customer>();
+                result.Top3InvoicesEver = [.. (await salesStatisticsService.GetHighestInvoicesAsync(3)).Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount))];
+                result.Top3InvoicesLast12Month = [.. (await salesStatisticsService.GetHighestInvoicesAsync(3, 12)).Select(x => new SalesAmountItem(x.Number.ToString(), x.Id.ToString(), x.Amount))];
+                result.InvoiceCount = await cache.CountAsync<Invoice>();
+                result.CustomerCount = await cache.CountAsync<Customer>();
                 result.OrderCount = 0;
             }
 
@@ -105,12 +95,11 @@ namespace LIT.Smabu.UseCases.Dashboards.Sales
             private async Task SetSalesByCustomerAsync(GetSalesDashboardReadModel result, IReadOnlyList<Customer> customers)
             {
                 Dictionary<CustomerId, decimal> salesByCustomer = await salesStatisticsService.GetSalesByCustomerAsync();
-                result.SalesByCustomer = salesByCustomer
+                result.SalesByCustomer = [.. salesByCustomer
                     .Select(x => new SalesAmountItem(
                         customers.Single(c => c.Id == x.Key).CorporateDesign.ShortName,
                         customers.Single(c => c.Id == x.Key).Id.ToString(),
-                        x.Value))
-                    .ToList();
+                        x.Value))];
             }
         }
     }

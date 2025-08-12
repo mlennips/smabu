@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid, Paper, Stack, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate, useParams } from 'react-router-dom';

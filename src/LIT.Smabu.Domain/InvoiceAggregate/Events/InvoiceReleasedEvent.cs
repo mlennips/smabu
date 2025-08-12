@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Domain.InvoiceAggregate.Events
 {
-    public record InvoiceReleasedEvent(InvoiceId InvoiceId) : IDomainEvent
+    public record InvoiceReleasedEvent(InvoiceId InvoiceId) : DomainEventBase
     {
 
     }

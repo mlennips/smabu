@@ -6,21 +6,17 @@ using System.Linq;
 
 namespace LIT.Smabu.Infrastructure.Persistence
 {
-    public class FileAggregateStore(ILogger<FileAggregateStore> logger, ICurrentUser currentUser, IDomainEventDispatcher domainEventDispatcher) : IAggregateStore
+    public class FileAggregateRepository(ILogger<FileAggregateRepository> logger, ICurrentUser currentUser) : IAggregateRepository
     {
         private readonly string rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Smabu", "Data");
-        private readonly ILogger<FileAggregateStore> logger = logger;
+        private readonly ILogger<FileAggregateRepository> logger = logger;
         private readonly ICurrentUser currentUser = currentUser;
-        private readonly IDomainEventDispatcher domainEventDispatcher = domainEventDispatcher;
 
         public async Task CreateAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             await SaveToFileAsync(aggregate);
-
-            await domainEventDispatcher.PublishInformativeCreatedNotificationAsync(aggregate);
-            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task UpdateAsync<TAggregate>(TAggregate aggregate)
@@ -45,9 +41,6 @@ namespace LIT.Smabu.Infrastructure.Persistence
                 aggregate.UpdateMeta(new AggregateMeta(1, DateTime.Now, currentUser.Username, currentUser.Name, null, null, null));
             }
             await SaveToFileAsync(aggregate);
-
-            await domainEventDispatcher.PublishInformativeUpdatedNotificationEventAsync(aggregate);
-            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
         }
 
         public async Task<TAggregate[]> GetAllAsync<TAggregate>()
@@ -67,17 +60,15 @@ namespace LIT.Smabu.Infrastructure.Persistence
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var allItems = await LoadAsync<TAggregate>(ids);
-            return allItems.Where(x => ids.Contains(x.Id)).ToArray();
+            return [.. allItems.Where(x => ids.Contains(x.Id))];
         }
 
-        public async Task DeleteAsync<TAggregate>(TAggregate aggregate)
+        public Task DeleteAsync<TAggregate>(TAggregate aggregate)
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>
         {
             var file = GetFilePath(aggregate);
             File.Delete(file);
-
-            await domainEventDispatcher.PublishInformativeDeletedNotificationAsync(aggregate);
-            await domainEventDispatcher.HandleDomainEventsAsync(aggregate);
+            return Task.CompletedTask;
         }
 
         public async Task<int> CountAsync<TAggregate>()
@@ -110,7 +101,7 @@ namespace LIT.Smabu.Infrastructure.Persistence
             var fileNames = Directory.GetFiles(directory, "*.json", SearchOption.TopDirectoryOnly);
             if (ids != null)
             {
-                fileNames = fileNames.Where(x => ids.Any(y => x.Contains(y.Value.ToString()))).ToArray();
+                fileNames = [.. fileNames.Where(x => ids.Any(y => x.Contains(y.Value.ToString())))];
             }
             logger.LogInformation("Read {files} files for type {aggregate} ", fileNames.Length, aggregateType.Name);
             foreach (var fileName in fileNames)

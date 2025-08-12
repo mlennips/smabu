@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { InvoiceDTO, AddInvoiceItemCommand } from '../../types/domain';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';

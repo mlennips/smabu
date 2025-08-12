@@ -9,7 +9,6 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
     public class PaymentConditionTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Constructor_ShouldThrowArgumentException_WhenTermsIsEmpty()
         {
             // Arrange
@@ -17,7 +16,7 @@ namespace LIT.Smabu.DomainTests.PaymentAggregate
             var terms = Array.Empty<PaymentCondition.PaymentTerms>();
 
             // Act
-            var paymentCondition = new PaymentCondition(name, terms);
+            Assert.ThrowsExactly<ArgumentException>(() => new PaymentCondition(name, terms));
 
             // Assert is handled by ExpectedException
         }

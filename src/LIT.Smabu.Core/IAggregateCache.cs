@@ -1,16 +1,7 @@
 ﻿namespace LIT.Smabu.Core
 {
-    public interface IAggregateStore
+    public interface IAggregateCache
     {
-        Task CreateAsync<TAggregate>(TAggregate aggregate)
-            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
-
-        Task UpdateAsync<TAggregate>(TAggregate aggregate)
-            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
-
-        Task DeleteAsync<TAggregate>(TAggregate aggregate)
-            where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
-
         Task<TAggregate[]> GetAllAsync<TAggregate>()
             where TAggregate : class, IAggregateRoot<IEntityId<TAggregate>>;
 

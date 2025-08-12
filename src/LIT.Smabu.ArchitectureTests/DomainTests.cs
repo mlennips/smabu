@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using LIT.Smabu.Domain.Base;
+﻿using LIT.Smabu.Domain.Base;
 using LIT.Smabu.Core;
 using NetArchTest.Rules;
 using Newtonsoft.Json;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CreateOfferCommand, Currency, CustomerDTO, OfferId } from '../../types/domain';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid, Paper, Stack, TextField } from '@mui/material';
 import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';

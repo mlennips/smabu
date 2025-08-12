@@ -11,30 +11,29 @@ namespace LIT.Smabu.UseCases.Financial
         public record UpdateAnnualFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId,
             List<FinancialTransaction> Incomes, List<FinancialTransaction> Expenditures) : ICommand;
 
-        public class UpdateAnnualFinancialStatementHandler(IAggregateStore store) : ICommandHandler<UpdateAnnualFinancialStatementCommand>
+        public class UpdateAnnualFinancialStatementHandler(IUnitOfWork uow) : ICommandHandler<UpdateAnnualFinancialStatementCommand>
         {
-
             public async Task<Result> Handle(UpdateAnnualFinancialStatementCommand request, CancellationToken cancellationToken)
             {
-                AnnualFinancialStatement financialStatement = await store.GetByAsync(request.AnnualFinancialStatementId);
+                AnnualFinancialStatement financialStatement = await uow.Repository.GetByAsync(request.AnnualFinancialStatementId);
                 if (financialStatement == null)
                 {
                     return FinancialErrors.FinancialStatementNotFound;
                 }
 
                 Result incomeResult = financialStatement.UpdateIncomes([.. request.Incomes]);
-                if (!incomeResult.IsSuccess)
+                if (incomeResult.IsFailure)
                 {
                     return incomeResult;
                 }
 
                 Result expenditureResult = financialStatement.UpdateExpenditures([.. request.Expenditures]);
-                if (!expenditureResult.IsSuccess)
+                if (expenditureResult.IsFailure)
                 {
                     return expenditureResult;
                 }
 
-                await store.UpdateAsync(financialStatement);
+                await uow.Repository.UpdateAsync(financialStatement);
 
                 return Result.Success();
             }

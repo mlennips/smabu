@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { InvoiceDTO } from "../../types/domain";
 import DefaultContentContainer, { ToolbarItem } from "../../components/contentBlocks/DefaultContentBlock";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
@@ -8,6 +7,7 @@ import { getInvoices } from "../../services/invoice.service";
 import { Link } from "react-router-dom";
 import { Paper } from "@mui/material";
 import { handleAsyncTask } from "../../utils/handleAsyncTask";
+import { ListInvoicesDTO } from "../../types/domain/list-invoices-dto";
 
 const columns: GridColDef[] = [
     { field: 'number', headerName: '#', width: 120, valueGetter: (value: any) => value.displayName },
@@ -16,6 +16,7 @@ const columns: GridColDef[] = [
     { field: 'customer', headerName: 'Kunde', flex: 1, valueGetter: (value: any) => value.name },
     { field: 'amount', headerName: 'Summe', width: 110, align: 'right', valueFormatter: (value: any, row) => `${value.toFixed(2)} ${row.currency?.isoCode}` },
     { field: 'releasedAt', headerName: 'Freigegeben am', width: 100, valueFormatter: (value) => formatDate(value) },
+    { field: 'isPaid', headerName: 'Beglichen', width: 100, type: 'boolean' },
     {
         field: 'actions',
         type: 'actions',
@@ -36,7 +37,6 @@ const columns: GridColDef[] = [
                     label="Delete"
                     component={Link}
                     onClick={() => window.location.href = `/invoices/${id}/delete`}
-                    color="warning"
                 />,
             ];
         },
@@ -46,7 +46,7 @@ const columns: GridColDef[] = [
 const paginationModel = { page: 0, pageSize: 10 };
 
 const InvoiceList = () => {
-    const [data, setData] = useState<InvoiceDTO[]>([]);
+    const [data, setData] = useState<ListInvoicesDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
     const toolbarItems: ToolbarItem[] = [

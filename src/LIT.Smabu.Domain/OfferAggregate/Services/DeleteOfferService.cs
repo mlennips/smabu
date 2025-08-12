@@ -5,7 +5,7 @@ using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.OfferAggregate.Services
 {
-    public class DeleteOfferService(IAggregateStore store)
+    public class DeleteOfferService(IAggregateRepository repository)
     {
         public async Task<Result> DeleteAsync(OfferId id)
         {
@@ -15,15 +15,15 @@ namespace LIT.Smabu.Domain.OfferAggregate.Services
                 return CommonErrors.HasReferences;
             }
 
-            Offer invoice = await store.GetByAsync(id);
+            Offer invoice = await repository.GetByAsync(id);
             invoice.Delete();
-            await store.DeleteAsync(invoice);
+            await repository.DeleteAsync(invoice);
             return Result.Success();
         }
 
         private async Task<bool> CheckIsOfferIdAsync(OfferId id)
         {
-            IReadOnlyList<OrderAggregate.Order> orders = await store.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
+            IReadOnlyList<OrderAggregate.Order> orders = await repository.ApplySpecificationTask(new DetectOrderForReferenceIdSpec(id));
             return orders.Any();
         }
     }

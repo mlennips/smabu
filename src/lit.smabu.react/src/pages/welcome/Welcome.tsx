@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardContent, CardHeader, Container, Grid2 as Grid, IconButton, Paper, SvgIcon, Typography, } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, CardHeader, Container, Grid, IconButton, Paper, SvgIcon, Typography, } from "@mui/material";
 import LandingPageImg from "./../../assets/landing-desk.png";
 import { useAuth } from "../../contexts/authContext";
 import { getWelcomeDashboard } from "../../services/dashboard.service";

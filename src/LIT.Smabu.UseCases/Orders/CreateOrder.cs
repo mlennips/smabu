@@ -12,13 +12,13 @@ namespace LIT.Smabu.UseCases.Orders
         public record CreateOrderCommand(OrderId OrderId, CustomerId CustomerId, string Name,
             DateTime OrderDate, OrderNumber? Number = null) : ICommand<OrderId>;
 
-        public class CreateOrderHandler(IAggregateStore store, BusinessNumberService businessNumberService) : ICommandHandler<CreateOrderCommand, OrderId>
+        public class CreateOrderHandler(IAggregateRepository repository, BusinessNumberService businessNumberService) : ICommandHandler<CreateOrderCommand, OrderId>
         {
             public async Task<Result<OrderId>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
             {
                 OrderNumber number = request.Number ?? await businessNumberService.CreateOrderNumberAsync(request.OrderDate.Year);
                 var order = Order.Create(request.OrderId, number, request.CustomerId, request.Name, DateOnly.FromDateTime(request.OrderDate));
-                await store.CreateAsync(order);
+                await repository.CreateAsync(order);
                 return order.Id;
             }
         }

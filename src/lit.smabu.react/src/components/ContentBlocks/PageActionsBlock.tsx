@@ -1,16 +1,24 @@
 import { ArrowBack, ArrowForward as ArrowForwardIcon, Cancel as CancelIcon, Delete as DeleteIcon, Refresh as RefreshIcon, Save as SaveIcon } from '@mui/icons-material';
-import { Button, ButtonGroup, Divider, Grid2 as Grid, IconButton } from '@mui/material';
+import { Button, ButtonGroup, Divider, Grid, IconButton } from '@mui/material';
 import React from 'react';
+import { AppError } from '../../utils/errorConverter';
+import ErrorComponent from './ErrorComponent';
 
 interface DetailsActionsProps {
     formId: string | undefined;
     deleteUrl?: string;
     disabled?: boolean;
+    error?: AppError | undefined | null;
 }
 
-export const DetailsActions: React.FC<DetailsActionsProps> = ({ formId, deleteUrl, disabled }) => {
+export const DetailsActions: React.FC<DetailsActionsProps> = ({ formId, deleteUrl, disabled, error }) => {
     return (
+        
         <Grid container sx={{ my:2 }}>
+            {error && <Grid size={{ xs: 12}}>
+                <ErrorComponent {...error} />
+            </Grid>}
+
             <Grid size="auto">
                 <ButtonGroup>
                     <IconButton color="default" onClick={() => window.history.back()}

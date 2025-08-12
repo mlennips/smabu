@@ -1,5 +1,7 @@
 import axiosConfig from "../configs/axiosConfig";
 import { AddInvoiceItemCommand, CreateInvoiceCommand, InvoiceDTO, ReleaseInvoiceCommand, UpdateInvoiceCommand, UpdateInvoiceItemCommand, WithdrawReleaseInvoiceCommand } from "../types/domain";
+import { GetInvoiceDTO } from "../types/domain/get-invoice-dto";
+import { ListInvoicesDTO } from "../types/domain/list-invoices-dto";
 
 export const createInvoice = async (payload: CreateInvoiceCommand) => {
     const response = await axiosConfig.post<InvoiceDTO[]>(`invoices`, payload);
@@ -7,12 +9,12 @@ export const createInvoice = async (payload: CreateInvoiceCommand) => {
 };
 
 export const getInvoices = async () => {
-    const response = await axiosConfig.get<InvoiceDTO[]>(`invoices`);
+    const response = await axiosConfig.get<ListInvoicesDTO[]>(`invoices`);
     return response.data;
 };
 
 export const getInvoice = async (invoiceId: string, withItems: boolean = false) => {
-    const response = await axiosConfig.get<InvoiceDTO>(`invoices/${invoiceId}?withItems=${withItems}`);
+    const response = await axiosConfig.get<GetInvoiceDTO>(`invoices/${invoiceId}?withItems=${withItems}`);
     return response.data;
 };
 

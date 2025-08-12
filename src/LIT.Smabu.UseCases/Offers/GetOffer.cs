@@ -11,12 +11,12 @@ namespace LIT.Smabu.UseCases.Offers
     {
         public record GetOfferQuery(OfferId OfferId, bool WithItems = false) : IQuery<OfferDTO>;
 
-        public class GetOfferHandler(IAggregateStore store) : IQueryHandler<GetOfferQuery, OfferDTO>
+        public class GetOfferHandler(IAggregateRepository repository) : IQueryHandler<GetOfferQuery, OfferDTO>
         {
             public async Task<Result<OfferDTO>> Handle(GetOfferQuery request, CancellationToken cancellationToken)
             {
-                Offer offer = await store.GetByAsync(request.OfferId);
-                Customer customer = await store.GetByAsync(offer.CustomerId);
+                Offer offer = await repository.GetByAsync(request.OfferId);
+                Customer customer = await repository.GetByAsync(offer.CustomerId);
                 return OfferDTO.Create(offer, customer, request.WithItems);
             }
         }

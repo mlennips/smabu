@@ -1,5 +1,5 @@
 ﻿
-using LIT.Smabu.Domain.Base;
+using LIT.Smabu.Core;
 
 namespace LIT.Smabu.Domain.CatalogAggregate
 {

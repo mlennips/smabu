@@ -14,7 +14,7 @@ namespace LIT.Smabu.UseCases.Financial
     {
         public record CreateAnnualFinancialStatementCommand(AnnualFinancialStatementId AnnualFinancialStatementId, int FiscalYear) : ICommand<AnnualFinancialStatementId>;
 
-        public class CreateAnnualFinancialStatementHandler(IAggregateStore store)
+        public class CreateAnnualFinancialStatementHandler(IUnitOfWork uow)
             : ICommandHandler<CreateAnnualFinancialStatementCommand, AnnualFinancialStatementId>
         {
             public async Task<Result<AnnualFinancialStatementId>> Handle(CreateAnnualFinancialStatementCommand request, CancellationToken cancellationToken)
@@ -26,13 +26,13 @@ namespace LIT.Smabu.UseCases.Financial
                 }
 
                 var financialStatement = AnnualFinancialStatement.Create(request.AnnualFinancialStatementId, request.FiscalYear);
-                await store.CreateAsync(financialStatement);
+                await uow.Repository.CreateAsync(financialStatement);
                 return Result.Success(financialStatement.Id);
             }
 
             private async Task<Result> CheckFiscalYearAlreadyExistsAsync(CreateAnnualFinancialStatementCommand request)
             {
-                AnnualFinancialStatement[] detectedFinancialStatements = await store.ApplySpecificationTask(new DectecFinancialStatementByFiscalYearSpec(request.FiscalYear));
+                AnnualFinancialStatement[] detectedFinancialStatements = await uow.Repository.ApplySpecificationTask(new DectecFinancialStatementByFiscalYearSpec(request.FiscalYear));
                 return detectedFinancialStatements.SingleOrDefault() != null
                     ? (Result)FinancialErrors.FiscalYearAlreadyExists
                     : Result.Success();

@@ -11,14 +11,14 @@ namespace LIT.Smabu.UseCases.Offers
     {
         public record UpdateOfferCommand(OfferId OfferId, TaxRate TaxRate, DateOnly OfferDate, DateOnly ExpiresOn) : ICommand<OfferDTO>;
 
-        public class UpdateOfferHandler(IAggregateStore store) : ICommandHandler<UpdateOfferCommand, OfferDTO>
+        public class UpdateOfferHandler(IUnitOfWork uow) : ICommandHandler<UpdateOfferCommand, OfferDTO>
         {
             public async Task<Result<OfferDTO>> Handle(UpdateOfferCommand request, CancellationToken cancellationToken)
             {
-                Offer offer = await store.GetByAsync(request.OfferId);
-                Customer customer = await store.GetByAsync(offer.CustomerId);
+                Offer offer = await uow.Repository.GetByAsync(request.OfferId);
+                Customer customer = await uow.Repository.GetByAsync(offer.CustomerId);
                 offer.Update(request.TaxRate, request.OfferDate, request.ExpiresOn);
-                await store.UpdateAsync(offer);
+                await uow.Repository.UpdateAsync(offer);
                 return OfferDTO.Create(offer, customer);
             }
         }

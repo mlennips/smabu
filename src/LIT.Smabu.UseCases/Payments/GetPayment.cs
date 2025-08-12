@@ -9,11 +9,11 @@ namespace LIT.Smabu.UseCases.Payments
     {
         public record GetPaymentQuery(PaymentId PaymentId) : IQuery<PaymentDTO>;
 
-        public class GetPaymentHandler(IAggregateStore store) : IQueryHandler<GetPaymentQuery, PaymentDTO>
+        public class GetPaymentHandler(IAggregateRepository repository) : IQueryHandler<GetPaymentQuery, PaymentDTO>
         {
             public async Task<Result<PaymentDTO>> Handle(GetPaymentQuery request, CancellationToken cancellationToken)
             {
-                Payment payment = await store.GetByAsync(request.PaymentId);
+                Payment payment = await repository.GetByAsync(request.PaymentId);
                 return payment == null ? PaymentErrors.NotFound : PaymentDTO.Create(payment);
             }
         }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CatalogGroupDTO } from '../../types/domain';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';

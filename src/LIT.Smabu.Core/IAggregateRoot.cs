@@ -8,9 +8,11 @@
 
     public interface IAggregateRoot : IEntity
     {
+        Guid DisplayId { get; }
         AggregateMeta? Meta { get; }
         void UpdateMeta(AggregateMeta aggregateMeta);
-        IEnumerable<IDomainEvent> GetUncommittedEvents(bool cleanup = true);
+        IEnumerable<DomainEventBase> GetUncommittedEvents(bool cleanup = true);
+        Result Validate();
     }
 }
 

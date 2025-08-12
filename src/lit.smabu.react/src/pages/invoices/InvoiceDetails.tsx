@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { InvoiceDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
-import { Grid2 as Grid, Paper, Stack, TextField } from '@mui/material';
+import { Grid, Paper, Stack, TextField } from '@mui/material';
 import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { CancelScheduleSend, ContentCopy, Print, Send } from '@mui/icons-material';
@@ -13,11 +12,12 @@ import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock'
 import { formatForTextField } from '../../utils/formatDate';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import { PaymentConditionSelectField } from '../../components/controls/SelectField';
+import { GetInvoiceDTO } from '../../types/domain/get-invoice-dto';
 
 const InvoiceDetails = () => {
     const params = useParams();
     const { toast } = useNotification();
-    const [data, setData] = useState<InvoiceDTO>();
+    const [data, setData] = useState<GetInvoiceDTO>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(undefined);
     const [errorItems, setErrorItems] = useState(undefined);

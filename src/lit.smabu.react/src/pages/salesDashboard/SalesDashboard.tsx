@@ -1,5 +1,5 @@
 import {
-  Avatar, Box, Card, CardHeader, Container, Grid2 as Grid, Paper,
+  Avatar, Box, Card, CardHeader, Container, Grid, Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -68,32 +68,33 @@ function renderHeaderBlock(data: GetSalesDashboardReadModel) {
       <Stack direction="column" spacing={0} alignItems="flex-end">
         <Card variant="outlined" sx={{ backgroundColor: 'transparent', border: 0, textAlign: 'right' }}>
           <CardHeader
-        title={`${data?.totalSales ?? 0} ${data?.currency?.sign ?? '€'}`}
-        sx={{ p: 0 }}
-        subheader='Gesamtumsatz' />
+            title={`${data?.totalSales ?? 0} ${data?.currency?.sign ?? '€'}`}
+            sx={{ p: 0 }}
+            subheader='Gesamtumsatz' />
         </Card>
         <Box flexGrow={1} textAlign="right">
           <PieChart
-        colors={cheerfulFiestaPalette}
-        slotProps={{ legend: { hidden: true } }}
-        series={[
-          {
-            data: data.salesByYear?.valueLabels?.map((x, i) => ({
-          id: x,
-          value: data?.salesByYear?.series?.find(serie => serie.key === 'year')?.values?.[i] ?? 0,
-          label: x
-            })) ?? [],                
-            innerRadius: 40,
-            outerRadius: 65,
-            paddingAngle: 0,
-            cornerRadius: 0,
-            startAngle: 0,
-            endAngle: 360,
-            cx: 90,
-          },
-        ]}
-        width={160}
-        height={160}
+            colors={cheerfulFiestaPalette}
+             hideLegend={true}
+            slotProps={{ legend: { } }}
+            series={[
+              {
+                data: data.salesByYear?.valueLabels?.map((x, i) => ({
+                  id: x,
+                  value: data?.salesByYear?.series?.find(serie => serie.key === 'year')?.values?.[i] ?? 0,
+                  label: x
+                })) ?? [],
+                innerRadius: 40,
+                outerRadius: 65,
+                paddingAngle: 0,
+                cornerRadius: 0,
+                startAngle: 0,
+                endAngle: 360,
+                cx: 90,
+              },
+            ]}
+            width={160}
+            height={160}
           />
         </Box>
       </Stack>
@@ -101,13 +102,13 @@ function renderHeaderBlock(data: GetSalesDashboardReadModel) {
 
     <Grid size={{ xs: 12, sm: 12, md: 12, lg: 8 }} offset={{ lg: -10 }}>
       <LineChart
-        sx={{ mt: -10, borderLeft: '1px solid #ddd', borderRight: '1px solid #ddd' }}
+        sx={{ mt: -0, mb: 4, borderLeft: '1px solid #ddd', borderRight: '1px solid #ddd' }} hideLegend={true}
         slotProps={{
-          legend: { hidden: true },
+          legend: { },
         }}
         xAxis={[{
           data: data.salesByYear?.valueLabels ?? [], scaleType: 'band', disableTicks: true, disableLine: true,
-          tickLabelStyle: { angle: -90, textAnchor: 'end', fontWeight: 400, opacity: 0.5 }
+          tickLabelStyle: { angle: -90, textAnchor: 'end', fontWeight: 400, opacity: 0.5, width: 10 },
         }]}
         series={[
           { data: salesTotalSeries?.values || [], label: salesTotalSeries?.label || '', color: orange[500] },
@@ -142,11 +143,12 @@ function renderCustomerBlock(data: GetSalesDashboardReadModel) {
         <BarChart
           height={370}
           colors={cheerfulFiestaPalette}
-          slotProps={{ legend: { hidden: true } }}
-          tooltip={{ trigger: 'item' }}
+          hideLegend={true}
           series={series1.concat(series2)}
+          slotProps={{ tooltip: { trigger: 'axis',  } }}
           yAxis={[{ scaleType: 'linear', disableTicks: true, disableLine: true }]}
-          xAxis={[{ data: data.salesByYear?.valueLabels ?? [], scaleType: 'band', disableTicks: true }]} />
+          xAxis={[{ data: data.salesByYear?.valueLabels ?? [], scaleType: 'band', disableTicks: true, 
+          tickLabelStyle: { angle: -90, textAnchor: 'end', fontWeight: 400, opacity: 0.5, width: 10 }, }]} />
       </Paper>
     </Grid>
 
@@ -156,7 +158,7 @@ function renderCustomerBlock(data: GetSalesDashboardReadModel) {
         <BarChart
           dataset={data.salesByCustomer?.map(x => ({ customer: x.name, total: x.total })) ?? []}
           colors={cheerfulFiestaPalette}
-          slotProps={{ legend: { hidden: true } }}
+          hideLegend={true}
           yAxis={[{ scaleType: 'band', dataKey: 'customer' }]}
           series={[{ dataKey: 'total', label: 'Total' }]}
           layout="horizontal"

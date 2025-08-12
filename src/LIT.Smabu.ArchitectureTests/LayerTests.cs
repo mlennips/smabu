@@ -1,10 +1,9 @@
-using FluentAssertions;
 using NetArchTest.Rules;
 using System.Reflection;
 
 namespace LIT.Smabu.ArchitectureTests
 {
-    [TestClass()]
+    [TestClass]
     public class LayerTests
     {
         private static readonly Assembly DomainAssembly = typeof(Domain.Common.Address).Assembly;
@@ -15,49 +14,49 @@ namespace LIT.Smabu.ArchitectureTests
         [TestMethod]
         public void DomainLayer_ShouldNotHaveDependencyOn()
         {
-            //Arrange  
+            // Arrange  
             var notIn = new[] { UseCasesAssembly, InfrastructureAssembly, ApiAssembly };
 
-            //Act  
+            // Act  
             var result = Types.InAssembly(DomainAssembly)
                 .ShouldNot()
                 .HaveDependencyOnAll(notIn.Select(x => x.FullName).ToArray())
                 .GetResult();
 
-            //Assert  
-            result.IsSuccessful.Should().BeTrue();
+            // Assert  
+            Assert.IsTrue(result.IsSuccessful);
         }
 
         [TestMethod]
         public void ApplicationLayer_ShouldNotHaveDependencyOn()
         {
-            //Arrange  
+            // Arrange  
             var notIn = new[] { InfrastructureAssembly, ApiAssembly };
 
-            //Act  
+            // Act  
             var result = Types.InAssembly(InfrastructureAssembly)
                 .ShouldNot()
                 .HaveDependencyOnAll(notIn.Select(x => x.FullName).ToArray())
                 .GetResult();
 
-            //Assert  
-            result.IsSuccessful.Should().BeTrue();
+            // Assert  
+            Assert.IsTrue(result.IsSuccessful);
         }
 
         [TestMethod]
         public void InfrastructureLayer_ShouldNotHaveDependencyOn()
         {
-            //Arrange  
+            // Arrange  
             var notIn = new[] { ApiAssembly };
 
-            //Act  
+            // Act  
             var result = Types.InAssembly(InfrastructureAssembly)
                 .ShouldNot()
                 .HaveDependencyOnAll(notIn.Select(x => x.FullName).ToArray())
                 .GetResult();
 
-            //Assert  
-            result.IsSuccessful.Should().BeTrue();
+            // Assert  
+            Assert.IsTrue(result.IsSuccessful);
         }
     }
 }

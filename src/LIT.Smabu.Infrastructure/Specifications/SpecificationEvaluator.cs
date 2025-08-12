@@ -9,8 +9,7 @@ namespace LIT.Smabu.Infrastructure.Specifications
             Specification<TAggregate> specification)
             where TAggregate : IAggregateRoot<IEntityId<TAggregate>>
         {
-            IQueryable<TAggregate> queryable = inputQueryable;
-            queryable = queryable.Where(specification.Criteria);
+            var queryable = inputQueryable.Where(specification.Criteria);
 
             if (specification.OrderByExpression != null)
             {
@@ -24,7 +23,6 @@ namespace LIT.Smabu.Infrastructure.Specifications
             {
                 queryable = queryable.Take(specification.Take.Value);
             }
-
             return queryable;
         }
     }

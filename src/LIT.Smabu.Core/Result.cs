@@ -1,5 +1,4 @@
-﻿
-namespace LIT.Smabu.Domain.Base
+﻿namespace LIT.Smabu.Core
 {
     public sealed class Result<TValue> : Result
     {
@@ -66,6 +65,11 @@ namespace LIT.Smabu.Domain.Base
             return new(value);
         }
 
+        public static VoidResult Void()
+        {
+            return new();
+        }
+
         public static ErrorDetail Success(object create)
         {
             throw new NotImplementedException();
@@ -77,8 +81,35 @@ namespace LIT.Smabu.Domain.Base
         }
     }
 
+    public sealed class VoidResult : Result
+    {
+        public VoidResult() 
+        {
+            // "MediatR workaround for void results. MediatR.Unit is not fully compatible with behavior pipelines."
+        }
+    }
+
     public sealed record ErrorDetail(string Code, string Description)
     {
         public static readonly ErrorDetail None = new(string.Empty, string.Empty);
+        public Dictionary<string, string> Details { get; private set; } = [];
+
+        public ErrorDetail WithDetails(Dictionary<string, string> details)
+        {
+            foreach (var item in details)
+            {
+                WithDetail(item.Key, item.Value);
+            }
+            return this;
+        }
+
+        public ErrorDetail WithDetail(string key, string value)
+        {
+            if (!Details.TryAdd(key, value))
+            {
+                Details[key] = value;
+            }
+            return this;
+        }
     }
 }
