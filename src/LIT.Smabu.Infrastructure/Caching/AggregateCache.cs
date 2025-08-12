@@ -122,6 +122,7 @@ namespace LIT.Smabu.Infrastructure.Caching
             MemoryCache? cache;
             if (!_cache.ContainsKey(typeof(TAggregate)))
             {
+                logger.LogInformation("Creating cache for type {type}", typeof(TAggregate).Name);
                 cache = new MemoryCache(new MemoryCacheOptions());
                 _cache[typeof(TAggregate)] = cache;
                 var allItems = await LoadFromStoreAsync<TAggregate>();

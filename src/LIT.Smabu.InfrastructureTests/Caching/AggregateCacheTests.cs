@@ -79,12 +79,13 @@ namespace LIT.Smabu.InfrastructureTests.Caching
         public async Task Handle_AggregateDeleted_ShouldDeleteItemInCache()
         {
             // Arrange
-            var customer = CreateCustomer();
+            var customer1 = CreateCustomer();
+            var customer2 = CreateCustomer();
             mockAggregateRepository.Setup(x => x.GetAllAsync<Customer>())
-                .ReturnsAsync([customer, CreateCustomer()]);
+                .ReturnsAsync([customer1, customer2]);
 
             // Act
-            await testee.Handle(new InformativeNotification.AggregateDeletedEvent(customer), new CancellationToken());
+            await testee.Handle(new InformativeNotification.AggregateDeletedEvent(customer1), new CancellationToken());
 
             // Assert
             var customerCount = await testee.CountAsync<Customer>();
