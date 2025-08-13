@@ -10,7 +10,7 @@ namespace LIT.Smabu.UseCases.Payments
     {
         public record CompletePaymentCommand(PaymentId PaymentId, decimal Amount, DateTime PaidAt) : ICommand;
 
-        public class CompletePaymentHandler(IAggregateRepository repository, FinancialRelationsService financialRelationsService) : ICommandHandler<CompletePaymentCommand>
+        public class CompletePaymentHandler(IUnitOfWork uow, FinancialRelationsService financialRelationsService) : ICommandHandler<CompletePaymentCommand>
         {
             public async Task<Result> Handle(CompletePaymentCommand request, CancellationToken cancellationToken)
             {
@@ -20,7 +20,7 @@ namespace LIT.Smabu.UseCases.Payments
                     return financialResult;
                 }
 
-                Payment payment = await repository.GetByAsync(request.PaymentId);
+                Payment payment = await uow.Repository.GetByAsync(request.PaymentId);
                 if (payment == null)
                 {
                     return PaymentErrors.NotFound;
@@ -30,7 +30,7 @@ namespace LIT.Smabu.UseCases.Payments
 
                 if (completeResult.IsSuccess)
                 {
-                    await repository.UpdateAsync(payment);
+                    await uow.Repository.UpdateAsync(payment);
                 }
 
                 return completeResult;

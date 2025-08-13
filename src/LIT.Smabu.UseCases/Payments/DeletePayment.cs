@@ -11,7 +11,7 @@ namespace LIT.Smabu.UseCases.Payments
     {
         public record DeletePaymentCommand(PaymentId PaymentId) : ICommand;
 
-        public class DeletePaymentHandler(IAggregateRepository repository, FinancialRelationsService financialRelationsService) : ICommandHandler<DeletePaymentCommand>
+        public class DeletePaymentHandler(IUnitOfWork uow, FinancialRelationsService financialRelationsService) : ICommandHandler<DeletePaymentCommand>
         {
             public async Task<Result> Handle(DeletePaymentCommand request, CancellationToken cancellationToken)
             {
@@ -21,7 +21,7 @@ namespace LIT.Smabu.UseCases.Payments
                     return financialResult;
                 }
 
-                Payment payment = await repository.GetByAsync(request.PaymentId);
+                Payment payment = await uow.Repository.GetByAsync(request.PaymentId);
                 if (payment == null)
                 {
                     return PaymentErrors.NotFound;
@@ -30,7 +30,7 @@ namespace LIT.Smabu.UseCases.Payments
                 Result deleteResult = payment.Delete();
                 if (deleteResult.IsSuccess)
                 {
-                    await repository.DeleteAsync(payment);
+                    await uow.Repository.DeleteAsync(payment);
                 }
 
                 return deleteResult;

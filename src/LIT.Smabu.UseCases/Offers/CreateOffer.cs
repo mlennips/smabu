@@ -12,15 +12,15 @@ namespace LIT.Smabu.UseCases.Offers
     {
         public record CreateOfferCommand(OfferId OfferId, CustomerId CustomerId, Currency Currency, TaxRate? TaxRate, OfferNumber? Number) : ICommand<OfferId>;
 
-        public class CreateOfferHandler(IAggregateRepository repository, BusinessNumberService businessNumberService) : ICommandHandler<CreateOfferCommand, OfferId>
+        public class CreateOfferHandler(IUnitOfWork uow, BusinessNumberService businessNumberService) : ICommandHandler<CreateOfferCommand, OfferId>
         {
             public async Task<Result<OfferId>> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
             {
-                Customer customer = await repository.GetByAsync(request.CustomerId);
+                Customer customer = await uow.Repository.GetByAsync(request.CustomerId);
                 OfferNumber number = request.Number ?? await businessNumberService.CreateOfferNumberAsync();
                 var offer = Offer.Create(request.OfferId, request.CustomerId, number, customer.MainAddress,
                     request.Currency, request.TaxRate ?? TaxRate.Default);
-                await repository.CreateAsync(offer);
+                await uow.Repository.CreateAsync(offer);
                 return offer.Id;
             }
         }
