@@ -10,12 +10,12 @@ namespace LIT.Smabu.UseCases.Offers
     {
         public record ListOffersQuery : IQuery<OfferDTO[]>;
 
-        public class GetOffersHandler(IAggregateRepository repository) : IQueryHandler<ListOffersQuery, OfferDTO[]>
+        public class GetOffersHandler(IAggregateCache cache) : IQueryHandler<ListOffersQuery, OfferDTO[]>
         {
             public async Task<Result<OfferDTO[]>> Handle(ListOffersQuery request, CancellationToken cancellationToken)
             {
-                IReadOnlyList<Offer> offers = await repository.GetAllAsync<Offer>();
-                Customer[] customers = await repository.GetByAsync(offers.Select(x => x.CustomerId));
+                IReadOnlyList<Offer> offers = await cache.GetAllAsync<Offer>();
+                Customer[] customers = await cache.GetByAsync(offers.Select(x => x.CustomerId));
                 return offers.Select(x => OfferDTO.Create(x, customers.Single(y => y.Id == x.CustomerId))).OrderByDescending(x => x.Number).ToArray();
             }
         }

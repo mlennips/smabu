@@ -10,13 +10,13 @@ namespace LIT.Smabu.UseCases.Customers
     {
         public record CreateCustomerCommand(CustomerId CustomerId, string Name, CustomerNumber? Number) : ICommand<CustomerId>;
 
-        public class CreateCustomerHandler(IAggregateRepository repository, BusinessNumberService businessNumberService) : ICommandHandler<CreateCustomerCommand, CustomerId>
+        public class CreateCustomerHandler(IUnitOfWork uow, BusinessNumberService businessNumberService) : ICommandHandler<CreateCustomerCommand, CustomerId>
         {
             public async Task<Result<CustomerId>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
             {
                 CustomerNumber number = await businessNumberService.CreateCustomerNumberAsync();
                 var customer = Customer.Create(request.CustomerId, number, request.Name, "");
-                await repository.CreateAsync(customer);
+                await uow.Repository.CreateAsync(customer);
                 return customer.Id;
             }
         }
