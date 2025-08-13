@@ -13,13 +13,13 @@ namespace LIT.Smabu.UseCases.Invoices
     {
         public record GetInvoiceQuery(InvoiceId InvoiceId, bool WithItems = false) : IQuery<GetInvoiceDTO>;
 
-        public class GetInvoiceHandler(IAggregateRepository repository, IAggregateCache cache) : IQueryHandler<GetInvoiceQuery, GetInvoiceDTO>
+        public class GetInvoiceHandler(IAggregateCache cache) : IQueryHandler<GetInvoiceQuery, GetInvoiceDTO>
         {
             public async Task<Result<GetInvoiceDTO>> Handle(GetInvoiceQuery request, CancellationToken cancellationToken)
             {
-                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
+                Invoice invoice = await cache.GetByAsync(request.InvoiceId);
                 Customer customer = await cache.GetByAsync(invoice.CustomerId);
-                IReadOnlyList<Payment> payments = await repository.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([request.InvoiceId]));
+                IReadOnlyList<Payment> payments = await cache.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([request.InvoiceId]));
                 var result = GetInvoiceDTO.Create(invoice, customer, [.. payments], request.WithItems);
                 return result;
             }

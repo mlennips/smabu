@@ -12,10 +12,9 @@ namespace LIT.Smabu.UseCases.Payments
 {
     public static class CreatePaymentIfInvoiceReleased
     {
-        public class CreatePaymentIfInvoiceReleasedHandler(IAggregateRepository repository, ISender sender)
+        public class CreatePaymentIfInvoiceReleasedHandler(IUnitOfWork uow, ISender sender)
             : IRequestHandler<InvoiceReleasedEvent>
         {
-
             public async Task Handle(InvoiceReleasedEvent request, CancellationToken cancellationToken)
             {
                 var alreadyExists = await CheckPaymentForInvoiceAlreadyExistsAsync(request.InvoiceId);
@@ -23,15 +22,15 @@ namespace LIT.Smabu.UseCases.Payments
                 {
                     return;
                 }
-                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
-                Customer customer = await repository.GetByAsync(invoice.CustomerId);
+                Invoice invoice = await uow.Repository.GetByAsync(request.InvoiceId);
+                Customer customer = await uow.Repository.GetByAsync(invoice.CustomerId);
                 var command = CreatePaymentCommand.Create(invoice, customer);
                 await sender.Send(command, cancellationToken);
             }
 
             private async Task<bool> CheckPaymentForInvoiceAlreadyExistsAsync(InvoiceId invoiceId)
             {
-                IReadOnlyList<Payment> detectedPayments = await repository.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([invoiceId]));
+                IReadOnlyList<Payment> detectedPayments = await uow.Repository.ApplySpecificationTask(new PaymentsWithInvoiceIdSpec([invoiceId]));
                 return detectedPayments.Any();
             }
         }

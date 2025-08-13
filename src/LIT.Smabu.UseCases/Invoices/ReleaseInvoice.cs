@@ -10,11 +10,11 @@ namespace LIT.Smabu.UseCases.Invoices
     {
         public record ReleaseInvoiceCommand(InvoiceId InvoiceId, InvoiceNumber? Number, DateTime? ReleasedAt) : ICommand;
 
-        public class ReleaseInvoiceHandler(IAggregateRepository repository, BusinessNumberService businessNumberService) : ICommandHandler<ReleaseInvoiceCommand>
+        public class ReleaseInvoiceHandler(IUnitOfWork uow, BusinessNumberService businessNumberService) : ICommandHandler<ReleaseInvoiceCommand>
         {
             public async Task<Result> Handle(ReleaseInvoiceCommand request, CancellationToken cancellationToken)
             {
-                Invoice invoice = await repository.GetByAsync(request.InvoiceId);
+                Invoice invoice = await uow.Repository.GetByAsync(request.InvoiceId);
                 InvoiceNumber number = await businessNumberService.CreateInvoiceNumberAsync(invoice.Number, request.Number, invoice.FiscalYear);
                 Result result = invoice.Release(number, request.ReleasedAt);
                 if (result.IsFailure)
@@ -22,7 +22,7 @@ namespace LIT.Smabu.UseCases.Invoices
                     return result.Error;
                 }
 
-                await repository.UpdateAsync(invoice);
+                await uow.Repository.UpdateAsync(invoice);
                 return Result.Success();
             }
         }
