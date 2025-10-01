@@ -30,6 +30,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.InfrastructureTests", "src\LIT.Smabu.InfrastructureTests\LIT.Smabu.InfrastructureTests.csproj", "{4B919D4F-2D79-4DC5-A751-E22B8F333E5B}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "lit.smabu.react", "src\lit.smabu.react\", "{0A57BB55-31F3-108A-A3B8-E4B4BF6AE002}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.VirtualPath = "/localhost_55876"
+		Debug.AspNetCompiler.PhysicalPath = "src\lit.smabu.react\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55876\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_55876"
+		Release.AspNetCompiler.PhysicalPath = "src\lit.smabu.react\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55876\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "55876"
+		SlnRelativePath = "src\lit.smabu.react\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.AppHost", "src\LIT.Smabu.AppHost\LIT.Smabu.AppHost.csproj", "{130E4FB4-C18E-ED45-4E91-E6A87BB794D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +90,13 @@ Global
 		{4B919D4F-2D79-4DC5-A751-E22B8F333E5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B919D4F-2D79-4DC5-A751-E22B8F333E5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B919D4F-2D79-4DC5-A751-E22B8F333E5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A57BB55-31F3-108A-A3B8-E4B4BF6AE002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A57BB55-31F3-108A-A3B8-E4B4BF6AE002}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A57BB55-31F3-108A-A3B8-E4B4BF6AE002}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{130E4FB4-C18E-ED45-4E91-E6A87BB794D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{130E4FB4-C18E-ED45-4E91-E6A87BB794D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{130E4FB4-C18E-ED45-4E91-E6A87BB794D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{130E4FB4-C18E-ED45-4E91-E6A87BB794D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +110,8 @@ Global
 		{07EAD7AF-E9C9-4C73-A9E9-BEB57747EEC2} = {5F0B7E6C-35E9-4B94-A607-63F48BB64AB1}
 		{7118A0A2-9BC1-4325-89B3-348333FBF745} = {87D0AE3A-2318-4D78-A807-4C4DD69B2D8E}
 		{4B919D4F-2D79-4DC5-A751-E22B8F333E5B} = {87D0AE3A-2318-4D78-A807-4C4DD69B2D8E}
+		{0A57BB55-31F3-108A-A3B8-E4B4BF6AE002} = {9BC799CB-FA00-4C6C-87DC-DC3648FFC5F8}
+		{130E4FB4-C18E-ED45-4E91-E6A87BB794D2} = {9BC799CB-FA00-4C6C-87DC-DC3648FFC5F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7F066E4-6DD5-4713-AAD8-6D72AEE7D53C}

@@ -20,16 +20,56 @@ var azureTenantId = builder.Configuration["AzureAD:TenantId"]!;
 var azureIssuer = builder.Configuration["AzureAD:Issuer"]!;
 var azureAudience = azureClientId;
 
+const string DevCorsPolicy = "DevCors";
+const string ProdCorsPolicy = "ProdCors";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost",
-        builder =>
+    if (builder.Environment.IsDevelopment())
+    {
+        options.AddPolicy(DevCorsPolicy, policy =>
+            policy
+                .SetIsOriginAllowed(origin =>
+                {
+                    if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri)) return false;
+                    if (!string.Equals(uri.Host, "localhost", StringComparison.OrdinalIgnoreCase)) return false;
+                    return uri.Scheme is "http" or "https";
+                })
+                .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                .WithHeaders("Authorization", "Content-Type", "Accept")
+                // Nur aktivieren falls du Cookies / SignalR / Authorization Header mit Credentials brauchst:
+                //.AllowCredentials()
+                .SetPreflightMaxAge(TimeSpan.FromMinutes(30))
+        );
+    }
+    else
+    {
+        // Produktion: Origins aus Konfiguration (appsettings / Secrets)
+        // Example in appsettings:
+        // "Cors": { "AllowedOrigins": [ "https://app.example.com", "https://portal.example.com" ] }
+        string[] allowed = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? [];
+
+        options.AddPolicy(ProdCorsPolicy, policy =>
         {
-            builder.WithOrigins("http://localhost", "http://localhost:5173", "http://localhost:*")
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+            if (allowed.Length == 0)
+            {
+                // Failsafe: nichts freigeben, frühzeitig im Log warnen
+                policy.WithOrigins("http://invalid-origin.local");
+            }
+            else
+            {
+                policy.WithOrigins(allowed)
+                      .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                      .WithHeaders("Authorization", "Content-Type", "Accept");
+            }
+            // Kein AllowCredentials standardmäßig in Prod ohne Notwendigkeit
+            policy.SetPreflightMaxAge(TimeSpan.FromHours(1));
         });
+    }
 });
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -61,7 +101,6 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddDomainServices();
 builder.Services.AddUseCasesServices();
 
-
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -81,7 +120,8 @@ if (app.Environment.IsDevelopment())
 
 app.SeedDatabaseAsync().GetAwaiter();
 
-app.UseCors("AllowLocalhost");
+// CORS muss vor Auth/Endpoints bleiben
+app.UseCors(builder.Environment.IsDevelopment() ? DevCorsPolicy : ProdCorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
