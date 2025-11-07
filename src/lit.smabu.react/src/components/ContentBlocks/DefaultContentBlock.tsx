@@ -3,7 +3,7 @@ import React from 'react';
 import { getItemByCurrentLocation } from '../../configs/navConfig';
 import { blueGrey, grey } from '@mui/material/colors';
 import { AppError } from '../../utils/errorConverter';
-import ErrorComponent from './ErrorComponent';
+import ErrorComponent from '../ContentBlocks/ErrorComponent';
 
 interface DefaultContentContainerProps {
     title?: string | undefined | null;

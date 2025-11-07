@@ -5,11 +5,11 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
-import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer from '../../components/ContentBlocks/DefaultContentBlock';
 import { getCustomers } from '../../services/customer.service';
 import { createInvoice, getInvoices } from '../../services/invoice.service';
 import { formatDate, formatToDateOnly } from '../../utils/formatDate';
-import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import { CreateActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import SelectField from '../../components/controls/SelectField';
 

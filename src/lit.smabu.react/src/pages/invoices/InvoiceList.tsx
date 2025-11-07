@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DefaultContentContainer, { ToolbarItem } from "../../components/contentBlocks/DefaultContentBlock";
+import DefaultContentContainer, { ToolbarItem } from "../../components/ContentBlocks/DefaultContentBlock";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { formatDate } from "../../utils/formatDate";

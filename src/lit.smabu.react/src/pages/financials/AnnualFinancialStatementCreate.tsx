@@ -5,8 +5,8 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
-import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
-import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import DefaultContentContainer from '../../components/ContentBlocks/DefaultContentBlock';
+import { CreateActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import { createAnnualFinancialStatement } from '../../services/financials.service';
 

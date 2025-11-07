@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { CatalogDTO } from '../../types/domain';
 import { Box, Button, ButtonGroup, Card, CardActions, CardContent, Divider, Paper, Stack, TextField, Toolbar, Typography } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { getDefaultCatalog, updateCatalog } from '../../services/catalogs.service';
 import { Add, Edit } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';

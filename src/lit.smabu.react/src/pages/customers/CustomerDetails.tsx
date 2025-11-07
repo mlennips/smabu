@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { CustomerDTO } from '../../types/domain';
 import { useParams } from 'react-router-dom';
 import { Avatar, AvatarGroup, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import { getCustomer, updateCustomer } from '../../services/customer.service';
-import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import { PaymentConditionSelectField, PaymentMethodSelectField } from '../../components/controls/SelectField';
 

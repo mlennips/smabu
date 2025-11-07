@@ -14,7 +14,7 @@ import { CallMsGraph } from "../../utils/msGraphApiCall.ts";
 // Material-ui imports
 import Paper from "@mui/material/Paper";
 import { Grid } from "@mui/material";
-import DefaultContentContainer from "../../components/contentBlocks/DefaultContentBlock.tsx";
+import DefaultContentContainer from "../../components/ContentBlocks/DefaultContentBlock.tsx";
 
 const ProfileContent = () => {
     const { instance, inProgress } = useMsal();

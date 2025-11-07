@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { CatalogItemDTO } from '../../types/domain';
 import { Paper, Stack } from '@mui/material';
-import DetailPageContainer from '../../components/contentBlocks/DefaultContentBlock';
+import DetailPageContainer from '../../components/ContentBlocks/DefaultContentBlock';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
-import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DeleteActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { getCatalogItem, removeCatalogItem } from '../../services/catalogs.service';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 

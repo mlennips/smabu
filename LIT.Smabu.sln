@@ -32,6 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIT.Smabu.InfrastructureTes
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "lit.smabu.react", "src\lit.smabu.react\", "{0A57BB55-31F3-108A-A3B8-E4B4BF6AE002}"
 	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_55876"
 		Debug.AspNetCompiler.PhysicalPath = "src\lit.smabu.react\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55876\"

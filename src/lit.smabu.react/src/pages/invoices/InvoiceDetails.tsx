@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, Paper, Stack, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { CancelScheduleSend, ContentCopy, Print, Send } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import InvoiceItemsComponent from './InvoiceItemsComponent';
 import { getInvoice, getInvoiceReport, releaseInvoice, updateInvoice, withdrawReleaseInvoice } from '../../services/invoice.service';
 import { openPdf } from '../../utils/openPdf';
-import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { formatForTextField } from '../../utils/formatDate';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import { PaymentConditionSelectField } from '../../components/controls/SelectField';

@@ -3,7 +3,7 @@ import { GetOrderReferencesResponse, InvoiceId, InvoiceIdOrderReferenceDTO, Offe
 import { Chip, Grid, Stack } from '@mui/material';
 import { Cancel, Edit, Save } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
-import { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { getOrdersReferences, updateOrderReferences } from '../../services/order.service';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 

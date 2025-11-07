@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CustomerDTO } from "../../types/domain";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import DefaultContentContainer, { ToolbarItem } from "../../components/contentBlocks/DefaultContentBlock";
+import DefaultContentContainer, { ToolbarItem } from "../../components/ContentBlocks/DefaultContentBlock";
 import { Add, Edit } from "@mui/icons-material";
 import { getCustomers } from "../../services/customer.service";
 import { handleAsyncTask } from "../../utils/handleAsyncTask";

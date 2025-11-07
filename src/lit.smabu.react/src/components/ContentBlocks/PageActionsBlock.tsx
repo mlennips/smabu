@@ -2,7 +2,7 @@ import { ArrowBack, ArrowForward as ArrowForwardIcon, Cancel as CancelIcon, Dele
 import { Button, ButtonGroup, Divider, Grid, IconButton } from '@mui/material';
 import React from 'react';
 import { AppError } from '../../utils/errorConverter';
-import ErrorComponent from './ErrorComponent';
+import ErrorComponent from '../ContentBlocks/ErrorComponent';
 
 interface DetailsActionsProps {
     formId: string | undefined;

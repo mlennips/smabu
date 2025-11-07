@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, Paper, Stack, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
 import { getOffer, updateOfferItem } from '../../services/offer.service';
 import { OfferDTO, OfferItemDTO } from '../../types/domain';
-import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { UnitSelectField } from '../../components/controls/SelectField';
 import SelectCatalogItemComponent from '../catalogs/SelectCatalogItemComponent';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';

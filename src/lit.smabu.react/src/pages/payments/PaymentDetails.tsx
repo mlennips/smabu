@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, Paper, Stack, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { useNotification } from '../../contexts/notificationContext';
-import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import { completePayment, getPayment, updatePayment } from '../../services/payments.services';
 import { PaymentDTO } from '../../types/domain';

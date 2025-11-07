@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { CatalogGroupDTO } from '../../types/domain';
 import { Grid, Paper, Stack, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { deepValueChange } from '../../utils/deepValueChange';
-import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { getCatalogGroup, updateCatalogGroup } from '../../services/catalogs.service';
 import { useNotification } from '../../contexts/notificationContext';
 import { useParams } from 'react-router-dom';

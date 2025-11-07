@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Paper, Stack } from '@mui/material';
-import DetailPageContainer from '../../components/contentBlocks/DefaultContentBlock';
+import DetailPageContainer from '../../components/ContentBlocks/DefaultContentBlock';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
 import { getOffer, deleteOfferItem } from '../../services/offer.service';
 import { OfferDTO, OfferItemDTO } from '../../types/domain';
-import { DeleteActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DeleteActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const OfferDelete = () => {

@@ -5,10 +5,10 @@ import { deepValueChange } from '../../utils/deepValueChange';
 import createId from '../../utils/createId';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../contexts/notificationContext';
-import DefaultContentContainer from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer from '../../components/ContentBlocks/DefaultContentBlock';
 import { getCustomers } from '../../services/customer.service';
 import { createOffer } from '../../services/offer.service';
-import { CreateActions } from '../../components/contentBlocks/PageActionsBlock';
+import { CreateActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 
 const defaultCurrency: Currency = {

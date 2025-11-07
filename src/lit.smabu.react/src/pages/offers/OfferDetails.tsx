@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, Paper, Stack, TextField } from '@mui/material';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { Print } from '@mui/icons-material';
 import { useNotification } from '../../contexts/notificationContext';
 import { getOffer, getOfferReport, updateOffer } from '../../services/offer.service';
@@ -9,7 +9,7 @@ import { OfferDTO } from '../../types/domain';
 import OfferItemsComponent from './OfferItemsComponent';
 import { deepValueChange } from '../../utils/deepValueChange';
 import { openPdf } from '../../utils/openPdf';
-import { DetailsActions } from '../../components/contentBlocks/PageActionsBlock';
+import { DetailsActions } from '../../components/ContentBlocks/PageActionsBlock';
 import { formatForTextField } from '../../utils/formatDate';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 

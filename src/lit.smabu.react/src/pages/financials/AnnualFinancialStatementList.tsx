@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnnualFinancialStatementDTO } from '../../types/domain/annual-financial-statement-dto';
 import { getAnnualFinancialStatements } from '../../services/financials.service';
-import DefaultContentContainer, { ToolbarItem } from '../../components/contentBlocks/DefaultContentBlock';
+import DefaultContentContainer, { ToolbarItem } from '../../components/ContentBlocks/DefaultContentBlock';
 import { handleAsyncTask } from '../../utils/handleAsyncTask';
 import { Add, Edit, Lock, LockOpen } from '@mui/icons-material';
 import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
