@@ -12,7 +12,7 @@ namespace LIT.Smabu.UseCases.Base
     {
     }
 
-    public interface  ICommandBase : IRequest
+    public interface  ICommandBase
     {
         
     }

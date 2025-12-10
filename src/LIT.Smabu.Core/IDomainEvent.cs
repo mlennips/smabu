@@ -2,7 +2,7 @@
 
 namespace LIT.Smabu.Core
 {
-    public interface IDomainEvent : IRequest
+    public interface IDomainEvent : IRequest<Result>
     {
 
     }

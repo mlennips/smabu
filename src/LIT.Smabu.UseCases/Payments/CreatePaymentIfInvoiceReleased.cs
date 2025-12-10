@@ -13,19 +13,20 @@ namespace LIT.Smabu.UseCases.Payments
     public static class CreatePaymentIfInvoiceReleased
     {
         public class CreatePaymentIfInvoiceReleasedHandler(IUnitOfWork uow, ISender sender)
-            : IRequestHandler<InvoiceReleasedEvent>
+            : IRequestHandler<InvoiceReleasedEvent, Result>
         {
-            public async Task Handle(InvoiceReleasedEvent request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(InvoiceReleasedEvent request, CancellationToken cancellationToken)
             {
                 var alreadyExists = await CheckPaymentForInvoiceAlreadyExistsAsync(request.InvoiceId);
                 if (alreadyExists)
                 {
-                    return;
+                    return Result.Success();
                 }
                 Invoice invoice = await uow.Repository.GetByAsync(request.InvoiceId);
                 Customer customer = await uow.Repository.GetByAsync(invoice.CustomerId);
                 var command = CreatePaymentCommand.Create(invoice, customer);
                 await sender.Send(command, cancellationToken);
+                return Result.Success();
             }
 
             private async Task<bool> CheckPaymentForInvoiceAlreadyExistsAsync(InvoiceId invoiceId)
